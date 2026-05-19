@@ -1,0 +1,62 @@
+[
+  {
+    "id": "2605.15854",
+    "date": "2026-05-19",
+    "title": "Improving Automatic Speech Recognition for Speakers Treated for Oral Cancer using Data Augmentation and LLM Error Correction"
+  },
+  {
+    "id": "2410.17799",
+    "date": "2026-05-19",
+    "title": "OmniFlatten: An End-to-end GPT Model for Seamless Voice Conversation"
+  },
+  {
+    "id": "2604.27393",
+    "date": "2026-05-19",
+    "title": "MiniCPM-o 4.5: Towards Real-Time Full-Duplex Omni-Modal Interaction"
+  },
+  {
+    "id": "2605.16964",
+    "date": "2026-05-19",
+    "title": "SemaVoice: Semantic-Aware Continuous Autoregressive Speech Synthesis"
+  },
+  {
+    "id": "2605.18222",
+    "date": "2026-05-19",
+    "title": "Contextual Biasing for Streaming ASR via CTC-based Word Spotting"
+  },
+  {
+    "id": "2605.17443",
+    "date": "2026-05-19",
+    "title": "Analyzing Error Propagation in Korean Spoken QA with ASR-LLM Cascades"
+  },
+  {
+    "id": "2605.16545",
+    "date": "2026-05-19",
+    "title": "Symphony for Speech-to-Text: Supporting Real-Time Medical Voice Interfaces"
+  },
+  {
+    "id": "2508.19205",
+    "date": "2026-05-19",
+    "title": "VibeVoice Technical Report"
+  },
+  {
+    "id": "2605.17710",
+    "date": "2026-05-19",
+    "title": "Sometin Beta Pass Notin (SBPN): Improving Multilingual ASR for Nigerian Languages via Knowledge Distillation"
+  },
+  {
+    "id": "2605.16896",
+    "date": "2026-05-19",
+    "title": "JSPG: Dynamic Dictionary Filtering via Joint Semantic-Pinyin-Glyph Retrieval for Chinese Contextual ASR"
+  },
+  {
+    "id": "2605.16555",
+    "date": "2026-05-19",
+    "title": "MedASR: An Open-Source Model for High-Accuracy Medical Dictation"
+  },
+  {
+    "id": "2605.16026",
+    "date": "2026-05-19",
+    "title": "From Flat Language Labels to Typological Priors: Structured Language Conditioning for Multilingual Speech-to-Speech Translation"
+  }
+]
