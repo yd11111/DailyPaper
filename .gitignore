@@ -1,0 +1,14 @@
+# macOS
+.DS_Store
+
+# Obsidian 用户态文件（每次启动都会改）
+.obsidian/workspace*.json
+.obsidian/workspaces.json
+
+# Obsidian 回收站
+.trash/
+
+# 编辑器临时文件
+*.tmp
+*.swp
+*~
