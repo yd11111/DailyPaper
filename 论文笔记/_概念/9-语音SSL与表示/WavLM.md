@@ -16,7 +16,8 @@ aliases: []
 ## 代表工作
 
 - [[SemaVoice]]
+- [[VibeVoice]]: 用 WavLM-large 提 speaker embedding 计算长对话与短句 SIM-O
 
 ## 相关概念
 
-[[HuBERT]] / [[wav2vec 2.0]]
+[[HuBERT]] / [[wav2vec 2.0]] / [[VibeVoice]] / [[Semantic Tokenizer]]

@@ -15,8 +15,9 @@ aliases: []
 
 ## 代表工作
 
-- (待补)
+- 多篇 2024-2025 工作（SpeechAlign、Seed-TTS DPO 等）
+- [[VibeVoice]]: 笔记 future work 中提及作为长篇 TTS 偏好对齐方向
 
 ## 相关概念
 
-[[DPO]]
+[[DPO]] / [[UTMOS]] / [[VibeVoice]]

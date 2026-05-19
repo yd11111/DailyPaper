@@ -16,7 +16,8 @@ aliases: []
 ## 代表工作
 
 - [[SemaVoice]]
+- [[VibeVoice]]: 推理时 CFG scale $w=1.3$，配合 [[DPM-Solver|DPM-Solver++]] 10 步采样
 
 ## 相关概念
 
-[[DDPM]] / [[Flow Matching]]
+[[DDPM]] / [[Flow Matching]] / [[DPM-Solver]] / [[VibeVoice]]

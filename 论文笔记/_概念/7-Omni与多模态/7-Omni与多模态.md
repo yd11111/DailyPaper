@@ -10,7 +10,10 @@ generated_by: dailypaper-skills
 
 ## 当前目录笔记
 
-- 暂无内容
+- [[论文笔记/_概念/7-Omni与多模态/Gemini 2.5 Flash|Gemini 2.5 Flash]]
+- [[论文笔记/_概念/7-Omni与多模态/Mini-Omni|Mini-Omni]]
+- [[论文笔记/_概念/7-Omni与多模态/MiniCPM-o|MiniCPM-o]]
+- [[论文笔记/_概念/7-Omni与多模态/Qwen3-Omni|Qwen3-Omni]]
 
 ## 说明
 

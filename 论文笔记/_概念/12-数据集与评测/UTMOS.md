@@ -15,6 +15,9 @@ aliases: [UTMOS, UTMOSv2]
 
 ## 代表工作
 - 现代 TTS 论文常用作 MOS 替代；[[OmniFlatten]] 未使用
+- [[VibeVoice]]: tokenizer 重建在 LibriTTS test-other 达 UTMOS 3.724（接近 GT 3.483）
 
 ## 相关概念
 - [[OmniFlatten]]
+- [[VibeVoice]]
+- [[PESQ]] · [[STOI]] · [[LibriTTS]]
