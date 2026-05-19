@@ -5,16 +5,6 @@
     "title": "Improving Automatic Speech Recognition for Speakers Treated for Oral Cancer using Data Augmentation and LLM Error Correction"
   },
   {
-    "id": "2410.17799",
-    "date": "2026-05-19",
-    "title": "OmniFlatten: An End-to-end GPT Model for Seamless Voice Conversation"
-  },
-  {
-    "id": "2604.27393",
-    "date": "2026-05-19",
-    "title": "MiniCPM-o 4.5: Towards Real-Time Full-Duplex Omni-Modal Interaction"
-  },
-  {
     "id": "2605.16964",
     "date": "2026-05-19",
     "title": "SemaVoice: Semantic-Aware Continuous Autoregressive Speech Synthesis"
@@ -33,11 +23,6 @@
     "id": "2605.16545",
     "date": "2026-05-19",
     "title": "Symphony for Speech-to-Text: Supporting Real-Time Medical Voice Interfaces"
-  },
-  {
-    "id": "2508.19205",
-    "date": "2026-05-19",
-    "title": "VibeVoice Technical Report"
   },
   {
     "id": "2605.17710",
