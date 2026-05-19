@@ -5,7 +5,7 @@ authors: [Junbo Cui, Bokai Xu, Chongyi Wang, Tianyu Yu, Yuan Yao, Zhiyuan Liu, M
 year: 2026
 venue: arXiv
 tags: [full-duplex, omni-modal, speech-llm, streaming, proactive-interaction, edge-deployment]
-zotero_collection: Speech-LLM/全双工
+zotero_collection: 7-Omni与多模态
 image_source: online
 arxiv_html: https://arxiv.org/html/2604.27393v1
 created: 2026-05-19

@@ -2,15 +2,15 @@
 tags: [MOC, auto-generated]
 generated_by: dailypaper-skills
 ---
-# 论文目录页：Speech-LLM
+# 论文目录页：7-Omni与多模态
 
 用于浏览论文笔记、分类目录和子主题入口。
 
-- 当前目录：`Speech-LLM`
+- 当前目录：`7-Omni与多模态`
 
-## 子目录
+## 当前目录笔记
 
-- [[论文笔记/Speech-LLM/全双工/全双工|全双工]] · 2 篇笔记 · 0 个子目录
+- [[论文笔记/7-Omni与多模态/MiniCPM-o-4.5|MiniCPM-o-4.5]]
 
 ## 说明
 

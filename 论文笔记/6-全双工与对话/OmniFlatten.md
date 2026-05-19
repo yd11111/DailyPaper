@@ -5,7 +5,7 @@ authors: [Qinglin Zhang, Luyao Cheng, Chong Deng, Qian Chen, Wen Wang, Siqi Zhen
 year: 2024
 venue: arXiv
 tags: [full-duplex, speech-llm, dialogue, flatten, post-training, gpt, omni, low-latency]
-zotero_collection: Speech-LLM/全双工
+zotero_collection: 6-全双工与对话
 image_source: online
 arxiv_html: https://arxiv.org/html/2410.17799v2
 created: 2026-05-19
