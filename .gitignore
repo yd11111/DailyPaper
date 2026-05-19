@@ -1,14 +1,78 @@
-# macOS
-.DS_Store
+# ========================================
+# Obsidian Vault .gitignore
+# 原则：忽略「设备特异 / 会话级 / 频繁变动」的状态；
+#       保留「整个 vault 共享」的配置和真正的知识内容。
+# 参考：Obsidian 中文论坛 19004（workspace 噪音 + git track 缓存陷阱）
+#       + 社区通行实践
+# ========================================
 
-# Obsidian 用户态文件（每次启动都会改）
-.obsidian/workspace*.json
+# ───────── macOS 系统文件 ─────────
+.DS_Store
+.AppleDouble
+.LSOverride
+.Spotlight-V100
+.Trashes
+._*
+
+# ───────── iCloud / 网盘占位 ─────────
+*.icloud
+.icloud
+desktop.ini
+
+# ───────── Windows 兼容（多设备时有用） ─────────
+Thumbs.db
+ehthumbs.db
+$RECYCLE.BIN/
+
+# ───────── 编辑器临时文件 ─────────
+*.swp
+*.swo
+*.tmp
+*~
+.~lock.*
+
+# ───────── Obsidian：回收站 ─────────
+.trash/
+.obsidian/trash/
+
+# ───────── Obsidian：UI 工作区状态（每次启动会变，最大噪音源）─────────
+# 这是论坛 19004 帖子里 OP 最头疼的几个文件
+.obsidian/workspace.json
+.obsidian/workspace-mobile.json
 .obsidian/workspaces.json
 
-# Obsidian 回收站
-.trash/
+# ───────── Obsidian：索引/搜索缓存（按设备生成，体积大无意义）─────────
+.obsidian/cache
+.obsidian/.cache/
+.obsidian/plugin-cache/
+.obsidian/canvas-card.json
 
-# 编辑器临时文件
-*.tmp
-*.swp
-*~
+# ───────── Obsidian：插件的本地数据（含 token / 最近文件 / 设备特异偏好）─────────
+# 默认全忽略；要共享某个插件的配置时用 `! 否定规则` 反向加白
+.obsidian/plugins/*/data.json
+.obsidian/plugins/*/.git/
+.obsidian/plugins/*/*.log
+# obsidian-git 等高频改动的状态/缓存（manifest.json / main.js 保留追踪）
+.obsidian/plugins/obsidian-git/recent-commits.json
+.obsidian/plugins/obsidian-git/cache/
+
+# ───────── Obsidian：主题（一般按设备装，体积大）─────────
+# 想共享团队主题可注释掉这行
+.obsidian/themes/
+
+# ───────── 流水线临时产物 ─────────
+*.tmp.json
+*.bak
+.tmp/
+
+# ───────── 显式保留（白名单注释，方便后人理解；不需要 ! 规则因未在上面排除）─────────
+# 以下默认会被 git 跟踪，是 vault 共享的核心配置：
+#   .obsidian/app.json              基础设置
+#   .obsidian/appearance.json       主题选择、字体等
+#   .obsidian/core-plugins.json     启用了哪些官方插件
+#   .obsidian/community-plugins.json 启用了哪些社区插件（不含数据）
+#   .obsidian/hotkeys.json          自定义快捷键
+#   .obsidian/graph.json            图谱视图设置
+#   .obsidian/snippets/             自定义 CSS 片段
+#   .obsidian/plugins/{id}/main.js, manifest.json, styles.css  插件代码本身
+#   DailyPapers/.history.json       论文跨天去重数据（单机使用建议保留）
