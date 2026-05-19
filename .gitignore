@@ -65,6 +65,10 @@ $RECYCLE.BIN/
 *.bak
 .tmp/
 
+# ───────── library-import 归档的 PDF（本地保留，不推 GitHub） ─────────
+# 191MB 体量，不适合走 git/网络。assets/papers/ 这个目录由 .gitkeep 占位即可
+assets/papers/*.pdf
+
 # ───────── 显式保留（白名单注释，方便后人理解；不需要 ! 规则因未在上面排除）─────────
 # 以下默认会被 git 跟踪，是 vault 共享的核心配置：
 #   .obsidian/app.json              基础设置
