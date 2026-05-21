@@ -20,6 +20,7 @@ Kyutai Labs 2024 年的全双工语音对话模型。**双流 token 同时建模
 
 - 原论文 (Kyutai 2024)
 - [[VibeVoice]]: 在 limitations 中引用 Moshi 作为对照（VibeVoice 不显式建模 overlap）
+- [[Synchronization-Turn-Taking]]: 用两个 Moshi 互相对话探针其内部表示同步与轮替预测能力
 
 ## 评测/常见数字
 

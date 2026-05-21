@@ -37,6 +37,7 @@ aliases: [Full-Duplex, 全双工, 全双工对话]
 - [[VITA]]: 腾讯多模态交互
 - [[SyncLLM]]: 实时双向 LLM
 - [[LiveCC]] / [[StreamingVLM]]: vision-only 流式
+- [[Synchronization-Turn-Taking]]: 让两个 [[Moshi]] 互相对话，用 [[CKA]] + 因果 LSTM 探针分析全双工模型的内部同步与轮替信号
 
 ## 评测/常见数字
 
