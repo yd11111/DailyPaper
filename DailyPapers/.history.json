@@ -1,13 +1,43 @@
 [
   {
-    "id": "2605.15854",
-    "date": "2026-05-19",
-    "title": "Improving Automatic Speech Recognition for Speakers Treated for Oral Cancer using Data Augmentation and LLM Error Correction"
+    "id": "2605.18749",
+    "date": "2026-05-20",
+    "title": "WavFlow: Audio Generation in Waveform Space"
   },
   {
-    "id": "2605.16964",
-    "date": "2026-05-19",
-    "title": "SemaVoice: Semantic-Aware Continuous Autoregressive Speech Synthesis"
+    "id": "2605.18296",
+    "date": "2026-05-20",
+    "title": "MEEDAV: A Synchronous Web Viewer for EEG, Eye-Tracking and Speech Data"
+  },
+  {
+    "id": "2605.18001",
+    "date": "2026-05-20",
+    "title": "Bridging the Gap: Converting Read Text to Conversational Dialogue"
+  },
+  {
+    "id": "2605.17860",
+    "date": "2026-05-20",
+    "title": "PAREDA: A Multi-Accent Speech Dataset of Natural Language Processing Research Discussions"
+  },
+  {
+    "id": "2605.17225",
+    "date": "2026-05-20",
+    "title": "Can Large Audio Language Models Ignore Multilingual Distractors? An Evaluation of Their Selective Auditory Attention Capabilities"
+  },
+  {
+    "id": "2605.17085",
+    "date": "2026-05-20",
+    "title": "Taming Audio VAEs via Target-KL Regularization"
+  },
+  {
+    "id": "2605.16938",
+    "date": "2026-05-20",
+    "title": "Effort as Ceiling, Not Dial: Reasoning Budget Does Not Modulate Cognitive Cost Alignment Between Humans and Large Reasoning Models"
+  },
+  {
+    "id": "2605.16364",
+    "date": "2026-05-20",
+    "title": "WASIL: In-the-Wild Arabic Spoken Interactions with LLMs"
   },
   {
     "id": "2605.18222",
@@ -15,19 +45,19 @@
     "title": "Contextual Biasing for Streaming ASR via CTC-based Word Spotting"
   },
   {
+    "id": "2605.17710",
+    "date": "2026-05-19",
+    "title": "Sometin Beta Pass Notin (SBPN): Improving Multilingual ASR for Nigerian Languages via Knowledge Distillation"
+  },
+  {
     "id": "2605.17443",
     "date": "2026-05-19",
     "title": "Analyzing Error Propagation in Korean Spoken QA with ASR-LLM Cascades"
   },
   {
-    "id": "2605.16545",
+    "id": "2605.16964",
     "date": "2026-05-19",
-    "title": "Symphony for Speech-to-Text: Supporting Real-Time Medical Voice Interfaces"
-  },
-  {
-    "id": "2605.17710",
-    "date": "2026-05-19",
-    "title": "Sometin Beta Pass Notin (SBPN): Improving Multilingual ASR for Nigerian Languages via Knowledge Distillation"
+    "title": "SemaVoice: Semantic-Aware Continuous Autoregressive Speech Synthesis"
   },
   {
     "id": "2605.16896",
@@ -40,8 +70,78 @@
     "title": "MedASR: An Open-Source Model for High-Accuracy Medical Dictation"
   },
   {
+    "id": "2605.16545",
+    "date": "2026-05-19",
+    "title": "Symphony for Speech-to-Text: Supporting Real-Time Medical Voice Interfaces"
+  },
+  {
     "id": "2605.16026",
     "date": "2026-05-19",
     "title": "From Flat Language Labels to Typological Priors: Structured Language Conditioning for Multilingual Speech-to-Speech Translation"
+  },
+  {
+    "id": "2605.15854",
+    "date": "2026-05-19",
+    "title": "Improving Automatic Speech Recognition for Speakers Treated for Oral Cancer using Data Augmentation and LLM Error Correction"
+  },
+  {
+    "id": "2605.20830",
+    "date": "2026-05-21",
+    "title": "Raon-OpenTTS: Open Models and Data for Robust Text-to-Speech"
+  },
+  {
+    "id": "2605.20356",
+    "date": "2026-05-21",
+    "title": "Synchronization and Turn-Taking in Full-Duplex Speech Dialogue Models"
+  },
+  {
+    "id": "2605.19833",
+    "date": "2026-05-21",
+    "title": "Mega-ASR: Towards In-the-wild^2 Speech Recognition via Scaling up Real-world Acoustic Simulation"
+  },
+  {
+    "id": "2605.20755",
+    "date": "2026-05-21",
+    "title": "DuplexSLA: A Full-Duplex Spoken Language Model with Synchronized Speech, Language, and Action"
+  },
+  {
+    "id": "2605.20712",
+    "date": "2026-05-21",
+    "title": "SCRIBE: Diagnostic Evaluation and Rich Transcription Models for Indic ASR"
+  },
+  {
+    "id": "2605.19711",
+    "date": "2026-05-21",
+    "title": "Can Large Language Models Reliably Correct Errors in Low-Resource ASR? A Contamination-Aware Case Study on West Frisian"
+  },
+  {
+    "id": "2605.19266",
+    "date": "2026-05-21",
+    "title": "FormalASR: End-to-End Spoken Chinese to Formal Text"
+  },
+  {
+    "id": "2605.19069",
+    "date": "2026-05-21",
+    "title": "Benchmarking Commercial ASR Systems on Code-Switching Speech: Arabic, Persian, and German"
+  },
+  {
+    "id": "2605.20266",
+    "date": "2026-05-21",
+    "title": "A Survey of Large Audio Language Models: Generalization, Trustworthiness, and Outlook"
+  },
+  {
+    "id": "2605.18168",
+    "date": "2026-05-21",
+    "title": "Acoustic Interference: A New Paradigm Weaponizing Acoustic Latent Semantic for Universal Jailbreak against Large Audio Language Models"
+  },
+  {
+    "id": "2605.20519",
+    "date": "2026-05-21",
+    "title": "Codec-Robust Attacks on Audio LLMs"
+  },
+  {
+    "id": "2605.20414",
+    "date": "2026-05-21",
+    "title": "PlanRAG-Audio: Planning and Retrieval Augmented Generation for Long-form Audio Understanding"
   }
 ]
