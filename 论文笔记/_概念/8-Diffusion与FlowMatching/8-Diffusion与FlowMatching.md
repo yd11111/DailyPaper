@@ -19,6 +19,7 @@ generated_by: dailypaper-skills
 - [[论文笔记/_概念/8-Diffusion与FlowMatching/Flow Matching|Flow Matching]]
 - [[论文笔记/_概念/8-Diffusion与FlowMatching/OT-CFM|OT-CFM]]
 - [[论文笔记/_概念/8-Diffusion与FlowMatching/VAE|VAE]]
+- [[论文笔记/_概念/8-Diffusion与FlowMatching/WaveGrad|WaveGrad]]
 
 ## 说明
 
