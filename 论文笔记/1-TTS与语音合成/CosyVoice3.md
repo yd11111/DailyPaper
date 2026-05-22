@@ -33,9 +33,10 @@ created: 2026-05-22
 
 ## 📊 关键结果 / 评测
 
-- 首页未给出具体数字，待全文确认
-- 定性目标：in-the-wild 场景鲁棒性（噪声/口音/非标准文本）
-- 已开源模型和推理代码
+- Seed-TTS-eval test-zh: CER 0.71%（CosyVoice 2 的 1.45% → 51% 相对提升）
+- Seed-TTS-eval test-en: WER 1.45%（CosyVoice 2 的 2.57% → 44% 相对提升）
+- Speaker similarity (WavLM): 0.775（test-zh）
+- MOS: 中文 ~4.50, 英文 ~4.35（接近/超过人类录音）
 
 ## 💡 借鉴意义（一句话）
 

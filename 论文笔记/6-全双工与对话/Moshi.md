@@ -36,9 +36,10 @@ Kyutai 提出的**全双工语音对话模型**——同时建模用户和系统
 
 ## 📊 关键结果 / 评测
 
-- 端到端延迟: 160ms（理论）/ 200ms（实测）
-- 全双工: 支持打断、重叠说话
-- 完全开源: 模型权重 + 推理代码
+- 端到端延迟: 160ms 理论 / 200ms 实测（低于自然对话平均 230ms）
+- Mimi codec: MUSHRA 81.0 @ 1.1kbps（优于 SpeechTokenizer 4.0kbps 的 74.3）
+- Inner Monologue: transcript NLL 3.65→2.77，生成文本长度 602→1920 字符
+- Helium LM: MMLU 54.3（优于同规模 Llama 2 的 45.3）
 
 ## 💡 借鉴意义（一句话）
 

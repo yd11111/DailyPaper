@@ -36,9 +36,10 @@ created: 2026-05-22
 
 ## 📊 关键结果 / 评测
 
-- 支持实时语音交互
-- 集成异步 tool call
-- 情感控制 + 多语言
+- ASR: 平均 CER 4.64（6 个 benchmark，优于 Whisper Large-v3 的 7.28）
+- TTS: CER 1.31%（中文）/ WER 2.31%（英文），优于 CosyVoice 2 / MaskGCT
+- Spoken QA: Llama Question 81.0, ComplexBench 74.0（开源 SOTA）
+- 推理加速: speculative generation 减少约 500ms 延迟
 
 ## 💡 借鉴意义（一句话）
 

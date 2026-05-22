@@ -37,9 +37,10 @@ Fish Audio 推出的开源 TTS——**Dual-AR** 架构（slow AR 建模语义 + 
 
 ## 📊 关键结果 / 评测
 
-- 完全开源（模型 + 代码 + 训练）
-- 支持中/英/日等多语言
-- 实时率优于同质量的 AR-only 方案
+- Voice cloning WER: 6.89%（GT 9.22%, CosyVoice 22.20%）
+- Speaker similarity (Resemblyzer): 0.914（GT 0.921）
+- MOS: 4.05（CosyVoice 3.80, F5-TTS 2.90）
+- 首包延迟 150ms，RTX 4090 实时率 ~1:15
 
 ## 💡 借鉴意义（一句话）
 

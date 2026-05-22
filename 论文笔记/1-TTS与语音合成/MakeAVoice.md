@@ -35,8 +35,9 @@ created: 2026-05-22
 
 ## 📊 关键结果 / 评测
 
-- 统一 TTS / VC / 歌声合成
-- 各任务效果接近专门模型
+- TTS: MOS 4.04, speaker cosine 0.77, CER 0.068（优于 YourTTS / GenerSpeech）
+- VC: MOS 4.07, speaker cosine 0.80
+- SVS: MOS 3.99, FFE 0.05（pitch 精度最优）
 
 ## 💡 借鉴意义（一句话）
 

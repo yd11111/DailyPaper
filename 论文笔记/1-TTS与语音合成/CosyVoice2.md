@@ -36,9 +36,10 @@ created: 2026-05-22
 
 ## 📊 关键结果 / 评测
 
-- 流式首包延迟: ~150ms
-- 非流式质量: 与 CosyVoice 1 持平或更好
-- 开源可用
+- LibriSpeech test-clean: WER 2.47%, NMOS 3.96, speaker similarity 0.745（均优于 human recording）
+- Seed-TTS-eval test-zh: CER 1.45%, speaker similarity 0.806
+- Seed-TTS-eval test-en: WER 2.57%
+- 流式模式（CosyVoice 2-S）质量几乎无损：test-zh CER 保持 1.45%
 
 ## 💡 借鉴意义（一句话）
 

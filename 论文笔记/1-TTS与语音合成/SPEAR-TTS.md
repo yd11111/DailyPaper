@@ -35,8 +35,9 @@ Google 提出的**两阶段 TTS**——S₁ "reading"（text → semantic token�
 
 ## 📊 关键结果 / 评测
 
-- 仅 15 分钟标注数据即可做 zero-shot TTS
-- 质量接近完全监督的 TTS baseline
+- 仅 15 分钟配对数据: CER 1.92%（LibriSpeech test-clean），接近 FastSpeech2-LR 24h 数据的 1.99%
+- MOS: 4.96（GT 4.92）；zero-shot voice transfer MOS 4.75（VALL-E 3.35）
+- Speaker similarity: cosine 0.56（VALL-E 0.58，但 SPEAR-TTS 用 240,000× 更少数据）
 
 ## 💡 借鉴意义（一句话）
 

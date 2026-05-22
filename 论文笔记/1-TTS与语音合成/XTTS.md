@@ -35,9 +35,10 @@ Coqui 推出的**大规模多语言 zero-shot TTS**——在 [[YourTTS]] / [[Tor
 
 ## 📊 关键结果 / 评测
 
-- 17 种语言 zero-shot TTS
-- 完全开源（模型 + 训练代码）
-- Coqui TTS 生态核心模型
+- 英文 CER: 0.543%（优于 HierSpeech++ 0.774%、Tortoise 1.093%）
+- 16 语言平均 CER: 2.06%（YourTTS 4.79%）
+- 16 语言平均 speaker similarity (SECS): 0.505（YourTTS 0.470）
+- 主观评测: CMOS +0.41 vs HierSpeech++, +0.92 vs Mega-TTS 2
 
 ## 💡 借鉴意义（一句话）
 

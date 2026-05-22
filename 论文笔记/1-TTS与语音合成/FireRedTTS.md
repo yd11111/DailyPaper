@@ -36,8 +36,10 @@ created: 2026-05-22
 
 ## 📊 关键结果 / 评测
 
-- 工业落地于小红书音频产品
-- 支持流式合成
+- 一致性 CoMOS: 4.32（CosyVoice 4.15, GT 4.53）
+- 中文发音错误率: 2.09%（CosyVoice 5.68%）
+- Few-shot PUGC voice cloning: MOS 4.65, SIM 78.92%
+- 情感控制: instruction tuning 后分类准确率 50%→97%
 
 ## 💡 借鉴意义（一句话）
 

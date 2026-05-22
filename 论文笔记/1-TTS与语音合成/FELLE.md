@@ -31,8 +31,9 @@ created: 2026-05-22
 
 ## 📊 关键结果 / 评测
 
-- 质量优于 MELLE / VALL-E
-- 保持 AR 的 streaming 友好特性
+- Continuation: WER-C 1.53%, SIM-o 0.513（MELLE SIM-o 0.480）
+- Cross-sentence: WER-C 2.20%, SIM-o 0.619（MELLE 0.591）
+- Cross-sentence MOS: 4.157（超过 GT 的 4.043）
 
 ## 💡 借鉴意义（一句话）
 

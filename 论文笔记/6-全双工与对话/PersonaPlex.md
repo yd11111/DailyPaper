@@ -35,8 +35,10 @@ NVIDIA 提出的全双工对话模型扩展——在 [[Moshi]] 基础上加入 *
 
 ## 📊 关键结果 / 评测
 
-- Voice cloning: speaker similarity 显著提升
-- Role control: 角色一致性 + 对话质量保持
+- 语音质量: DMOS 3.90（baseline Moshi 3.51）
+- Voice cloning: SSIM 0.57（zero-shot）→ 0.65（fine-tuned）
+- Turn-taking 延迟: 0.070s（保持 Moshi 级低延迟）
+- 角色一致性: GPT-4o 评估 compliance 4.2/5
 
 ## 💡 借鉴意义（一句话）
 

@@ -36,8 +36,10 @@ created: 2026-05-22
 
 ## 📊 关键结果 / 评测
 
-- SUPERB leaderboard 全 10 任务 SOTA（发布时）
-- 特别在 SE / SS / SV 等非内容任务上大幅领先 HuBERT
+- SUPERB overall score: 74.6（WavLM Large，全 10 任务 SOTA）
+- Speaker verification: VoxCeleb1 EER 0.383%（HuBERT Large 0.585%）
+- Speech separation: LibriCSS WER 6.0%（HuBERT 7.0%）
+- ASR: LibriSpeech test-clean WER 1.75%（94k hours 预训练）
 
 ## 💡 借鉴意义（一句话）
 

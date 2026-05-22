@@ -36,9 +36,9 @@ DeepMind 奠基性工作——提出 **Vector Quantised VAE**，在 VAE 的 late
 
 ## 📊 关键结果 / 评测
 
-- 图像: 在 CIFAR-10 / ImageNet 上重建质量接近连续 VAE
-- 语音: 对 VCTK 语音做 VQ，学到的离散 code 自动对应 phoneme-like 单元
-- WaveNet decoder: VQ-VAE + WaveNet 做 unconditional speech generation
+- CIFAR-10: 4.67 bits/dim（连续 VAE 4.51，仅差 0.16 bits/dim）
+- 语音 VQ: 无监督 phoneme classification 准确率 49.3%（VCTK，学到 phoneme-like 离散单元）
+- 音频压缩: 64-128× 压缩率（VQ 码本索引），保持高质量 WaveNet 解码
 
 ## 💡 借鉴意义（一句话）
 

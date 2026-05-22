@@ -36,8 +36,9 @@ created: 2026-05-22
 
 ## 📊 关键结果 / 评测
 
-- Decoder-only ASR: RepCodec token 优于 EnCodec / HuBERT k-means token
-- 语义保留更好，但不能直接重建波形（需另接 vocoder）
+- Decoder-only ASR: WER 2.87%（vs k-means 4.55% / EnCodec 5.31%）
+- 语音重合成 ASR: WER 4.71%（vs k-means 7.61%）
+- 码本利用率: 99.8%（vs k-means ~60-80%），几乎无 codebook collapse
 
 ## 💡 借鉴意义（一句话）
 

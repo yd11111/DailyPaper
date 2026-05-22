@@ -36,9 +36,10 @@ created: 2026-05-22
 
 ## 📊 关键结果 / 评测
 
-- 图像生成: ImageNet FID 与 discrete token 方法可比
-- 音频 TTS: 竞争力质量
-- 统一框架: 一个模型处理多模态
+- ImageNet FID: 2.24（479M 参数，优于 DiT-XL/2 的 2.27 / 675M）
+- Text-to-Image FID: 14.54（Transfusion 16.10）
+- LibriSpeech TTS: SIM 0.697, WER-H 1.8（优于 VALL-E 2 的 SIM 0.643）
+- σ-VAE 语音压缩: 1600× 压缩率，PESQ 2.724
 
 ## 💡 借鉴意义（一句话）
 

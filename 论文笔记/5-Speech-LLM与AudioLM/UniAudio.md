@@ -35,8 +35,10 @@ created: 2026-05-22
 
 ## 📊 关键结果 / 评测
 
-- 11 种音频任务统一处理
-- 各任务性能接近或优于 task-specific 模型
+- TTS: SIM 0.71, WER 2.0, MOS 3.81（优于 NaturalSpeech 2 的 SIM 0.62）
+- Text-to-Sound: FAD 3.12（AudioLDM 4.93）
+- Text-to-Music: FAD 3.65（MusicGen 4.52）
+- 多任务联合训练一致提升：TTS SIM 0.64→0.71，Sound FAD 3.84→3.12
 
 ## 💡 借鉴意义（一句话）
 
