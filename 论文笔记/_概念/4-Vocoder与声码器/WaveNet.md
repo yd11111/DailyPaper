@@ -21,6 +21,7 @@ DeepMind 提出的自回归波形生成模型，使用 dilated causal convolutio
 - WaveNet (van den Oord et al., 2016)
 - [[Parallel WaveGAN]]: 非因果 WaveNet + GAN
 - [[FastSpeech2]]: FastSpeech 2s waveform decoder 基于 non-causal WaveNet
+- [[VITS]]: Posterior Encoder 和 Flow coupling layer 使用 WaveNet 残差块
 
 ## 相关概念
 

@@ -7,7 +7,7 @@ aliases: [MAS]
 
 ## 定义
 
-VITS 中提出的动态规划算法，在文本-语音 alignment 中搜索最优的单调对齐路径，使模型无需外部 forced alignment 工具即可学习 duration。
+[[Glow-TTS]] 中提出的动态规划算法，在文本-语音 alignment 中搜索最优的单调对齐路径，使模型无需外部 forced alignment 工具即可学习 duration。后被 [[VITS]] 继承使用。
 
 ## 核心要点
 

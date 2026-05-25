@@ -25,7 +25,8 @@ $$
 - [[CosyVoice]]: 继承 VITS 的 Flow-based 思路
 
 ## 评测/常见数字
-- LJSpeech MOS ~4.0+，接近真人
+- LJSpeech MOS 4.43（GT 4.46），VCTK MOS 4.38（GT 4.38）
+- 合成速度 x67 real-time（NVIDIA V100），是 Glow-TTS+HiFi-GAN 的 2.4 倍
 
 ## 相关概念
 - [[Normalizing Flow]]
