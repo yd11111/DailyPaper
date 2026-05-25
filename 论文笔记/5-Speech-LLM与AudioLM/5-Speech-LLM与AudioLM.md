@@ -17,6 +17,7 @@ generated_by: dailypaper-skills
 - [[论文笔记/5-Speech-LLM与AudioLM/SpeechWorldModel|SpeechWorldModel]]
 - [[论文笔记/5-Speech-LLM与AudioLM/StepAudio-EditX|StepAudio-EditX]]
 - [[论文笔记/5-Speech-LLM与AudioLM/StepAudio|StepAudio]]
+- [[论文笔记/5-Speech-LLM与AudioLM/StepAudio2.5|StepAudio2.5]]
 - [[论文笔记/5-Speech-LLM与AudioLM/UniAudio|UniAudio]]
 
 ## 说明

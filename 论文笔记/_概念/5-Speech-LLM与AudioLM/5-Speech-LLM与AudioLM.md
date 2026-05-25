@@ -31,6 +31,7 @@ generated_by: dailypaper-skills
 - [[论文笔记/_概念/5-Speech-LLM与AudioLM/SALMONN|SALMONN]]
 - [[论文笔记/_概念/5-Speech-LLM与AudioLM/Speech LLM|Speech LLM]]
 - [[论文笔记/_概念/5-Speech-LLM与AudioLM/SpeechGPT|SpeechGPT]]
+- [[论文笔记/_概念/5-Speech-LLM与AudioLM/Step-Audio-2.5|Step-Audio-2.5]]
 - [[论文笔记/_概念/5-Speech-LLM与AudioLM/Step-Audio-2|Step-Audio-2]]
 - [[论文笔记/_概念/5-Speech-LLM与AudioLM/Step-Audio|Step-Audio]]
 - [[论文笔记/_概念/5-Speech-LLM与AudioLM/SyncLLM|SyncLLM]]
