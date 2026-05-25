@@ -26,6 +26,7 @@ generated_by: dailypaper-skills
 - [[论文笔记/_概念/14-LLM基础/Encoder-Decoder Transformer|Encoder-Decoder Transformer]]
 - [[论文笔记/_概念/14-LLM基础/Feed-Forward Network|Feed-Forward Network]]
 - [[论文笔记/_概念/14-LLM基础/Feed-Forward Transformer|Feed-Forward Transformer]]
+- [[论文笔记/_概念/14-LLM基础/FiLM|FiLM]]
 - [[论文笔记/_概念/14-LLM基础/GPT|GPT]]
 - [[论文笔记/_概念/14-LLM基础/GRPO|GRPO]]
 - [[论文笔记/_概念/14-LLM基础/Gumbel-Softmax|Gumbel-Softmax]]

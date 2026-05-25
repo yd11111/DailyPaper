@@ -23,8 +23,8 @@ $$
 其中 $c$ 为文本和说话人条件。
 
 ## 代表工作
-- NaturalSpeech 2 (Shen et al., 2023): latent diffusion TTS
-- NaturalSpeech 3 (Ju et al., 2024): 使用 FACodec 分解建模
+- [[NaturalSpeech2]]: 435M params, 44K hours MLS, WaveNet-based latent diffusion, CMOS 与 GT 持平
+- [[NaturalSpeech 3]]: 继任者，使用 DiT + [[Conditional Flow Matching]] 替代 WaveNet + diffusion
 
 ## 评测/常见数字
 - LibriSpeech test-clean WER: ~2%
