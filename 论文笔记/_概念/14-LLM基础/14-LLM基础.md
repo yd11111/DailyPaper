@@ -12,8 +12,10 @@ generated_by: dailypaper-skills
 
 - [[论文笔记/_概念/14-LLM基础/Adaptive Layer Normalization|Adaptive Layer Normalization]]
 - [[论文笔记/_概念/14-LLM基础/Autoregressive|Autoregressive]]
+- [[论文笔记/_概念/14-LLM基础/BERT|BERT]]
 - [[论文笔记/_概念/14-LLM基础/BPE|BPE]]
 - [[论文笔记/_概念/14-LLM基础/ConvNeXt|ConvNeXt]]
+- [[论文笔记/_概念/14-LLM基础/Cross-Attention|Cross-Attention]]
 - [[论文笔记/_概念/14-LLM基础/DPO|DPO]]
 - [[论文笔记/_概念/14-LLM基础/DeepSeek-R1|DeepSeek-R1]]
 - [[论文笔记/_概念/14-LLM基础/DeepSeek|DeepSeek]]

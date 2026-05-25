@@ -24,6 +24,7 @@ generated_by: dailypaper-skills
 - [[论文笔记/_概念/3-Audio-Codec与Tokenizer/RVQ|RVQ]]
 - [[论文笔记/_概念/3-Audio-Codec与Tokenizer/Semantic Token|Semantic Token]]
 - [[论文笔记/_概念/3-Audio-Codec与Tokenizer/Semantic Tokenizer|Semantic Tokenizer]]
+- [[论文笔记/_概念/3-Audio-Codec与Tokenizer/SoundStorm|SoundStorm]]
 - [[论文笔记/_概念/3-Audio-Codec与Tokenizer/SoundStream|SoundStream]]
 - [[论文笔记/_概念/3-Audio-Codec与Tokenizer/SpectroStream|SpectroStream]]
 - [[论文笔记/_概念/3-Audio-Codec与Tokenizer/Speech Tokenizer|Speech Tokenizer]]
@@ -31,6 +32,7 @@ generated_by: dailypaper-skills
 - [[论文笔记/_概念/3-Audio-Codec与Tokenizer/VQ|VQ]]
 - [[论文笔记/_概念/3-Audio-Codec与Tokenizer/Vector Quantization|Vector Quantization]]
 - [[论文笔记/_概念/3-Audio-Codec与Tokenizer/WavTokenizer|WavTokenizer]]
+- [[论文笔记/_概念/3-Audio-Codec与Tokenizer/X-Codec|X-Codec]]
 
 ## 说明
 

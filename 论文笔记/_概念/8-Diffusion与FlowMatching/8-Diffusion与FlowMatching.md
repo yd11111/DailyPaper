@@ -18,6 +18,7 @@ generated_by: dailypaper-skills
 - [[论文笔记/_概念/8-Diffusion与FlowMatching/Diffusion Head|Diffusion Head]]
 - [[论文笔记/_概念/8-Diffusion与FlowMatching/Diffusion Transformer|Diffusion Transformer]]
 - [[论文笔记/_概念/8-Diffusion与FlowMatching/Flow Matching|Flow Matching]]
+- [[论文笔记/_概念/8-Diffusion与FlowMatching/Normalizing Flow|Normalizing Flow]]
 - [[论文笔记/_概念/8-Diffusion与FlowMatching/OT-CFM|OT-CFM]]
 - [[论文笔记/_概念/8-Diffusion与FlowMatching/Optimal Transport|Optimal Transport]]
 - [[论文笔记/_概念/8-Diffusion与FlowMatching/VAE|VAE]]

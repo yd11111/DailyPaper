@@ -19,6 +19,7 @@ aliases: [ICL, 上下文学习, 提示学习]
 
 - GPT-3 (Brown et al., 2020): NLP 中首次大规模展示 ICL
 - [[VALL-E]]: 语音领域首次实现 ICL，3 秒 prompt 即可 zero-shot TTS
+- [[VALL-E-X]]: 将 ICL 扩展到跨语言场景，涌现 code-switch 合成能力
 - [[Zero-shot TTS]]: ICL 在 TTS 中的具体应用
 
 ## 相关概念

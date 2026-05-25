@@ -20,6 +20,7 @@ aliases: [Your-TTS]
 
 - YourTTS (Casanova et al., 2022): 原始论文
 - [[VALL-E]]: 在 LibriSpeech / VCTK 上显著超越 YourTTS
+- [[VALL-E-X]]: 在跨语言 TTS 上以 YourTTS 为基线（ASV-Score 0.30 vs 0.36）
 
 ## 评测/常见数字
 

@@ -25,16 +25,24 @@ $$
 
 ## 代表工作
 
+- F5-TTS 原论文 (arXiv 2410.06885, Chen et al. 2024): 本概念的原始论文，详见 [[F5-TTS]]
 - [[VibeVoice]]: 把 F5-TTS 当作"短句零样本 TTS"对比基线之一
-- F5-TTS 原论文 (arXiv 2410.06885, Chen et al. 2024)
 
 ## 评测/常见数字
 
-- LibriSpeech-PC test-clean WER: ~2.4%
-- SECS: ~0.66
+- LibriSpeech-PC test-clean WER: 2.42% (32 NFE) / 2.53% (16 NFE)
+- SIM-o: 0.66
+- RTF: 0.15 (16 NFE Euler)
+- Seed-TTS test-en WER: 1.83%, CMOS: +0.31
+- Seed-TTS test-zh WER: 1.56%, CMOS: +0.21
 
 ## 相关概念
 
 - [[Flow Matching]]
+- [[DiT]]
+- [[ConvNeXt]]
+- [[E2 TTS]]
 - [[CosyVoice]]
 - [[Duration Predictor]]
+- [[Vocos]]
+- [[Emilia]]

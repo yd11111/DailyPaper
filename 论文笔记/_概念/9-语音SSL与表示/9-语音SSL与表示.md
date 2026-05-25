@@ -12,16 +12,20 @@ generated_by: dailypaper-skills
 
 - [[论文笔记/_概念/9-语音SSL与表示/AfriHuBERT|AfriHuBERT]]
 - [[论文笔记/_概念/9-语音SSL与表示/CAM++|CAM++]]
+- [[论文笔记/_概念/9-语音SSL与表示/ContentVec|ContentVec]]
 - [[论文笔记/_概念/9-语音SSL与表示/ECAPA-TDNN|ECAPA-TDNN]]
 - [[论文笔记/_概念/9-语音SSL与表示/ERes2Net|ERes2Net]]
 - [[论文笔记/_概念/9-语音SSL与表示/HuBERT|HuBERT]]
 - [[论文笔记/_概念/9-语音SSL与表示/SSL Speech Representation|SSL Speech Representation]]
+- [[论文笔记/_概念/9-语音SSL与表示/Speaker Encoder|Speaker Encoder]]
+- [[论文笔记/_概念/9-语音SSL与表示/SpeechUT|SpeechUT]]
 - [[论文笔记/_概念/9-语音SSL与表示/WavLM|WavLM]]
 - [[论文笔记/_概念/9-语音SSL与表示/X-Vector|X-Vector]]
 - [[论文笔记/_概念/9-语音SSL与表示/XEUS|XEUS]]
 - [[论文笔记/_概念/9-语音SSL与表示/XLS|XLS]]
 - [[论文笔记/_概念/9-语音SSL与表示/emotion2vec|emotion2vec]]
 - [[论文笔记/_概念/9-语音SSL与表示/w2v-BERT 2.0|w2v-BERT 2.0]]
+- [[论文笔记/_概念/9-语音SSL与表示/w2v-BERT|w2v-BERT]]
 
 ## 说明
 
