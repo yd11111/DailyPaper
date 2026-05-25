@@ -18,8 +18,8 @@ aliases: [FastSpeech2, FS2]
 
 ## 代表工作
 
-- FastSpeech (Ren et al., 2019): 初版，用 teacher-student 提取 duration
-- FastSpeech 2 (Ren et al., 2021): 去掉 teacher，直接用 forced alignment 标签
+- [[FastSpeech]] (Ren et al., 2019): 初版，用 teacher-student 提取 duration
+- [[FastSpeech2]] (Ren et al., 2021): 去掉 teacher，直接用 forced alignment 标签
 
 ## 评测/常见数字
 

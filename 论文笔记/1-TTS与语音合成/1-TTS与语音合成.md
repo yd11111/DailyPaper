@@ -8,6 +8,10 @@ generated_by: dailypaper-skills
 
 - 当前目录：`1-TTS与语音合成`
 
+## 子目录
+
+- [[论文笔记/1-TTS与语音合成/assets/assets|assets]] · 0 篇笔记 · 0 个子目录
+
 ## 当前目录笔记
 
 - [[论文笔记/1-TTS与语音合成/BaseTTS|BaseTTS]]
@@ -18,6 +22,8 @@ generated_by: dailypaper-skills
 - [[论文笔记/1-TTS与语音合成/CosyVoice3|CosyVoice3]]
 - [[论文笔记/1-TTS与语音合成/F5-TTS|F5-TTS]]
 - [[论文笔记/1-TTS与语音合成/FELLE|FELLE]]
+- [[论文笔记/1-TTS与语音合成/FastSpeech|FastSpeech]]
+- [[论文笔记/1-TTS与语音合成/FastSpeech2|FastSpeech2]]
 - [[论文笔记/1-TTS与语音合成/FireRedTTS|FireRedTTS]]
 - [[论文笔记/1-TTS与语音合成/FireRedTTS2|FireRedTTS2]]
 - [[论文笔记/1-TTS与语音合成/Fish-Speech|Fish-Speech]]
