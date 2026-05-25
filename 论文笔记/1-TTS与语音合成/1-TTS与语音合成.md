@@ -33,6 +33,7 @@ generated_by: dailypaper-skills
 - [[论文笔记/1-TTS与语音合成/NaturalSpeech|NaturalSpeech]]
 - [[论文笔记/1-TTS与语音合成/NaturalSpeech2|NaturalSpeech2]]
 - [[论文笔记/1-TTS与语音合成/NaturalSpeech3|NaturalSpeech3]]
+- [[论文笔记/1-TTS与语音合成/Qwen3-TTS|Qwen3-TTS]]
 - [[论文笔记/1-TTS与语音合成/Raon-OpenTTS|Raon-OpenTTS]]
 - [[论文笔记/1-TTS与语音合成/SC-VALLE|SC-VALLE]]
 - [[论文笔记/1-TTS与语音合成/SPEAR-TTS|SPEAR-TTS]]
@@ -43,6 +44,7 @@ generated_by: dailypaper-skills
 - [[论文笔记/1-TTS与语音合成/VALL-E|VALL-E]]
 - [[论文笔记/1-TTS与语音合成/VITS|VITS]]
 - [[论文笔记/1-TTS与语音合成/VibeVoice|VibeVoice]]
+- [[论文笔记/1-TTS与语音合成/VoxCPM|VoxCPM]]
 - [[论文笔记/1-TTS与语音合成/XTTS|XTTS]]
 - [[论文笔记/1-TTS与语音合成/YourTTS|YourTTS]]
 

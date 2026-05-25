@@ -10,7 +10,9 @@ generated_by: dailypaper-skills
 
 ## 当前目录笔记
 
+- [[论文笔记/_概念/4-Vocoder与声码器/BigVGAN|BigVGAN]]
 - [[论文笔记/_概念/4-Vocoder与声码器/HiFi-GAN|HiFi-GAN]]
+- [[论文笔记/_概念/4-Vocoder与声码器/Vocos|Vocos]]
 
 ## 说明
 

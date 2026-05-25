@@ -19,6 +19,7 @@ generated_by: dailypaper-skills
 - [[论文笔记/_概念/14-LLM基础/Qwen2-0.5B|Qwen2-0.5B]]
 - [[论文笔记/_概念/14-LLM基础/Qwen2.5-1.5B|Qwen2.5-1.5B]]
 - [[论文笔记/_概念/14-LLM基础/Qwen2.5|Qwen2.5]]
+- [[论文笔记/_概念/14-LLM基础/Qwen3|Qwen3]]
 - [[论文笔记/_概念/14-LLM基础/RLAIF-V|RLAIF-V]]
 - [[论文笔记/_概念/14-LLM基础/Smooth Length Reward|Smooth Length Reward]]
 - [[论文笔记/_概念/14-LLM基础/llama.cpp-omni|llama.cpp-omni]]
