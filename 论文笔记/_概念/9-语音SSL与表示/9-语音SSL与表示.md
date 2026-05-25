@@ -16,6 +16,7 @@ generated_by: dailypaper-skills
 - [[论文笔记/_概念/9-语音SSL与表示/WavLM|WavLM]]
 - [[论文笔记/_概念/9-语音SSL与表示/XEUS|XEUS]]
 - [[论文笔记/_概念/9-语音SSL与表示/XLS|XLS]]
+- [[论文笔记/_概念/9-语音SSL与表示/emotion2vec|emotion2vec]]
 - [[论文笔记/_概念/9-语音SSL与表示/w2v-BERT 2.0|w2v-BERT 2.0]]
 
 ## 说明

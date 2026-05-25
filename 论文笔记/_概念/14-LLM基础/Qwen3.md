@@ -15,6 +15,7 @@ aliases: [Qwen3 LLM, Qwen3 系列]
 4. 提供 ChatML 格式的对话模板，便于多模态任务统一训练
 
 ## 代表工作
+- [[IndexTTS2]]: 使用 Qwen3-1.7B + LoRA 作为 T2E 情感控制 student 模型
 - [[Qwen3-TTS]]: 使用 Qwen3 0.6B/1.7B 作为 TTS backbone
 - [[Qwen3-Omni-30B-A3B]]: 使用 Qwen3 MoE 作为多模态 backbone
 

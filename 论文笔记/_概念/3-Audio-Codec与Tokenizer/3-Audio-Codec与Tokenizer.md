@@ -16,6 +16,7 @@ generated_by: dailypaper-skills
 - [[论文笔记/_概念/3-Audio-Codec与Tokenizer/Audio VAE|Audio VAE]]
 - [[论文笔记/_概念/3-Audio-Codec与Tokenizer/DAC|DAC]]
 - [[论文笔记/_概念/3-Audio-Codec与Tokenizer/EnCodec|EnCodec]]
+- [[论文笔记/_概念/3-Audio-Codec与Tokenizer/Mel-Spectrogram|Mel-Spectrogram]]
 - [[论文笔记/_概念/3-Audio-Codec与Tokenizer/Mimi|Mimi]]
 - [[论文笔记/_概念/3-Audio-Codec与Tokenizer/RVQ|RVQ]]
 - [[论文笔记/_概念/3-Audio-Codec与Tokenizer/Semantic Token|Semantic Token]]

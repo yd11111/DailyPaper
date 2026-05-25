@@ -15,6 +15,7 @@ aliases: [BigVGAN-v2]
 4. 处理的是 Mel-Spectrogram → Waveform 的映射
 
 ## 代表工作
+- [[IndexTTS2]]: 使用 BigVGANv2 作为级联系统的最终声码器
 - [[Qwen3-TTS]]: 25Hz tokenizer 的流式波形重建声码器
 - [[CosyVoice 2]]: 作为 flow matching 后的声码器
 - [[F5-TTS]]: mel 谱图→波形重建
