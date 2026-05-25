@@ -29,20 +29,21 @@ last_updated: 2026-05-25
 详见 [[TTS-技术路线图]]，此处仅给鸟瞰：
 
 ```
-┌──────────────────────────────────────────────────────────┐
-│                     TTS 技术路线                          │
-├──────────────┬───────────────┬──────────────┬────────────┤
-│  声学特征中介  │  Codec Token  │  端到端 E2E  │  Latent    │
-│  (mel/linear) │  (RVQ codes)  │  (text→wav)  │  (连续表征) │
-├──────────────┼───────────────┼──────────────┼────────────┤
-│ FastSpeech2  │ VALL-E        │ VITS         │ NatSpeech2 │
-│ TransformerTTS│ SPEAR-TTS    │ F5-TTS       │ NatSpeech3 │
-│ Tacotron2    │ SeedTTS       │ VoxCPM       │ SemaVoice  │
-│ MegaTTS      │ CosyVoice     │              │ MaskGCT    │
-│              │ IndexTTS2     │              │            │
-│              │ GLM-TTS       │              │            │
-│              │ GPT-SoVITS    │              │            │
-└──────────────┴───────────────┴──────────────┴────────────┘
+┌──────────────────────────────────────────────────────────────────────────┐
+│                           TTS 技术路线                                    │
+├──────────────┬───────────────┬──────────────┬────────────┬──────────────┤
+│  声学特征中介  │  Codec Token  │  端到端 E2E  │  Latent    │ Tokenizer-  │
+│  (mel/linear) │  (RVQ codes)  │  (text→wav)  │  (连续表征) │ free/连续AR  │
+├──────────────┼───────────────┼──────────────┼────────────┼──────────────┤
+│ FastSpeech2  │ VALL-E        │ VITS         │ NatSpeech2 │ MELLE       │
+│ TransformerTTS│ SPEAR-TTS    │ F5-TTS       │ NatSpeech3 │ VoxCPM      │
+│ Tacotron2    │ SeedTTS       │              │ MaskGCT    │ FELLE       │
+│ MegaTTS      │ CosyVoice     │              │ SemaVoice  │ CLEAR       │
+│              │ IndexTTS2     │              │            │             │
+│              │ GLM-TTS       │              │            │ LLM-native: │
+│              │ GPT-SoVITS    │              │            │ Qwen3-TTS   │
+│              │ Qwen3-TTS     │              │            │ StepAudio2.5│
+└──────────────┴───────────────┴──────────────┴────────────┴──────────────┘
 ```
 
 ## 关键演进节点
@@ -65,6 +66,11 @@ last_updated: 2026-05-25
 | 2025.05 | [[CosyVoice3]] | 100 万小时训练数据，Codec LM 路线的工业极致 |
 | 2025.05 | [[Qwen3-TTS]] | 500 万小时私有数据，LLM-native TTS |
 | 2025.05 | [[VoxCPM]] | 无 tokenizer 直接在连续 mel 上做 LLM |
+| 2026.01 | [[SemaVoice]] | 连续 AR + patch-wise diffusion，Tokenizer-free 路线代表 |
+| 2026.02 | [[Qwen3-TTS]] | LLM-native TTS，500 万小时数据，支持自然语言韵律指令 |
+| 2026.03 | [[FlexiVoice]] | ICLR 2026，自然语言指令控制风格（无需参考音频） |
+| 2026.04 | [[StepAudio2.5]] | ASR + TTS + 实时交互统一 Speech LLM 基座 |
+| 2026.05 | [[Raon-OpenTTS]] | 开放数据+模型的 DiT Flow Matching TTS |
 
 ## 当前格局
 
@@ -87,13 +93,15 @@ last_updated: 2026-05-25
 | [[GLM-TTS]] | Streaming LM + Flow | 10万h | 智谱，严格数据筛选 |
 | [[VoxCPM]] | Tokenizer-free LM | 180万h | 面壁，连续 mel 建模 |
 
-### 研究前沿（2025 热点）
+### 研究前沿（2026 热点）
 
-1. **Tokenizer-free**: [[VoxCPM]] 证明 LLM 可直接建模连续 mel，跳过 codec 这一"信息瓶颈"
-2. **流式低延迟**: [[CosyVoice2]] chunk-aware causal、[[GLM-TTS]] streaming decoder，目标首包延迟 < 200ms
-3. **超大规模数据**: 从 10 万小时级（2024）跃升到 100-500 万小时级（2025），数据质量 > 数据量
-4. **LLM 原生 TTS**: [[Qwen3-TTS]] 直接用 LLM 做 TTS，不额外训练声学模型
-5. **评测标准化**: [[Emilia]]、[[TTSDS2]]、[[SpeechJudge]] 推动可复现评测
+1. **Tokenizer-free / 连续 AR**: [[VoxCPM]]、[[MELLE]]、[[FELLE]]、[[CLEAR]]、[[SemaVoice]] 证明可跳过离散 tokenization，直接在连续空间做自回归建模。2026 年已有 5+ 篇工作，从单点探索变为活跃方向
+2. **LLM-native TTS**: [[Qwen3-TTS]] 直接用 Qwen3 LLM 输出 speech token；[[StepAudio2.5]] 将 ASR + TTS + 实时交互统一到一个 Speech LLM 基座
+3. **自然语言指令可控**: [[FlexiVoice]]（ICLR 2026）用文字描述控制说话风格，不再需要参考音频；[[Qwen3-TTS]] 利用 LLM 语义理解自动推断韵律
+4. **流式低延迟**: [[CosyVoice2]] chunk-aware causal、[[GLM-TTS]] streaming decoder，目标首包延迟 < 200ms
+5. **SSM 替代 Transformer**: [[MambaVoiceCloning]]（ICLR 2026）用 Mamba 做 diffusion TTS，线性复杂度
+6. **Speech RLHF**: [[GSRM]] 提出 generative speech reward model，强化学习对齐进入语音领域
+7. **超大规模数据**: [[Qwen3-TTS]] 500 万小时、[[VoxCPM]] 180 万小时、[[CosyVoice3]] 100 万小时
 
 ## 与相邻领域的关系
 

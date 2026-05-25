@@ -63,8 +63,8 @@ Text → LLM/AR模型 → 离散speech token序列 → Codec解码器(token→wa
 | [[IndexTTS2]] | 2025 | 100层 GPT + BigVGAN-v2 | 自训练 | 极深 LM + 高质量声码器 |
 | [[GPT-SoVITS]] | 2024 | GPT(语义) + VITS(声学) | [[HuBERT]] token | 语义 token + VITS 联合 |
 | [[SeedTTS]] | 2024 | AR LM + Diffusion | 自训练 | 自蒸馏 + 强化学习后训练 |
-| [[GLM-TTS]] | 2025 | Streaming LM + Flow | 自训练 | 流式 chunk 级解码 |
-| [[Qwen3-TTS]] | 2025 | Qwen3 LLM 直出 | multi-codebook | LLM-native，不额外训练声学模型 |
+| [[GLM-TTS]] | 2024 | Streaming LM + Flow | 自训练 | 流式 chunk 级解码 |
+| [[Qwen3-TTS]] | 2026 | Qwen3 LLM 直出 | multi-codebook | LLM-native，不额外训练声学模型 |
 | [[FireRedTTS]] | 2024 | AR LM | 图像 tokenizer 跨模态 | 用图像 VQ 做语音 tokenization |
 
 ### Token 设计演进
@@ -127,30 +127,42 @@ Text → 条件编码 → Diffusion/Flow Matching → 连续latent → 解码器
 |------|------|---------|------------|---------|
 | [[NaturalSpeech2]] | 2023 | Diffusion | 自训练 VAE latent | 连续 latent + diffusion，首个大规模零样本 |
 | [[NaturalSpeech3]] | 2024 | Flow Matching | FACodec 分解 latent | 分解为 content/prosody/timbre/detail 四路 latent |
-| [[SemaVoice]] | 2025 | Flow Matching | 语义 latent | 语义 latent 做主体 + shallow diffusion 补细节 |
-| [[MaskGCT]] | 2025 | Masked Generative | Codec latent | 非自回归 masked prediction |
+| [[SemaVoice]] | 2026 | Flow Matching | 语义 latent | SFM 对齐 + patch-wise diffusion head |
+| [[MaskGCT]] | 2024 | Masked Generative | Codec latent | 非自回归 masked prediction |
 
 ### 优势与局限
 
 - **优势**: 避免离散化信息瓶颈；生成质量理论上限更高；Flow Matching 训练比 Diffusion 稳定
 - **局限**: 推理速度受 diffusion steps 限制（需 ODE solver）；latent 空间设计需要精心调参
 
-## 路线 5（新兴）: Tokenizer-free / 连续序列建模
+## 路线 5（快速增长中）: Tokenizer-free / 连续 AR
 
 ### 范式
 
 ```
-Text → LLM → 连续mel帧序列（非离散token）→ 声码器 → Waveform
+Text → LLM/AR模型 → 连续mel帧或连续latent序列 → 声码器 → Waveform
 ```
 
-### 代表
+### 核心假设
 
-- [[VoxCPM]]（2025）: 用 LLM 直接自回归预测连续 mel 帧，每帧是一个连续向量而非离散 token
-- [[LatentLM]]（2024）: 在连续 latent 上训练 LM，用 diffusion loss 替代 cross-entropy
+语音的连续特性不应被强制离散化。跳过 codec tokenization 这个"人为瓶颈"，直接在连续空间做自回归建模，同时保留 LM 的 scaling 优势。
 
-### 意义
+### 代表工作
 
-这条路线试图同时获得 Codec LM 路线的 scaling 优势和连续 latent 路线的信息完整性。是否能 scale 到 100 万小时级数据仍是开放问题。
+| 模型 | 年份 | 连续目标 | 生成方式 | 关键创新 |
+|------|------|---------|---------|---------|
+| [[MELLE]] | 2024 | 连续 mel | AR + latent sampling module | 首个无 VQ 的 AR TTS |
+| [[LatentLM]] | 2024 | 连续 latent | AR + diffusion loss | 用 diffusion loss 替代 cross-entropy |
+| [[VoxCPM]] | 2025 | 连续 mel 帧 | LLM AR 连续预测 | 无 tokenizer，180 万小时数据 |
+| [[FELLE]] | 2025 | 连续 mel | AR + token-wise Flow Matching | 在 MELLE 基础上加逐 token Flow Matching 精修 |
+| [[CLEAR]] | 2025 | 连续 latent | AR 连续预测 | 专注低延迟，港中大/华为 |
+| [[SemaVoice]] | 2026 | 语义 latent | 连续 AR + patch-wise diffusion | SFM 对齐 + diffusion head |
+
+### 优势与局限
+
+- **优势**: 避开 codec 设计这个"开放战场"；理论信息保真度更高；连续空间天然适配语音的渐变特性
+- **局限**: 训练稳定性不如离散 token（连续值回归的方差更大）；scaling 能力是否匹配 Codec LM 路线尚无定论；缺乏公认的连续表征评测标准
+- **现状**: 从 2024 年的单点探索（MELLE）发展为 2026 年的活跃方向（5+ 篇工作），但尚未出现百万小时级以上的成功案例（VoxCPM 180 万 h 是目前最大）
 
 ## 路线选择决策树
 
@@ -175,14 +187,16 @@ Text → LLM → 连续mel帧序列（非离散token）→ 声码器 → Wavefor
 
 ## 路线融合趋势
 
-2024-2025 的趋势是**路线融合**而非路线替代：
+2024-2026 的趋势是**路线融合**而非路线替代：
 
 - **Codec LM + Flow Matching**（路线 2+4）: [[CosyVoice]] 系列——LM 预测语义 token，Flow Matching 生成波形
 - **Codec LM + Diffusion**（路线 2+4）: [[SeedTTS]]——AR 预测 token + diffusion 精修
 - **LM + 连续目标**（路线 2+5）: [[VoxCPM]]——LM 架构但预测连续值
+- **连续 AR + Flow**（路线 5+4）: [[FELLE]]——连续 AR 主体 + token-wise Flow Matching 精修；[[SemaVoice]]——连续 AR + patch-wise diffusion head
 - **E2E + Flow**（路线 3+4）: [[F5-TTS]]——DiT 端到端但用 Flow Matching 训练
+- **LLM-native + 指令控制**: [[Qwen3-TTS]]——通用 LLM 直接做 TTS + 自然语言韵律理解；[[FlexiVoice]]——NL 指令控制风格
 
-纯单一路线的系统越来越少，融合是主旋律。
+纯单一路线的系统越来越少，融合是主旋律。2026 年新增的趋势是 **LLM-native**（TTS 成为 LLM 的模态能力）和 **自然语言指令可控**（不再需要参考音频或显式条件）。
 
 ---
 

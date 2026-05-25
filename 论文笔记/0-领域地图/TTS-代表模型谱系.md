@@ -50,14 +50,21 @@ last_updated: 2026-05-25
 | [[XTTS]] | 2024 | C | GPT token | AR+声码器 | ✓ | Coqui 多语言开源（技术混合度高） |
 | [[Fish-Speech]] | 2024 | C | 自训练 token | AR | ✓ | 70万h 社区开源 |
 | [[CosyVoice2]] | 2024 | C+D | FSQ token | LLM→Flow Matching | ✓ | FSQ 替代 RVQ + chunk-aware 流式 |
-| [[MaskGCT]] | 2025 | C | codec latent | Masked Generative（NAR） | ✓ | 非自回归 masked prediction 生成 token |
-| [[SemaVoice]] | 2025 | D | 语义 latent | Flow Matching | ✓ | 语义 latent 为主 + shallow diffusion |
+| [[MaskGCT]] | 2024 | C | codec latent | Masked Generative（NAR） | ✓ | 非自回归 masked prediction 生成 token |
+| [[MELLE]] | 2024 | L | 连续 mel | AR 连续预测（latent sampling） | ✓ | 首个无 VQ 的 AR TTS，直接预测连续 mel |
 | [[IndexTTS2]] | 2025 | C | 自训练 token | 100层 AR + BigVGAN-v2 | ✓ | 极深 LM + 高质量声码器 |
-| [[GLM-TTS]] | 2025 | C+D | 自训练 token | Streaming LM→Flow | ✓ | 流式 chunk 级 LM 解码 |
+| [[GLM-TTS]] | 2024 | C+D | 自训练 token | Streaming LM→Flow | ✓ | 流式 chunk 级 LM 解码 |
 | [[FireRedTTS2]] | 2025 | C | 图像 VQ token | AR | ✓ | FireRedTTS 改进版 |
 | [[CosyVoice3]] | 2025 | C+D | FSQ token | LLM→Flow Matching | ✓ | 100万h 数据规模 |
-| [[Qwen3-TTS]] | 2025 | L+K | multi-codebook token | LLM 直出 | ✓ | 通用 LLM 直接做 TTS，支持自然语言韵律指令 |
 | [[VoxCPM]] | 2025 | L | 连续 mel 帧 | LLM AR 连续预测 | ✓ | 无 tokenizer，LLM 直接预测连续值 |
+| [[FELLE]] | 2025 | L+D | 连续 mel | AR + token-wise Flow Matching | ✓ | MELLE 基础上引入逐 token Flow Matching 精修 |
+| [[CLEAR]] | 2025 | L | 连续 latent | AR 连续预测 | ✓ | 连续 latent AR，追求低延迟 |
+| [[Qwen3-TTS]] | 2026 | L+K | multi-codebook token | LLM 直出 | ✓ | 通用 LLM 直接做 TTS，支持自然语言韵律指令 |
+| [[SemaVoice]] | 2026 | D+L | 语义 latent | 连续 AR + Flow Matching | ✓ | SFM 对齐 + patch-wise diffusion head |
+| [[Raon-OpenTTS]] | 2026 | D | — | DiT Flow Matching | ✓ | 开放数据+模型，KRAFTON/首尔大/KAIST |
+| [[FlexiVoice]] | 2026 | K+C | — | NL 指令条件生成 | ✓ | 自然语言指令控制风格（无需参考音频） |
+| [[MambaVoiceCloning]] | 2026 | D | — | SSM + Diffusion | ✓ | Mamba SSM 替代 Transformer，线性复杂度 |
+| [[StepAudio2.5]] | 2026 | L+K | 统一 token | 统一 Speech LLM | ✓ | ASR+TTS+交互统一基座 |
 
 ## 严格谱系分支
 
@@ -174,12 +181,18 @@ BigVGAN (2023) → BigVGAN-v2 (2024)
 | [[SeedTTS]] | Codec LM + Diffusion | 字节独立系统，借鉴 VALL-E 思路但无直接代码/架构继承 |
 | [[F5-TTS]] | Diffusion/Flow | DiT Flow Matching 端到端，独立设计 |
 | [[MaskGCT]] | Codec token 生成 | 非自回归 masked prediction，与 AR Codec LM 路线不同 |
-| [[SemaVoice]] | Diffusion/Flow | 语义 latent + shallow diffusion，独立设计 |
+| [[SemaVoice]] | 连续 AR + Flow | SFM 对齐 + patch-wise diffusion，2026 连续 AR 代表作 |
 | [[BaseTTS]] | Codec LM | Amazon 大规模预训练，方法论独立 |
 | [[XTTS]] | 混合（GPT + 声码器） | Coqui 工业开源，技术混合度高 |
 | [[Fish-Speech]] | Codec LM | 社区开源，独立实现 |
 | [[Qwen3-TTS]] | LLM-native | 与 Codec LM 有亲缘但属于新范式（通用 LLM 直出） |
 | [[VoxCPM]] | LLM-native / Tokenizer-free | 全新路线，无直接先驱 |
+| [[MELLE]] | Tokenizer-free AR | 微软，连续 mel AR 的开创者，VoxCPM 的思想近亲 |
+| [[FELLE]] | Tokenizer-free AR + Flow | 微软，MELLE 基础上加 token-wise flow matching |
+| [[CLEAR]] | Tokenizer-free AR | 港中大/华为，连续 latent AR 低延迟 |
+| [[Raon-OpenTTS]] | DiT Flow Matching | 韩国多校联合，强调开放数据和可复现 |
+| [[FlexiVoice]] | Instruction TTS | ICLR 2026，NL 指令控制风格（不需要参考音频） |
+| [[MambaVoiceCloning]] | SSM + Diffusion | ICLR 2026，Mamba 替代 Transformer 做 diffusion TTS |
 
 ## 演化脉络
 
@@ -223,16 +236,45 @@ Codec LM 内部分化为三个子方向：
 
 **留下的问题**: 离散化仍是信息瓶颈；codec 设计缺乏共识；序列长度与音质的 tradeoff
 
-### 第四阶段: LLM-native / Tokenizer-free（2025-萌芽中）
+### 第四阶段: Tokenizer-free / 连续 AR（2024-2026，快速增长中）
 
-**核心思路**: 不再为 TTS 训练专门模型，让通用 LLM 直接输出语音
-**试图解决的核心问题**: TTS 与 LLM 的统一
+**核心思路**: 跳过离散 tokenization，直接在连续空间做自回归建模
+**解决的核心问题**: 离散化带来的信息瓶颈
 
-两条探索路线正在同时推进：
-- **LLM 直出离散 token**: [[Qwen3-TTS]] 用 Qwen3 LLM 直接预测 multi-codebook speech token
-- **LLM 直出连续值**: [[VoxCPM]] 跳过 tokenizer，LLM 自回归预测连续 mel 帧
+这条路线比"LLM-native"更早启动，且在 2026 年加速：
 
-**尚未验证**: 通用 LLM 做 TTS 的质量能否真正匹配专用系统——[[Qwen3-TTS]] 的初步结果积极，但尚需更多独立评测确认
+| 模型 | 年份 | 思路 |
+|------|------|------|
+| [[MELLE]] | 2024 | 首个无 VQ 的 AR TTS，用 latent sampling module 预测连续 mel |
+| [[VoxCPM]] | 2025 | LLM 直接自回归预测连续 mel 帧，180万h 数据 |
+| [[FELLE]] | 2025 | 在 MELLE 基础上加 token-wise coarse-to-fine flow matching |
+| [[CLEAR]] | 2025 | 连续 latent AR，专注低延迟 |
+| [[SemaVoice]] | 2026 | SFM 对齐 + patch-wise diffusion head，连续 AR 路线的新代表 |
+
+**当前判断**: 连续 AR 路线已从 2024 年的单点探索（MELLE）发展为 2026 年的活跃方向（5+ 篇工作）。核心优势是避开 codec 设计这个"人为瓶颈"，但训练稳定性和 scaling 能力是否匹配离散 token 路线尚无定论。
+
+### 第五阶段: LLM-native + 指令可控（2026-当前前沿）
+
+**核心思路**: TTS 不再是独立系统，而是 LLM 的一个模态能力；控制方式从条件输入升级为自然语言指令
+**试图解决的核心问题**: TTS 与 LLM 的统一 + 细粒度可控性
+
+两个并行趋势在 2026 年汇合：
+
+**趋势 A — LLM-native TTS**:
+- [[Qwen3-TTS]]（2026）: 通用 Qwen3 LLM 直接预测 multi-codebook speech token，500万h 数据
+- [[StepAudio2.5]]（2026）: ASR + TTS + 实时交互统一在一个 Speech LLM 基座中
+
+**趋势 B — 自然语言指令控制**:
+- [[FlexiVoice]]（2026, ICLR）: 用文字描述（"用低沉柔和的声音说"）控制风格，不需要参考音频
+- [[Qwen3-TTS]]: LLM 理解文本语义后自动推断韵律
+
+**2026 年其他值得注意的新方向**:
+- **SSM 替代 Transformer**: [[MambaVoiceCloning]]（ICLR 2026）用 Mamba 做 diffusion TTS 条件路径，线性复杂度
+- **开放数据 + 可复现**: [[Raon-OpenTTS]]（2026）KRAFTON/首尔大/KAIST 联合，强调 open data + open model
+- **Speech RLHF**: [[GSRM]]（2026）提出 generative speech reward model，RL 对齐进入语音领域
+- **Codec 新探索**: [[FlexiCodec]]（ICLR 2026）动态帧率、[[StableToken]]（ICLR 2026）噪声鲁棒 tokenizer、[[ScalingSpeechTokenizers]]（ICLR 2026）diffusion autoencoder 替代 VQ
+
+**尚未验证**: LLM-native 做 TTS 的质量能否全面匹配专用系统；自然语言指令的可控精度是否足够；SSM 路线能否真正 scale
 
 ## 跨路线技术维度
 
@@ -251,17 +293,18 @@ Codec LM 内部分化为三个子方向：
 
 ### 可控性与指令 TTS（Controllable / Instruction TTS）
 
-从"给什么说什么"到"按指令说"的能力升级。这是 2024-2025 快速增长的维度。
+从"给什么说什么"到"按指令说"的能力升级。2026 年 ICLR 出现了多篇专门做 instruction TTS 的工作，这个维度正在从"附加功能"变成"独立研究方向"。
 
-| 控制粒度 | 代表 | 方式 |
-|---------|------|------|
-| 全局情感 | [[EmotionThinker]] | 情感 embedding 条件 |
-| duration/pitch/energy | [[FastSpeech2]] | 显式 variance adaptor |
-| 风格参考 | [[MegaTTS]]、[[CosyVoice]] | 参考音频 → speaker/style embedding |
-| 自然语言韵律指令 | [[Qwen3-TTS]] | LLM 理解文本语义 → 自动推断韵律 |
-| 语音理解+生成统一 | [[StepAudio2.5]]、[[Moshi]] | 统一 Speech LLM |
+| 控制粒度 | 代表 | 方式 | 年份 |
+|---------|------|------|------|
+| duration/pitch/energy | [[FastSpeech2]] | 显式 variance adaptor | 2020 |
+| 风格参考（音频） | [[MegaTTS]]、[[CosyVoice]] | 参考音频 → speaker/style embedding | 2023-24 |
+| 全局情感 | [[EmotionThinker]] | 情感 embedding + RL 推理 | 2026 |
+| **自然语言风格指令** | [[FlexiVoice]] | NL 描述控制风格（无需参考音频） | 2026 |
+| **LLM 语义理解驱动** | [[Qwen3-TTS]] | LLM 理解文本语义 → 自动推断韵律 | 2026 |
+| 语音理解+生成统一 | [[StepAudio2.5]]、[[Moshi]] | 统一 Speech LLM | 2024-26 |
 
-**为什么重要**: 很多近期系统的核心贡献不是"换了生成器"，而是**控制范式升级**——从显式条件（给定 F0 曲线）到自然语言指令（"用温柔的语气说"）。这个维度在本笔记库中的覆盖尚不充分，后续需要补充 StyleTTS、PromptTTS、InstructTTS 等工作。
+**为什么重要**: 2026 年的趋势表明，可控性正在从"给条件"向"说自然语言"转变。[[FlexiVoice]] 明确验证了"文字描述替代参考音频"的可行性；[[Qwen3-TTS]] 则展示了 LLM 本身的语义理解可以自动推断韵律。这个方向后续仍需补充 StyleTTS、PromptTTS、ParlerTTS 等工作。
 
 ### 评测范式演进
 
@@ -297,7 +340,7 @@ TTS 的评测逻辑也在随范式一起变化：
 
 - **Controllable / Instruction TTS 专题**: StyleTTS、PromptTTS、InstructTTS、ParlerTTS 等需要专题展开
 - **Speech Editing 路线**: Voicebox、FluentSpeech、SpeechX 等编辑类系统未纳入
-- **非中国团队的 2024-25 工作**: Google（SoundStorm 后续）、Meta（Voicebox 后续）的近期进展覆盖不足
+- **非中国团队的 2024-26 工作**: Google（SoundStorm 后续）、Meta（Voicebox 后续）的近期进展覆盖不足
 - **商业闭源系统**: ElevenLabs、OpenAI TTS、Azure TTS 等仅有有限公开信息，本文未收录
 - **多模态 TTS**: 视觉驱动的 talking head + TTS 联合系统
 - **音乐/歌唱合成**: SVS (Singing Voice Synthesis) 作为 TTS 近亲，当前未覆盖

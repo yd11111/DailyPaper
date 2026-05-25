@@ -28,6 +28,12 @@ last_updated: 2026-05-25
 | 解耦表征 | [[MegaTTS2]]、[[NaturalSpeech3]] | 显式分离 content/timbre/prosody | 分离不完全导致信息泄漏 |
 | Flow Matching 条件 | [[F5-TTS]] | 参考音频直接拼接到输入 | 需要 fill-in-the-middle 训练策略 |
 
+### 2026 年新进展
+
+- **连续 AR 路线**: [[SemaVoice]]（2026）通过 SFM 对齐 + patch-wise diffusion head 在连续空间做零样本克隆，避开 codec 信息瓶颈
+- **无参考音频克隆**: [[FlexiVoice]]（ICLR 2026）证明可用自然语言描述控制说话风格，完全不需要参考音频，开辟了"描述性克隆"新方向
+- **LLM-native 克隆**: [[Qwen3-TTS]] 利用通用 LLM 的 in-context learning 能力做零样本，500 万小时数据
+
 ### 未解问题
 
 - **跨语言克隆**: 参考音频是中文，生成英文——音色保持但发音模式如何处理？[[VALL-E-X]]、[[YourTTS]] 有探索但效果仍不稳定
@@ -58,6 +64,13 @@ last_updated: 2026-05-25
 | 音高 | pitch contour 输入 | [[FastSpeech2]]、[[MegaTTS]] | 需要 F0 标注 |
 | 细粒度韵律 | 韵律 latent 建模 | [[MegaTTS2]]、[[NaturalSpeech3]] | 分解质量不稳定 |
 | 自然韵律 | 文本理解驱动 | [[Qwen3-TTS]] | LLM 理解文本语义→自动推断韵律 |
+| **自然语言指令** | NL 描述控制 | [[FlexiVoice]]（ICLR 2026） | 用文字描述风格，不需要参考音频 |
+
+### 2026 年新进展
+
+- **Instruction TTS 浮现**: [[FlexiVoice]]（ICLR 2026）验证了"用自然语言描述替代参考音频"的可行性，将可控性从"给条件"转向"说人话"
+- **LLM 语义理解驱动韵律**: [[Qwen3-TTS]] 展示通用 LLM 的语义理解能力可以自动推断合适的韵律，无需显式韵律标注
+- **Speech RLHF**: [[GSRM]]（2026）提出 generative speech reward model，将 RLHF 对齐技术引入语音领域，有望在韵律自然度上带来突破
 
 ### 未解问题
 
@@ -91,6 +104,11 @@ last_updated: 2026-05-25
 | Streaming LM + Flow | [[GLM-TTS]] | ~300ms | 流式 Flow Matching 推理 |
 | 非自回归 | [[FastSpeech2]] | <50ms | 不支持零样本 |
 | Diffusion 加速 | [[NaturalSpeech2]] + DDIM | ~500ms | 质量-速度 tradeoff |
+
+### 2026 年新进展
+
+- **SSM 替代 Transformer**: [[MambaVoiceCloning]]（ICLR 2026）用 Mamba SSM 做 diffusion TTS 的条件路径，线性复杂度有望降低长序列推理延迟
+- **统一 Speech LLM 流式**: [[StepAudio2.5]]（2026）在统一基座中同时实现 ASR + TTS + 实时交互，流式是核心设计目标
 
 ### 未解问题
 
@@ -152,11 +170,17 @@ last_updated: 2026-05-25
 - [[RepCodec]]: 利用 SSL 表征做 codec
 - [[VoxCPM]]: 完全跳过 tokenization，直接建模连续 mel
 
+### 2026 年新进展
+
+- **Codec 新探索（ICLR 2026）**: [[FlexiCodec]] 动态帧率适配不同内容复杂度；[[StableToken]] 噪声鲁棒 tokenizer；[[ScalingSpeechTokenizers]] 用 diffusion autoencoder 替代 VQ
+- **Tokenizer-free 路线加速**: [[MELLE]]→[[FELLE]]→[[CLEAR]]→[[SemaVoice]]，5+ 篇工作证明跳过 tokenization 是可行方向，从根本上回避了 codec 设计问题
+
 ### 未解问题
 
 - **语义信息 vs 声学细节的最优平衡点**在哪里？
 - **codec 对下游 LM 的友好性**如何量化？
 - **codec 训练与 TTS 训练联合优化**是否可行？（目前几乎都是分开训练）
+- **Tokenizer-free 路线是否会使 codec 设计问题本身过时？** 这取决于连续 AR 路线的 scaling 能力能否匹配离散 token 路线
 
 ---
 
@@ -186,6 +210,8 @@ TTS 评测的可复现性和可比性差。不同论文使用不同的测试集�
 - [[TTSDS2]]: 专门的 TTS 评测框架
 - [[SpeechJudge]]: LLM-as-judge 做自动评测
 - Seed-TTS-eval: 字节提出的标准化评测集（未单独发论文）
+- **2026 新增 — 指令跟随评测**: [[Qwen3-TTS]]、[[StepAudio2.5]] 等 Instruction TTS / Speech LLM 系统需要新的评测维度——可控性、情感一致性、指令遵循率，传统的 WER + SIM-O + MOS 三件套不再足够
+- **2026 新增 — Speech RLHF**: [[GSRM]] 提出 generative speech reward model，可作为自动评测器替代人工 MOS
 
 ### 未解问题
 
@@ -224,14 +250,14 @@ TTS 评测的可复现性和可比性差。不同论文使用不同的测试集�
 
 ## 挑战优先级矩阵
 
-| 挑战 | 工业紧迫 | 学术价值 | 2025 热度 |
+| 挑战 | 工业紧迫 | 学术价值 | 2026 热度 |
 |------|---------|---------|----------|
 | 零样本克隆 | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | 🔥🔥🔥 |
 | 流式低延迟 | ⭐⭐⭐⭐⭐ | ⭐⭐⭐ | 🔥🔥🔥 |
+| Token 设计 | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | 🔥🔥🔥🔥（含 Tokenizer-free 路线的崛起） |
+| 韵律控制 | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ | 🔥🔥🔥（Instruction TTS 推动） |
 | 训练数据 | ⭐⭐⭐⭐ | ⭐⭐⭐ | 🔥🔥 |
-| Token 设计 | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | 🔥🔥🔥 |
-| 韵律控制 | ⭐⭐⭐ | ⭐⭐⭐⭐ | 🔥🔥 |
-| 评测标准化 | ⭐⭐⭐ | ⭐⭐⭐⭐ | 🔥 |
+| 评测标准化 | ⭐⭐⭐ | ⭐⭐⭐⭐ | 🔥🔥（指令跟随评测 + Speech RLHF 推动） |
 | 安全伦理 | ⭐⭐⭐ | ⭐⭐ | 🔥 |
 
 ---
