@@ -17,6 +17,7 @@ generated_by: dailypaper-skills
 - [[论文笔记/_概念/14-LLM基础/DeepSeek|DeepSeek]]
 - [[论文笔记/_概念/14-LLM基础/GPT|GPT]]
 - [[论文笔记/_概念/14-LLM基础/GRPO|GRPO]]
+- [[论文笔记/_概念/14-LLM基础/Gumbel-Softmax|Gumbel-Softmax]]
 - [[论文笔记/_概念/14-LLM基础/LoRA|LoRA]]
 - [[论文笔记/_概念/14-LLM基础/Multi-Token Prediction|Multi-Token Prediction]]
 - [[论文笔记/_概念/14-LLM基础/Qwen2-0.5B|Qwen2-0.5B]]

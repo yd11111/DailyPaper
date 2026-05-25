@@ -22,6 +22,7 @@ generated_by: dailypaper-skills
 - [[论文笔记/_概念/5-Speech-LLM与AudioLM/LauraGPT|LauraGPT]]
 - [[论文笔记/_概念/5-Speech-LLM与AudioLM/MAR|MAR]]
 - [[论文笔记/_概念/5-Speech-LLM与AudioLM/MiMo|MiMo]]
+- [[论文笔记/_概念/5-Speech-LLM与AudioLM/MinMo|MinMo]]
 - [[论文笔记/_概念/5-Speech-LLM与AudioLM/Mini-Omni 2|Mini-Omni 2]]
 - [[论文笔记/_概念/5-Speech-LLM与AudioLM/Mini-Omni|Mini-Omni]]
 - [[论文笔记/_概念/5-Speech-LLM与AudioLM/Moshi|Moshi]]
