@@ -15,7 +15,9 @@ generated_by: dailypaper-skills
 - [[论文笔记/_概念/3-Audio-Codec与Tokenizer/Audio Codec|Audio Codec]]
 - [[论文笔记/_概念/3-Audio-Codec与Tokenizer/Audio VAE|Audio VAE]]
 - [[论文笔记/_概念/3-Audio-Codec与Tokenizer/DAC|DAC]]
+- [[论文笔记/_概念/3-Audio-Codec与Tokenizer/Discrete Audio Token|Discrete Audio Token]]
 - [[论文笔记/_概念/3-Audio-Codec与Tokenizer/EnCodec|EnCodec]]
+- [[论文笔记/_概念/3-Audio-Codec与Tokenizer/FSQ|FSQ]]
 - [[论文笔记/_概念/3-Audio-Codec与Tokenizer/Mel-Spectrogram|Mel-Spectrogram]]
 - [[论文笔记/_概念/3-Audio-Codec与Tokenizer/Mimi|Mimi]]
 - [[论文笔记/_概念/3-Audio-Codec与Tokenizer/RVQ|RVQ]]
@@ -25,6 +27,7 @@ generated_by: dailypaper-skills
 - [[论文笔记/_概念/3-Audio-Codec与Tokenizer/SpectroStream|SpectroStream]]
 - [[论文笔记/_概念/3-Audio-Codec与Tokenizer/Speech Tokenizer|Speech Tokenizer]]
 - [[论文笔记/_概念/3-Audio-Codec与Tokenizer/SpeechTokenizer|SpeechTokenizer]]
+- [[论文笔记/_概念/3-Audio-Codec与Tokenizer/VQ|VQ]]
 - [[论文笔记/_概念/3-Audio-Codec与Tokenizer/Vector Quantization|Vector Quantization]]
 - [[论文笔记/_概念/3-Audio-Codec与Tokenizer/WavTokenizer|WavTokenizer]]
 

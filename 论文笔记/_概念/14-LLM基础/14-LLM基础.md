@@ -11,6 +11,8 @@ generated_by: dailypaper-skills
 ## 当前目录笔记
 
 - [[论文笔记/_概念/14-LLM基础/Autoregressive|Autoregressive]]
+- [[论文笔记/_概念/14-LLM基础/BPE|BPE]]
+- [[论文笔记/_概念/14-LLM基础/DPO|DPO]]
 - [[论文笔记/_概念/14-LLM基础/DeepSeek-R1|DeepSeek-R1]]
 - [[论文笔记/_概念/14-LLM基础/DeepSeek|DeepSeek]]
 - [[论文笔记/_概念/14-LLM基础/GPT|GPT]]
@@ -23,6 +25,7 @@ generated_by: dailypaper-skills
 - [[论文笔记/_概念/14-LLM基础/Qwen3|Qwen3]]
 - [[论文笔记/_概念/14-LLM基础/RLAIF-V|RLAIF-V]]
 - [[论文笔记/_概念/14-LLM基础/Smooth Length Reward|Smooth Length Reward]]
+- [[论文笔记/_概念/14-LLM基础/Transformer|Transformer]]
 - [[论文笔记/_概念/14-LLM基础/llama.cpp-omni|llama.cpp-omni]]
 
 ## 说明
