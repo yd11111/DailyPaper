@@ -28,6 +28,7 @@ $$
 
 - **Bengio et al. 2013**: STE 原始提出 (Estimating or Propagating Gradients Through Stochastic Neurons)
 - [[VoxCPM]]: FSQ 瓶颈通过 STE 实现端到端训练
+- [[CosyVoice2]]: FSQ 模块训练时使用 STE 进行梯度近似
 
 ## 相关概念
 
