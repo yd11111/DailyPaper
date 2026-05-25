@@ -18,6 +18,7 @@ generated_by: dailypaper-skills
 - [[论文笔记/_概念/3-Audio-Codec与Tokenizer/Discrete Audio Token|Discrete Audio Token]]
 - [[论文笔记/_概念/3-Audio-Codec与Tokenizer/EnCodec|EnCodec]]
 - [[论文笔记/_概念/3-Audio-Codec与Tokenizer/FSQ|FSQ]]
+- [[论文笔记/_概念/3-Audio-Codec与Tokenizer/Mel Codec|Mel Codec]]
 - [[论文笔记/_概念/3-Audio-Codec与Tokenizer/Mel-Spectrogram|Mel-Spectrogram]]
 - [[论文笔记/_概念/3-Audio-Codec与Tokenizer/Mimi|Mimi]]
 - [[论文笔记/_概念/3-Audio-Codec与Tokenizer/RVQ|RVQ]]

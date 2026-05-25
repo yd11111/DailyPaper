@@ -11,7 +11,9 @@ generated_by: dailypaper-skills
 ## 当前目录笔记
 
 - [[论文笔记/_概念/5-Speech-LLM与AudioLM/Audio-Flamingo|Audio-Flamingo]]
+- [[论文笔记/_概念/5-Speech-LLM与AudioLM/AudioLM|AudioLM]]
 - [[论文笔记/_概念/5-Speech-LLM与AudioLM/GLM-4-Voice|GLM-4-Voice]]
+- [[论文笔记/_概念/5-Speech-LLM与AudioLM/GSLM|GSLM]]
 - [[论文笔记/_概念/5-Speech-LLM与AudioLM/HearSay|HearSay]]
 - [[论文笔记/_概念/5-Speech-LLM与AudioLM/Kimi-Audio|Kimi-Audio]]
 - [[论文笔记/_概念/5-Speech-LLM与AudioLM/LALM|LALM]]

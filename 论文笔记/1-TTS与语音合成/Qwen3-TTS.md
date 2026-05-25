@@ -339,6 +339,66 @@ Qwen3-TTS 采用 **自回归 LM** 架构，核心组件包括：
 
 ---
 
+## 关键公式
+
+> [!note] 本论文为工程导向的 Tech Report，核心训练目标（DPO/GSPO/Flow Matching/GAN）均引用外部文献而未在正文显式给出。以下整理论文中可推导的关键量化关系和引用的核心损失函数。
+
+### 码率计算
+
+两套 tokenizer 的信息码率可从配置参数直接推导：
+
+**12Hz 多码本**（16 层 [[RVQ]]，码本大小 2048，帧率 12.5 Hz）：
+
+$$\text{Bitrate}_{12\text{Hz}} = f_s \times N_q \times \log_2 C = 12.5 \times 16 \times \log_2(2048) = 12.5 \times 16 \times 11 = 2200 \;\text{bps}$$
+
+**25Hz 单码本**（1 层 VQ，码本大小 32768，帧率 25 Hz）：
+
+$$\text{Bitrate}_{25\text{Hz}} = f_s \times 1 \times \log_2 C = 25 \times \log_2(32768) = 25 \times 15 = 375 \;\text{bps}$$
+
+其中 $f_s$ 为帧率，$N_q$ 为码本层数，$C$ 为码本大小。25Hz 方案码率极低（375 bps），但依赖下游 [[DiT]] + [[BigVGAN]] 补充声学细节。
+
+### 首包延迟分解
+
+$$\text{First\text{-}Packet Latency} = T_{\text{LM-TTFP}} + T_{\text{Tokenizer-Decode}}$$
+
+对于 12Hz-0.6B：$93\,\text{ms} + 4\,\text{ms} = 97\,\text{ms}$；对于 25Hz-1.7B：$125\,\text{ms} + 25\,\text{ms} = 150\,\text{ms}$。12Hz 方案因因果 ConvNet 解码器无需前看，tokenizer 解码仅需 4 ms。
+
+### Token 时间映射
+
+$$\Delta t = \frac{1}{f_s}$$
+
+25Hz：$\Delta t_{25} = 40\;\text{ms/token}$；12Hz：$\Delta t_{12} = 80\;\text{ms/token}$。
+
+25Hz 流式出包策略：chunk 大小 $C=8$ token，接收域 = 当前块 + 3 块回看 + 1 块前看，首包需等待 $2C = 16$ token（即 $16 \times 40 = 640\;\text{ms}$ 语音内容）。
+
+### 引用的核心损失函数
+
+**[[Speech DPO]] 损失**（后训练第 1 阶段，引用 Rafailov et al. 2023）：
+
+$$\mathcal{L}_{\text{DPO}} = -\mathbb{E}_{(x, y_w, y_l)} \left[ \log \sigma \left( \beta \log \frac{\pi_\theta(y_w | x)}{\pi_{\text{ref}}(y_w | x)} - \beta \log \frac{\pi_\theta(y_l | x)}{\pi_{\text{ref}}(y_l | x)} \right) \right]$$
+
+其中 $y_w, y_l$ 分别为人类偏好的优选和劣选语音，$\pi_\theta$ 为当前策略，$\pi_{\text{ref}}$ 为参考策略，$\beta$ 为温度系数。
+
+**[[Flow Matching]] 损失**（25Hz detokenizer [[DiT]] 训练，引用 Lipman et al. 2023）：
+
+$$\mathcal{L}_{\text{FM}} = \mathbb{E}_{t, x_0, x_1} \left\| v_\theta(x_t, t) - (x_1 - x_0) \right\|^2$$
+
+其中 $x_t = (1-t)x_0 + t x_1$ 为插值路径，$v_\theta$ 为模型预测的速度场，$x_0 \sim \mathcal{N}(0, I)$，$x_1$ 为目标 mel 谱图。
+
+**12Hz Tokenizer 训练损失**（GAN 框架 + 重建损失）：
+
+$$\mathcal{L}_{\text{total}} = \mathcal{L}_{\text{GAN}} + \lambda_{\text{mel}} \mathcal{L}_{\text{mel}} + \lambda_{\text{sem}} \mathcal{L}_{\text{sem}}$$
+
+其中 $\mathcal{L}_{\text{mel}}$ 为多尺度 mel 谱图重建损失，$\mathcal{L}_{\text{sem}}$ 为以 [[WavLM]] 为教师的语义蒸馏损失（约束第 1 层码本），$\mathcal{L}_{\text{GAN}}$ 为对抗损失。
+
+### 说话人相似度
+
+$$\text{SIM}(s_{\text{ref}}, s_{\text{gen}}) = \frac{\mathbf{e}_{\text{ref}} \cdot \mathbf{e}_{\text{gen}}}{\|\mathbf{e}_{\text{ref}}\| \cdot \|\mathbf{e}_{\text{gen}}\|}$$
+
+其中 $\mathbf{e}$ 为基于 [[WavLM]] 的说话人验证模型提取的 speaker embedding。
+
+---
+
 ## 实验
 
 ### 数据集

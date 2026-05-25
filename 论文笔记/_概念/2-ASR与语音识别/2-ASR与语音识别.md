@@ -22,6 +22,7 @@ generated_by: dailypaper-skills
 - [[论文笔记/_概念/2-ASR与语音识别/Paraformer|Paraformer]]
 - [[论文笔记/_概念/2-ASR与语音识别/Qwen3-ASR|Qwen3-ASR]]
 - [[论文笔记/_概念/2-ASR与语音识别/SenseVoice|SenseVoice]]
+- [[论文笔记/_概念/2-ASR与语音识别/Transducer|Transducer]]
 - [[论文笔记/_概念/2-ASR与语音识别/Trie-based biasing|Trie-based biasing]]
 - [[论文笔记/_概念/2-ASR与语音识别/Whisper|Whisper]]
 
