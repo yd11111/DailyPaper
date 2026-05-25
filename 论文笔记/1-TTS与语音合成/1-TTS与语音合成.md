@@ -49,10 +49,12 @@ generated_by: dailypaper-skills
 - [[论文笔记/1-TTS与语音合成/SemaVoice|SemaVoice]]
 - [[论文笔记/1-TTS与语音合成/TextRolSpeech|TextRolSpeech]]
 - [[论文笔记/1-TTS与语音合成/Tortoise|Tortoise]]
+- [[论文笔记/1-TTS与语音合成/TransformerTTS|TransformerTTS]]
 - [[论文笔记/1-TTS与语音合成/VALL-E|VALL-E]]
 - [[论文笔记/1-TTS与语音合成/VITS|VITS]]
 - [[论文笔记/1-TTS与语音合成/VibeVoice|VibeVoice]]
 - [[论文笔记/1-TTS与语音合成/VoxCPM|VoxCPM]]
+- [[论文笔记/1-TTS与语音合成/WaveNet|WaveNet]]
 - [[论文笔记/1-TTS与语音合成/XTTS|XTTS]]
 - [[论文笔记/1-TTS与语音合成/YourTTS|YourTTS]]
 

@@ -22,7 +22,7 @@ aliases: [TransformerTTS]
 
 ## 代表工作
 
-- Neural Speech Synthesis with Transformer Network (Li et al., 2019)
+- [[TransformerTTS]]: Neural Speech Synthesis with Transformer Network (Li et al., 2019)，首次将 Transformer 完整引入 TTS，训练加速 4.25 倍，MOS 4.39
 - [[FastSpeech]]: 以 Transformer TTS 为 teacher
 
 ## 相关概念
