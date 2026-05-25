@@ -20,6 +20,7 @@ $$
 3. 代表性 AR TTS: Tacotron 2、VALL-E、CosyVoice
 
 ## 代表工作
+- [[WaveNet]]: 首个原始波形级别自回归音频生成模型
 - [[VALL-E]]: AR 语言建模做 TTS
 - [[CosyVoice]]: AR LLM + Flow Matching
 

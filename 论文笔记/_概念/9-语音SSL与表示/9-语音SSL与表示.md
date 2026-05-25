@@ -16,6 +16,7 @@ generated_by: dailypaper-skills
 - [[论文笔记/_概念/9-语音SSL与表示/ECAPA-TDNN|ECAPA-TDNN]]
 - [[论文笔记/_概念/9-语音SSL与表示/ERes2Net|ERes2Net]]
 - [[论文笔记/_概念/9-语音SSL与表示/HuBERT|HuBERT]]
+- [[论文笔记/_概念/9-语音SSL与表示/Linear Predictive Coding|Linear Predictive Coding]]
 - [[论文笔记/_概念/9-语音SSL与表示/SSL Speech Representation|SSL Speech Representation]]
 - [[论文笔记/_概念/9-语音SSL与表示/Speaker Encoder|Speaker Encoder]]
 - [[论文笔记/_概念/9-语音SSL与表示/SpeechUT|SpeechUT]]

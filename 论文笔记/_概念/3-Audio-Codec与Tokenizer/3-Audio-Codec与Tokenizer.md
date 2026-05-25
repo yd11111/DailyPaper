@@ -21,6 +21,7 @@ generated_by: dailypaper-skills
 - [[论文笔记/_概念/3-Audio-Codec与Tokenizer/Mel Codec|Mel Codec]]
 - [[论文笔记/_概念/3-Audio-Codec与Tokenizer/Mel-Spectrogram|Mel-Spectrogram]]
 - [[论文笔记/_概念/3-Audio-Codec与Tokenizer/Mimi|Mimi]]
+- [[论文笔记/_概念/3-Audio-Codec与Tokenizer/Mu-Law Companding|Mu-Law Companding]]
 - [[论文笔记/_概念/3-Audio-Codec与Tokenizer/RVQ|RVQ]]
 - [[论文笔记/_概念/3-Audio-Codec与Tokenizer/Semantic Token|Semantic Token]]
 - [[论文笔记/_概念/3-Audio-Codec与Tokenizer/Semantic Tokenizer|Semantic Tokenizer]]
