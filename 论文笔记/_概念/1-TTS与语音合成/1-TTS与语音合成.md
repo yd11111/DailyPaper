@@ -37,6 +37,7 @@ generated_by: dailypaper-skills
 - [[论文笔记/_概念/1-TTS与语音合成/G2P|G2P]]
 - [[论文笔记/_概念/1-TTS与语音合成/GPT-SoVITS|GPT-SoVITS]]
 - [[论文笔记/_概念/1-TTS与语音合成/Glow-TTS|Glow-TTS]]
+- [[论文笔记/_概念/1-TTS与语音合成/Grad-TTS|Grad-TTS]]
 - [[论文笔记/_概念/1-TTS与语音合成/Grapheme-to-Phoneme|Grapheme-to-Phoneme]]
 - [[论文笔记/_概念/1-TTS与语音合成/HiggsAudio-v2|HiggsAudio-v2]]
 - [[论文笔记/_概念/1-TTS与语音合成/IndexTTS 2|IndexTTS 2]]
