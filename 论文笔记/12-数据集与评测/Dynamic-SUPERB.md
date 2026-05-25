@@ -32,8 +32,10 @@ created: 2026-05-22
 
 ## 📊 关键结果 / 评测
 
-- Phase-2 覆盖数百个任务，具体数字待全文确认
-- 目标：持续追踪 spoken LM 的能力前沿
+- ASR WER: 2.8% (SALMONN-13B, 最佳)
+- Emotion Recognition: 75.8% (Qwen2-Audio-7B-Instruct)
+- Phoneme Recognition PER: 24.6% (SALMONN-13B)
+- Keyword Spotting: 60.5% (Qwen-Audio-Chat, 仅略超 50% 随机基线)
 
 ## 💡 借鉴意义（一句话）
 

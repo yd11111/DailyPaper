@@ -31,8 +31,9 @@ created: 2026-05-22
 
 ## 📊 关键结果 / 评测
 
-- 不同 codec 的 token 统计特性差异显著
-- "更语言化"的 token（更接近 Zipf 分布）对 LM 更友好
+- 关键发现: Zipf 指数 α≈2.0 的 codec token 对应最低 WER/CER（3-gram NAC token 最接近自然语言）
+- Heaps 指数 β→1 时下游 WER/CER 更低、UTMOS 更高
+- 码本大小: 1024 tokens/dimension，20ms 帧率
 
 ## 💡 借鉴意义（一句话）
 

@@ -31,8 +31,9 @@ created: 2026-05-22
 
 ## 📊 关键结果 / 评测
 
-- 支持 podcast 级别长度的多人对话生成
-- Speaker consistency 在长对话中保持稳定
+- Seed-TTS-eval WER (English): 1.95%, CER (Mandarin): 1.14%
+- Speaker Similarity (LibriSpeech tokenizer): 0.87
+- Podcast zero-shot: CER 2.08% (zh) / WER 3.16% (en), SIM 0.753 (zh) / 0.703 (en)
 
 ## 💡 借鉴意义（一句话）
 

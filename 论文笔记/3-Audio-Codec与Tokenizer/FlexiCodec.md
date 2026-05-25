@@ -32,8 +32,7 @@ created: 2026-05-22
 
 ## 📊 关键结果 / 评测
 
-- ICLR 2026 submission（anonymous）
-- 低帧率下重建质量优于固定帧率 codec
+- 匿名投稿（ICLR 2026），具体数字见论文 Table 1-2
 
 ## 💡 借鉴意义（一句话）
 

@@ -32,8 +32,7 @@ created: 2026-05-22
 ## 📊 关键结果 / 评测
 
 - ICLR 2026 submission（anonymous）
-- 推理效率优于 transformer-based 方案
-- 生成质量保持
+- 匿名投稿（ICLR 2026），具体数字见论文 Table 1-3
 
 ## 💡 借鉴意义（一句话）
 

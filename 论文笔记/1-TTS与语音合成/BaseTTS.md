@@ -35,9 +35,10 @@ Amazon 的**大规模 TTS**实验——1B 参数 AR model 在 100K 小时数据�
 
 ## 📊 关键结果 / 评测
 
-- 1B 参数模型在复合语句上显著优于小模型
-- 出现 emergent abilities（类似 LLM 的能力涌现）
-- 100K 小时训练数据
+- WER: 6.5%（vs Tortoise 8.0%, Bark 19.2%）
+- Speaker Similarity: 92.7% cosine（vs Bark 91.7%, Tortoise 90.3%）
+- MUSHRA Naturalness: 71.7-73.7 (male) / 67.8-68.2 (female)（vs Tortoise 46-69）
+- 训练规模: 100K 小时数据，1B 参数，出现 emergent abilities
 
 ## 💡 借鉴意义（一句话）
 

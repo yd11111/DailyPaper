@@ -31,8 +31,7 @@ created: 2026-05-22
 
 ## 📊 关键结果 / 评测
 
-- ICLR 2026 submission（anonymous）
-- 同等 token 数下重建质量优于 VQ/RVQ-based tokenizer
+- 匿名投稿（ICLR 2026），具体数字见论文 Table 1-3
 
 ## 💡 借鉴意义（一句话）
 

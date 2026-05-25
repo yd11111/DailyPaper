@@ -32,8 +32,10 @@ created: 2026-05-22
 
 ## 📊 关键结果 / 评测
 
-- 首页未给出具体数字，待全文确认
-- 目标：揭示 TTS 系统在 emergent 场景上的真实能力边界
+- Win-rate 范围: 8.90% (Suno Bark) → 65.17% (GPT-4o-audio Ballad)
+- 评委一致性: Kendall's W 0.97
+- 人-模型对齐: Spearman ρ = 90.5%
+- Text normalization 影响: Complex Pronunciation win-rate 51.69% → 76.74%
 
 ## 💡 借鉴意义（一句话）
 

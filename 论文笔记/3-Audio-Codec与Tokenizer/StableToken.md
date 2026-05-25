@@ -32,8 +32,7 @@ created: 2026-05-22
 ## 📊 关键结果 / 评测
 
 - ICLR 2026 submission（anonymous）
-- 噪声条件下 token 一致性显著优于 HuBERT k-means
-- 下游 ASR/TTS 在噪声场景下性能提升
+- 匿名投稿（ICLR 2026），具体数字见论文 Table 1-2
 
 ## 💡 借鉴意义（一句话）
 

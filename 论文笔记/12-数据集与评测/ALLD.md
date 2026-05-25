@@ -36,8 +36,10 @@ NTU + Cisco 提出 **ALLD (Audio LLM Descriptive evaluation)**：让 Audio LLM �
 
 ## 📊 关键结果 / 评测
 
-- ICLR 2025 接收，具体数字待全文确认
-- 目标：Audio LLM 的 descriptive evaluation 与人类评估的一致性
+- MOS 预测 MSE: 0.17（vs 前 SOTA CNN-SA-AP 的 0.23）
+- A/B test 准确率: 98.6%
+- LCC/SRCC: 0.93/0.93（in-domain MOS prediction）
+- BLEU (descriptive): 25.84 (MOS) / 30.17 (A/B test)
 
 ## 💡 借鉴意义（一句话）
 

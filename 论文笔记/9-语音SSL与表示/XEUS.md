@@ -36,8 +36,10 @@ CMU 团队训练的**超大规模多语言语音 SSL 模型**，覆盖 4057 种�
 
 ## 📊 关键结果 / 评测
 
-- 首页未给出具体数字，待全文确认
-- 目标：在极低资源语言上的 ASR / LID 任务优于 XLS-R / MMS
+- ML-SUPERB score: 956（最佳，vs MMS-1B 953, w2v-BERT 826）
+- Speech Translation (JesusFilm, low-resource): 22.1 chrF（vs MMS-1B 15.5, +35%）
+- Speech Resynthesis (VCTK): WER 10.0, MOS 3.23
+- SUPERB ASR (English): WER 3.34; Keyword Spotting 98.32%
 
 ## 💡 借鉴意义（一句话）
 

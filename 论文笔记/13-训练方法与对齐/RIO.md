@@ -36,8 +36,10 @@ NTU 提出 **Reverse Inference Optimization**：在推理时通过反向优化 c
 
 ## 📊 关键结果 / 评测
 
-- 首页未给出具体数字，待全文确认
-- 目标：显著降低 zero-shot TTS 的 word error（skip/repeat/mispronunciation）
+- WER: 3.4%（VoiceCraft-330M + RIO, vs baseline 35.3%, GT 1.3%）
+- MOS (MOSNet): 4.40（vs baseline 3.36, GT 4.48）
+- Speaker Similarity: 0.96（vs baseline 0.79）
+- Bad Case 率 (MOS≤3): 1%（vs baseline 27%；830M backbone 上降至 0%）
 
 ## 💡 借鉴意义（一句话）
 

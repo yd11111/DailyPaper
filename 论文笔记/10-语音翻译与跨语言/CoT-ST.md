@@ -36,8 +36,10 @@ created: 2026-05-22
 
 ## 📊 关键结果 / 评测
 
-- 首页未给出具体数字，待全文确认
-- 目标：在 en→zh / zh→en 等语向上超越直接 ST baseline
+- BLEU (FLEURS 6×12, LLM-SRT-32B): 24.6 avg（vs SeamlessM4T-V2 20.2）
+- BLEU (FLEURS 15×14, 210 directions): 21.4 avg（vs SeamlessM4T-V2 18.8）
+- BLEU (CoVoST-2 En→X, LLM-SRT-7B): 39.1 avg（vs Qwen2-Audio 37.9）
+- Ablation: 移除 SRT stage 导致 -4.9 BLEU（最大单阶段影响）
 
 ## 💡 借鉴意义（一句话）
 

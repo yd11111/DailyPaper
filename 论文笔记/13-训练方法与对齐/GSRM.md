@@ -36,9 +36,10 @@ Meta Superintelligence Labs + MIT 2026 年 2 月新工作。把语音 naturalnes
 
 ## 📊 关键结果 / 评测
 
-- **数据集**: 31k expert ratings（自建）+ OOD 真实交互 benchmark
-- **model-human correlation 接近 human inter-rater consistency**（具体 PCC 数字看正文）
-- **下游验证**: 作为 RLHF online reward 改进 speech LLM naturalness；test-time scaling（K 增大）单调提升 PCC
+- Speech Semantic Judge Pearson (ID): 0.886（GSRM + CoT reasoning）
+- Speech Semantic Judge Pearson (OOD): 0.837（vs 无 CoT 0.706）
+- Audio Naturalness Pearson (OOD): 0.465, Spearman 0.427
+- Sub-dimension agreement rate: >85%（language complexity & spontaneity）
 
 ## 💡 借鉴意义（一句话）
 

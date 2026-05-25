@@ -37,8 +37,10 @@ created: 2026-05-22
 
 ## 📊 关键结果 / 评测
 
-- 首页未给出具体数字，待全文确认
-- 目标：验证 GRPO/DPO 在语音任务上的有效性和训练效率
+- ASR WER (short): 9.71（GRPO, vs baseline 10.25, -5.3%）
+- ASR WER (long): 6.03（vs 6.35, insertion errors 2.72→0.86）
+- TTS WER 中文: 3.330（CosyVoice2-0.5B + GRPO, vs 4.280 baseline, -22%）
+- TTS WER 英文: 5.279（vs 6.074 baseline）
 
 ## 💡 借鉴意义（一句话）
 

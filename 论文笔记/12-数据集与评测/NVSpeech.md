@@ -36,8 +36,10 @@ created: 2026-05-22
 
 ## 📊 关键结果 / 评测
 
-- 首页未给出具体数字，待全文确认
-- 目标: 让 TTS 合成的语音包含自然的非语言声音，提升对话自然度
+- ASR (SenseVoice): open-domain CER 3.79%, paralinguistic F1 0.85
+- TTS (CosyVoice2): in-domain CER 7.51%（12.8% 相对降低），UTMOS 2.67
+- 人类偏好胜率: 78.7% (CosyVoice) / 75.4% (CosyVoice2)
+- Naturalness MOS: 4.0 ± 0.16
 
 ## 💡 借鉴意义（一句话）
 

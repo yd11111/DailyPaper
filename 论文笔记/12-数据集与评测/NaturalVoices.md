@@ -35,7 +35,10 @@ created: 2026-05-22
 
 ## 📊 关键结果 / 评测
 
-- NaturalVoices 在 arousal/dominance/valence 维度上覆盖范围显著大于 VCTK
+- Speaker verification 通过率: 93.65% (S2S), 96.78% (NaturalVoices-Large)
+- WER: 27.20% (S2S)，与 VCTK 25.74% 可比
+- 合成语音 MOS: 3.17 ± 0.23 (quality), 3.77 ± 0.36 (intelligibility)
+- 源数据 MOS: 4.38 ± 0.16 (quality), 4.79 ± 0.18 (intelligibility)
 
 ## 💡 借鉴意义（一句话）
 

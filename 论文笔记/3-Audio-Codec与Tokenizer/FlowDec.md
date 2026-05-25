@@ -32,9 +32,7 @@ Meta 提出的 **flow-based 音频 codec**——用 flow matching 替代传统�
 
 ## 📊 关键结果 / 评测
 
-- ICLR 2025 发表
-- 48kHz 全频带音频重建
-- 感知质量优于 [[EnCodec]] / [[DAC]]
+- 匿名投稿（ICLR 2025 发表），具体数字见论文 Table 1-2
 
 ## 💡 借鉴意义（一句话）
 

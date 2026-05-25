@@ -36,7 +36,10 @@ created: 2026-05-22
 
 ## 📊 关键结果 / 评测
 
-- 首页未给出具体数字，待全文确认
+- Speaker Similarity (SSIM): 0.796（vs FreeVC baseline 0.617）
+- Naturalness (UTMOS): 4.011 (LM-VC-USM)
+- WER: 1.575% (Diffusion-USM, vs FreeVC 2.613%)
+- 主观 SMOS: 4.166 ± 0.101（vs baseline 2.879）
 
 ## 💡 借鉴意义（一句话）
 
