@@ -78,6 +78,7 @@ generated_by: dailypaper-skills
 - [[论文笔记/_概念/1-TTS与语音合成/VibeVoice|VibeVoice]]
 - [[论文笔记/_概念/1-TTS与语音合成/Voicebox|Voicebox]]
 - [[论文笔记/_概念/1-TTS与语音合成/VoxCPM|VoxCPM]]
+- [[论文笔记/_概念/1-TTS与语音合成/XTTS|XTTS]]
 - [[论文笔记/_概念/1-TTS与语音合成/YourTTS|YourTTS]]
 - [[论文笔记/_概念/1-TTS与语音合成/Zero-shot TTS|Zero-shot TTS]]
 - [[论文笔记/_概念/1-TTS与语音合成/σ-VAE|σ-VAE]]

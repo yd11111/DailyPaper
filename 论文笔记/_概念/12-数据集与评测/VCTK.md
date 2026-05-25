@@ -15,8 +15,10 @@ CSTR VCTK Corpus，由爱丁堡大学发布的多说话人英文语音数据集�
 4. 是多说话人 TTS 的标准评测集之一
 
 ## 代表工作
+- [[YourTTS]]: 主要训练/测试集，零样本 SECS 0.864 达 SOTA
 - [[VITS]]: 多说话人实验，MOS 4.38 达到 Ground Truth 水平
 - [[HiFi-GAN]]: 多说话人 vocoder 评测
+- [[SC-GlowTTS]]: ZS-TTS 评测
 
 ## 相关概念
 - [[LJSpeech]]
