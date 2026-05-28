@@ -16,6 +16,7 @@ generated_by: dailypaper-skills
 - [[论文笔记/_概念/2-ASR与语音识别/CTC|CTC]]
 - [[论文笔记/_概念/2-ASR与语音识别/Conformer|Conformer]]
 - [[论文笔记/_概念/2-ASR与语音识别/CrisperWhisper|CrisperWhisper]]
+- [[论文笔记/_概念/2-ASR与语音识别/FireRedASR|FireRedASR]]
 - [[论文笔记/_概念/2-ASR与语音识别/IndicConformer|IndicConformer]]
 - [[论文笔记/_概念/2-ASR与语音识别/IndicWhisper|IndicWhisper]]
 - [[论文笔记/_概念/2-ASR与语音识别/Kaldi|Kaldi]]

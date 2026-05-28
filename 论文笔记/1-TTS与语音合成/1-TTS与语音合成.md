@@ -41,6 +41,7 @@ generated_by: dailypaper-skills
 - [[论文笔记/1-TTS与语音合成/NaturalSpeech|NaturalSpeech]]
 - [[论文笔记/1-TTS与语音合成/NaturalSpeech2|NaturalSpeech2]]
 - [[论文笔记/1-TTS与语音合成/NaturalSpeech3|NaturalSpeech3]]
+- [[论文笔记/1-TTS与语音合成/PilotTTS|PilotTTS]]
 - [[论文笔记/1-TTS与语音合成/Qwen3-TTS|Qwen3-TTS]]
 - [[论文笔记/1-TTS与语音合成/Raon-OpenTTS|Raon-OpenTTS]]
 - [[论文笔记/1-TTS与语音合成/SC-VALLE|SC-VALLE]]

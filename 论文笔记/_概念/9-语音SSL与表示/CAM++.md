@@ -1,6 +1,6 @@
 ---
 type: concept
-aliases: [CAM++, 3D-Speaker]
+aliases: [CAM++, CAMPPlus, 3D-Speaker]
 ---
 
 # CAM++
@@ -15,6 +15,7 @@ aliases: [CAM++, 3D-Speaker]
 
 ## 代表工作
 - [[CosyVoice2]]: 用 CAM++ 提取 speaker embedding 作为 flow matching 的条件输入
+- [[PilotTTS]]: 冻结 CAM++（ONNX 推理）提取全局说话人 embedding，与 Q-Former 风格条件解耦
 
 ## 相关概念
 - [[WavLM]]
