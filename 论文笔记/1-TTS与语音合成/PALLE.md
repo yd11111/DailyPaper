@@ -419,7 +419,7 @@ $$
 1. **仅 LibriTTS ~580h 英文**：未验证大规模、多语种、噪声数据下的可扩展性；与大数据 baseline 跨行比不完全公平 [已 verify §5.1]。
 2. **两份独立权重**：两 stage 不能共享参数，部署成本约 2×。
 3. **依赖外部 detokenizer**：质量上限受 [[CosyVoice 2]] CFM+vocoder 约束，端到端非自给 [已 verify §4.1]。
-4. **语义 token 路线天花板**：用 [[S3Tokenizer]] 语义 token（GT S3Tokenizer 重建 SIM-o 仅 0.743，低于 EnCodec 的 0.715... 实际 Tab.1 显示 S3 cross SIM-o 0.743 vs EnCodec 0.715），说话人相似度受 tokenizer 上限制约 [已 verify Tab.1]。
+4. **语义 token 路线天花板**：用 [[S3Tokenizer]] 语义 token，其重建上限受限——GT 经 S3Tokenizer v2 重建后 continuation SIM-o 0.793（低于 GT EnCodec 0.823）、cross-sentence SIM-o 0.743（高于 GT EnCodec 0.715），即说话人相似度天花板被 tokenizer 重建质量约束，且在 continuation 设置下明显低于声学 codec [已 verify Tab.1]。
 5. **未见官方开源代码**：截至记录无官方 repo，L2 GitHub verify 不可用，复现依赖论文描述。
 
 ### 潜在改进方向
