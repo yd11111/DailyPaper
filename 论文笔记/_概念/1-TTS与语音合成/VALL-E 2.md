@@ -12,7 +12,7 @@ aliases: [VALLE2, VALL-E2]
 ## 核心要点
 
 1. **Repetition Aware Sampling**: 检测 AR 解码中的 token 重复，动态切换 nucleus sampling 和 random sampling，解决 infinite loop 和重复问题
-2. **Grouped Code Modeling**: 将多层 RVQ code 分组后一次性预测，减少 AR 步数
+2. **Grouped Code Modeling**: 将**第一码本沿时间轴的连续 $G$ 帧**打包成一个 AR 帧建模（**非**跨 RVQ 层堆叠），序列长度缩短为 $1/G$，摆脱 codec 固定帧率约束并缓解长上下文问题
 3. 在 LibriSpeech 和 VCTK 上 SMOS / CMOS 首次达到人类水平
 
 ## 代表工作
