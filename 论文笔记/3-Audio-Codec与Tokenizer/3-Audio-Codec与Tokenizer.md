@@ -14,6 +14,7 @@ generated_by: dailypaper-skills
 - [[论文笔记/3-Audio-Codec与Tokenizer/FSQ|FSQ]]
 - [[论文笔记/3-Audio-Codec与Tokenizer/FlexiCodec|FlexiCodec]]
 - [[论文笔记/3-Audio-Codec与Tokenizer/FlowDec|FlowDec]]
+- [[论文笔记/3-Audio-Codec与Tokenizer/LoSATok|LoSATok]]
 - [[论文笔记/3-Audio-Codec与Tokenizer/RepCodec|RepCodec]]
 - [[论文笔记/3-Audio-Codec与Tokenizer/SNAC|SNAC]]
 - [[论文笔记/3-Audio-Codec与Tokenizer/ScalingSpeechTokenizers|ScalingSpeechTokenizers]]

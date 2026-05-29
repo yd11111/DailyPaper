@@ -9,6 +9,10 @@ last_updated: 2026-05-25
 
 # TTS 评测体系
 
+> ⚠️ **未 verify 警告**（2026-05-26 添加）：本文档 2026-05-26 修订新增"评估方法论的结构性陷阱"7 子节 + 负责任评估三层框架。其中具体反例（如 LibriSpeech test-clean 子集 1234/40/1127 条、SIM-o 算法在 VALL-E vs VALL-E 2 不一致等）来自 Position #11 (arXiv:2510.06927) §Appendix A/B 摘录，**未直接 WebFetch verify Appendix 原文表格**。**结构层（7 维评测 + 主客观指标 + 三层框架）保留**，引用 Position #11 的具体数字需要 §X verify。详见 [[方法论复盘-2026-05-26-知识地图建设]]。
+
+---
+
 ## 评测维度全景
 
 TTS 评测需要覆盖多个正交维度，单一指标无法全面衡量系统质量。
@@ -154,6 +158,119 @@ TTS 评测需要覆盖多个正交维度，单一指标无法全面衡量系统�
 | [[CosyVoice3]] | 0.95% | 0.805 | Seed-TTS-eval zh |
 | [[IndexTTS2]] | 1.3% | 0.812 | Seed-TTS-eval zh |
 
+## 评估方法论的结构性陷阱
+
+> 本节基于 Position paper *Towards Responsible Evaluation for TTS* (arXiv:2510.06927, 2025) + Azzuni 2025 *Voice Cloning Survey* + Mousavi 2025 *Discrete Audio Tokens* 的具体反例。**这些不是个别工作的疏忽，而是当前 TTS 评估的系统性问题**。
+
+### 陷阱 1：LibriSpeech test-clean 子集碎片化
+
+**Position #11 §Appendix A 实证**：同一个"LibriSpeech test-clean"被不同论文切成完全不同的子集来报 WER：
+
+| 论文 | 评测条数 |
+|---|---|
+| [[VALL-E]] | 1234 条 |
+| [[NaturalSpeech3]] | 40 条 |
+| [[F5-TTS]] | 1127 条 |
+
+**后果**：WER 数值在不同子集上**绝对值不可比**——40 条的 WER 可能因子集偏差被显著低估或高估。即使两个工作"都在 LibriSpeech test-clean 上评测"，结果仍不可直接横比。
+
+**建议**：报告 WER 时必须**精确列出**使用的样本数 + 选择方式（随机？前 N 条？特定 utterance ID 列表？）。
+
+### 陷阱 2：SIM-o 计算方式不统一
+
+**Position #11 §Appendix B 实证**：同一篇团队的不同代号工作在 SIM-o 计算上都不一致：
+
+| 论文 | SIM-o 计算方式 |
+|---|---|
+| [[VALL-E]] | **排除 prompt 片段** 后算 cosine similarity |
+| VALL-E 2 | **包含 prompt 片段** 算 cosine similarity |
+
+**后果**：VALL-E 2 报告的 SIM-o 比 VALL-E 高，可能**完全是协议差异**而非真实能力提升。任何跨论文 SIM-o 比较都需要核对计算协议。
+
+**建议**：报告 SIM-o 时必须明确：(1) speaker encoder 是哪个；(2) prompt 是否被纳入计算；(3) 参考音频和合成音频的对齐方式。
+
+### 陷阱 3：跨论文 SECS 不可比（speaker encoder 不统一）
+
+**Azzuni 2025 #6 §VI 警示**：不同论文使用不同 speaker encoder 报告 SECS / SIM-o：
+
+| Speaker Encoder | 典型使用工作 |
+|---|---|
+| X-vector | 早期工作 |
+| GE2E | YourTTS 类 |
+| ECAPA-TDNN | VALL-E / NaturalSpeech 系列 |
+| TitaNet-L | 部分较新工作 |
+| WavLM-TDNN | 2024+ 主流 |
+
+**后果**：论文 A 用 ECAPA-TDNN 报 SECS=0.78，论文 B 用 GE2E 报 SECS=0.82 —— **不能说论文 B 更好**。
+
+详见 [[Voice-Cloning术语标准化]] §SECS 跨论文不可比警示。
+
+### 陷阱 4：WER 用作 RL reward 的危险
+
+**Position #11 §3.1 警示**：把 WER 作为 RL 训练的 reward 会"**collapse prosodic variance into monotone output**"——模型为了刷低 WER 会牺牲韵律自然度，输出单调机械。
+
+**后果**：报告 WER 持续下降的论文需要警惕——是否同时牺牲了其他维度？
+
+**建议**：用 RL 优化 TTS 时必须报告多维度 trade-off（韵律 / 情感 / 自然度），而非只追求 WER。
+
+### 陷阱 5：DNSMOS 的域外滥用
+
+**Position #11 §3.1 实证**：[[DNSMOS]] 训练在**语音增强**数据集上（去噪、去混响后的语音），但被大量论文用于评估**合成语音**质量。这是典型的 domain shift——预测器在分布外的输入上**没有可信度**。
+
+**后果**：DNSMOS 数值在合成语音上的绝对值可能严重偏离真实人耳感知。
+
+**建议**：用 DNSMOS 仅作参考，不作为决定性指标。同时报告 UTMOS（专门为 TTS 训练）或人工 MOS。
+
+### 陷阱 6：推理任务定义不一致
+
+**Position #11 §Appendix 实证**：即使"Continuation" 这一标准任务的定义都不统一：
+
+| 论文 | Continuation 任务定义 |
+|---|---|
+| [[VALL-E]] | 用 **前 3 秒** 做 prompt，合成剩余 |
+| E2 TTS | 用 **最后 3 秒** 做 prompt |
+
+**后果**：不同 prompt 位置对应不同难度（开头 vs 结尾的声学特征不同），评测难度系数不同。
+
+**建议**：报告 Continuation / Cross-sentence 等任务时必须明确 prompt 的具体位置和长度。
+
+### 陷阱 7：MOS 的天花板效应 + 不可迁移性
+
+**Position #11 §3.2 主张**：
+- **天花板效应**：现代高质量 TTS 系统间 MOS 分数饱和（普遍 4.0+），**无法区分**真正的质量差异
+- **不可迁移性**：不同研究间 MOS 分数直接对比"meaningless"——评分者池、评分指导、播放设备都不同
+- **报告不透明**：虽有 ITU-T P.808 标准，多数研究仅名义参照而无实际遵守
+
+**建议**：
+1. 报告 MOS 时必须含：评分人数、评分指导原文、播放条件、统计显著性检验（p-value）
+2. 跨论文比较时优先用 CMOS（对比 MOS）而非绝对 MOS
+3. 对最先进系统间的对比应考虑 **Audio Turing Test** 等更具区分力的协议（Position #11 推荐方向）
+
+## 负责任评估三层框架
+
+**Position #11 §4 提出**，应作为知识库内的评估方法论标尺：
+
+| 层级 | 关注 | 具体要求 |
+|---|---|---|
+| **L1 保真与准确** | 系统是否真的好 | 更鲁棒 / 更具区分力 / 更全面的主客观评分方法论；如 SP-MCQA、Audio Turing Test |
+| **L2 可比性 / 标准化 / 可迁移性** | 跨论文是否可比 | 标准化基准（prompt list 公开 / 子集明确）；透明报告（评测协议细节）；可迁移指标（LLM-as-a-Judge）|
+| **L3 治理 / 公平 / 安全** | 系统是否负责任 | 训练数据来源披露 + 授权；群体差异审计（按口音 / 性别 / 年龄分层报告）；防伪 / 水印 / 可追溯性纳入标准评估 |
+
+**当前 TTS 论文绝大多数只触及 L1，少数到 L2，L3 几乎全部缺失**（我的归纳，基于 11 篇综述综合）。
+
+## 跨域 Codec 评测的补充（Mousavi 2025 #7 提供）
+
+Mousavi 2025 跑通的几个跨域 codec benchmark 可作为 **TTS 表示层选型的间接指标**：
+
+| Benchmark | 测什么 | 与 TTS 的关系 |
+|---|---|---|
+| **Codec-SUPERB** | 重建质量跨域评估 | codec 重建上界 ≈ TTS LM 输出还原音质天花板 |
+| **VERSA** | 多维度音频质量 | 同上 |
+| **DASB** | 下游判别 + 生成任务（含 TTS / ASR / 增强 / 源分离）| 直接测 codec 对 TTS 性能的影响 |
+| **SALMon** | 声学语言建模质量 | 测 codec 对 LM 学习的友好度 |
+
+详见 [[TTS-表示层地图]] §6 评估表示质量的方法。
+
 ## 评测陷阱与红旗
 
 ### 常见不可靠做法
@@ -164,6 +281,8 @@ TTS 评测需要覆盖多个正交维度，单一指标无法全面衡量系统�
 4. **只报最好指标**: 报 WER 低但不报 SIM-O，或反之
 5. **缺少显著性检验**: MOS 差 0.1 是否有统计显著性？多数论文不报 p-value
 6. **测试集泄露**: 用 LibriSpeech 的数据同时训练和测试
+7. **子集碎片化**: 名义同一评测集但实际样本数 / 选择方式不同（见陷阱 1）
+8. **协议未透明**: SIM-o 是否含 prompt、Continuation 用前/后段 prompt 等关键细节缺失（见陷阱 2、6）
 
 ### 如何读懂一篇论文的评测
 

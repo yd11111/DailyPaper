@@ -16,6 +16,7 @@ generated_by: dailypaper-skills
 - [[论文笔记/_概念/3-Audio-Codec与Tokenizer/Audio VAE|Audio VAE]]
 - [[论文笔记/_概念/3-Audio-Codec与Tokenizer/BigCodec|BigCodec]]
 - [[论文笔记/_概念/3-Audio-Codec与Tokenizer/DAC|DAC]]
+- [[论文笔记/_概念/3-Audio-Codec与Tokenizer/DashengTokenizer|DashengTokenizer]]
 - [[论文笔记/_概念/3-Audio-Codec与Tokenizer/Discrete Audio Token|Discrete Audio Token]]
 - [[论文笔记/_概念/3-Audio-Codec与Tokenizer/DualCodec|DualCodec]]
 - [[论文笔记/_概念/3-Audio-Codec与Tokenizer/EnCodec|EnCodec]]
@@ -26,6 +27,8 @@ generated_by: dailypaper-skills
 - [[论文笔记/_概念/3-Audio-Codec与Tokenizer/Mimi|Mimi]]
 - [[论文笔记/_概念/3-Audio-Codec与Tokenizer/Mu-Law Companding|Mu-Law Companding]]
 - [[论文笔记/_概念/3-Audio-Codec与Tokenizer/RVQ|RVQ]]
+- [[论文笔记/_概念/3-Audio-Codec与Tokenizer/SemantiCodec|SemantiCodec]]
+- [[论文笔记/_概念/3-Audio-Codec与Tokenizer/Semantic Bottleneck|Semantic Bottleneck]]
 - [[论文笔记/_概念/3-Audio-Codec与Tokenizer/Semantic Token|Semantic Token]]
 - [[论文笔记/_概念/3-Audio-Codec与Tokenizer/Semantic Tokenizer|Semantic Tokenizer]]
 - [[论文笔记/_概念/3-Audio-Codec与Tokenizer/SoundStorm|SoundStorm]]
@@ -37,6 +40,7 @@ generated_by: dailypaper-skills
 - [[论文笔记/_概念/3-Audio-Codec与Tokenizer/Vector Quantization|Vector Quantization]]
 - [[论文笔记/_概念/3-Audio-Codec与Tokenizer/WavTokenizer|WavTokenizer]]
 - [[论文笔记/_概念/3-Audio-Codec与Tokenizer/X-Codec|X-Codec]]
+- [[论文笔记/_概念/3-Audio-Codec与Tokenizer/XY-Tokenizer|XY-Tokenizer]]
 
 ## 说明
 

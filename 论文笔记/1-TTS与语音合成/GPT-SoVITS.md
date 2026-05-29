@@ -67,6 +67,42 @@ GPT-SoVITS 采用**两阶段级联**架构：
 - **第一阶段 — GPT（Text2Semantic）**: 输入 [[Phoneme]] 序列 + [[BERT]] 文本特征 + 参考音频的语义 token 作为 prompt，[[Autoregressive Model|自回归]]预测目标语义 token 序列
 - **第二阶段 — SoVITS（Semantic2Waveform）**: 输入第一阶段预测的语义 token + 文本 + 参考音频 Mel，通过 [[VITS]] 架构生成最终波形
 
+> **Figure 1: GPT-SoVITS 两阶段架构总览**（根据源码还原）
+
+```mermaid
+flowchart LR
+    subgraph Inputs
+        A["📝 Text"] --> G2P["G2P\n(Phoneme)"]
+        A --> BERT["Chinese-RoBERTa\n(1024d → 512d)"]
+        R["🎙️ Ref Audio\n(5s)"] --> SSL["ContentVec\n(SSL 768d)"]
+        R --> MEL["Mel\nSpectrogram"]
+    end
+
+    subgraph Stage1["Stage 1: GPT — Text2Semantic"]
+        G2P --> PE["Phoneme Emb\n+ BERT Feat\n(512d)"]
+        BERT --> PE
+        SSL --> RVQ["RVQ\n(1-layer, 1024)"]
+        RVQ --> PROMPT["Semantic Token\nPrompt (≤150)"]
+        PE --> TF["Transformer\n12L / 512d / 8H"]
+        PROMPT --> TF
+        TF -->|"AR decode\n+ Top-k/p"| ST["Predicted\nSemantic Tokens"]
+    end
+
+    subgraph Stage2["Stage 2: SoVITS — Semantic2Waveform"]
+        ST --> MRTE["MRTE\n(Cross-Attn 4H)"]
+        PE2["Text Enc"] --> MRTE
+        MEL --> REF["MelStyle\nEncoder"]
+        REF -->|"speaker g"| MRTE
+        MRTE --> PRIOR["Prior Encoder\n(μ, σ)"]
+        PRIOR --> FLOW["Normalizing Flow\n(4-layer)"]
+        FLOW --> DEC["HiFi-GAN\nDecoder"]
+        DEC --> WAV["🔊 Waveform\n(32kHz)"]
+    end
+
+    style Stage1 fill:#e8f4fd,stroke:#4a90d9
+    style Stage2 fill:#fdf2e8,stroke:#d9904a
+```
+
 ### 第一阶段：GPT — Text2SemanticDecoder
 
 #### 输入表示

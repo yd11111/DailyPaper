@@ -3,513 +3,581 @@ title: "StepAudio 2.5 Technical Report"
 method_name: "StepAudio 2.5"
 authors: [StepFun-Audio Team]
 year: 2026
-venue: arXiv
+venue: arXiv (Tech Report)
 arxiv_id: "2605.23463"
-tags: [speech-llm, unified-model, asr, tts, realtime-dialogue, rlhf, multi-token-prediction, moe]
+tags: [speech-llm, unified-omni, asr, tts, realtime-dialogue, moe, multi-token-prediction, rlhf, industrial-tech-report]
 zotero_collection: 5-Speech-LLM与AudioLM
+
+# === 论文核心技术元数据（三层 verify）===
+lm_init: "warm-start from a textual MoE LLM, then 2.2T-token continual multimodal pre-training [§3.2 paper.html L329-345]"
+training_loss: "Stage-1 adaptor-only CE on 3B ASR tokens; Stage-2 unified next-token CE on 1.6T text+speech tokens with progressively annealed MoE auxiliary loss; Stage-3 cooldown CE on 600B high-quality tokens. ASR head adds weighted MTP CE (公式 1-2). TTS/Realtime add RLHF (GRM-shaped reward, PPO + KL) [§3.2, §4.1, §5.1, §6.1.3]"
+tokenizer_arch: "audio-encoder → adaptor → MoE LLM decoder; unified sequence space mixing text tokens and (vocabulary-expanded) audio tokens; TTS branch completely removes encoder+adaptor, uses LLM-only NTP on audio tokens [§2.1, §5 paper.html L699-700]"
+multitask: true "[§3.2] 主预训练 800B speech 含 ASR / TTS / S2T translation / 文本-语音 interleaved continuation / S2S conversation 五种任务格式"
+training_data: "Pretrain 2.2T tokens = 800B text + 800B speech + 600B cooldown; ASR SFT 100K h short-form + 50K h long-form pseudo-label (ROVER 3-system, drop disagreement-rate ê>0.05) [§3.2 + §4.2]; TTS SFT data 部分来自 Step-Audio-EditX 合成（无具体小时数） [§5.2]; Realtime SFT data 来自 10K+ native personas + algorithmic fission → 百万级 persona matrix [§6.2]"
+post_training: "TTS: GRM-shaped reward $r_{hf} = s(r_\\phi(x, y, y^*))$，pairwise scalar preference vs 高质量 reference [§5.1 Eq.1]. Realtime: PPO + KL 正则，GRM + interaction rubrics，multi-turn + single-turn 混合 [§6.1.3]"
+codec_detail: "未明示。tokenizer 设计未披露 RVQ/FSQ 选型 / 码本大小 / 帧率 / 码率。仅说明 audio encoder 输出经 adaptor 映射到 LLM hidden space，并向 LLM 词表新增 audio tokens [§2.1 + §3.2 p3]。L2 verify 不可用（未开源）"
+
+# === 知识地图联动 ===
+domain: SpeechLM
+subdomain: unified-omni
+routes: [speech-llm-tts, llm-asr, full-duplex-dialogue, controllable-tts]
+problems: [asr-accuracy, asr-throughput, instruction-following, prosody-control, dialogue-integration, persona-consistency, paralinguistic, latency]
+representations: [audio-token, unified-token-space]
+related_maps:
+  - "[[SpeechLM-领域总览]]"
+  - "[[TTS-SpeechLM-Dialogue关系]]"
+  - "[[TTS-技术路线图]]"
+  - "[[TTS-核心挑战]]"
+  - "[[TTS-评测体系]]"
+related_surveys:
+  - "[[ControllableTTS-Survey]]"
+evidence_level: medium
+maturity: emerging
+last_repositioned: 2026-05-26
+
+# === 回流状态 ===
+map_backfilled: false
+backfilled_at:
+
+# === 资源本地化路径 ===
+pdf_local: "~/DailyPaper/.cache/papers/2605.23463/paper.pdf"
+html_local: "~/DailyPaper/.cache/papers/2605.23463/paper.html"
+figures_dir: "_resources/2605.23463/figures/"
+github_local: ""
+cached_at: 2026-05-26
+
+# === 通用元数据 ===
 image_source: online
-arxiv_html: https://arxiv.org/html/2605.23463
-created: 2026-05-25
+arxiv_html: "https://arxiv.org/html/2605.23463v1"
+created: 2026-05-26
 ---
 
 # 论文笔记：StepAudio 2.5 Technical Report
+
+> **本笔记按工业 tech report 标准撰写**：重点抽取数据规模、训练 recipe、超参、serving 指标、可复现细节。工程价值 > 学术新颖性。
 
 ## 元信息
 
 | 项目 | 内容 |
 |------|------|
-| 机构 | StepFun (阶跃星辰) |
-| 日期 | May 2026 |
-| 前作 | [[StepAudio]] / [[Step-Audio-2]] / [[StepAudio-EditX]] |
-| 对比基线 | ASR: [[Qwen3-ASR]] / [[VibeVoice]] / FunASR-Nano / Doubao-ASR; TTS: MiniMax-2.8-HD / ElevenLabs-v3 / Gemini-3.1-Flash-TTS; Realtime: GPT-Realtime / Gemini Live / Doubao Realtime |
-| 链接 | [arXiv](https://arxiv.org/abs/2605.23463) / [HTML](https://arxiv.org/html/2605.23463) |
+| 机构 | StepFun（阶跃星辰） |
+| 发布日期 | 2026-05-22 |
+| 系列上下文 | Step-Audio → Step-Audio 2 → **StepAudio 2.5** → Step-Audio-EditX（合成数据生成器） |
+| 项目主页 | 未提供 |
+| 是否开源 | **未开源**（无 GitHub repo / 无 checkpoint） |
+| 链接 | [arXiv](https://arxiv.org/abs/2605.23463) / [HTML](https://arxiv.org/html/2605.23463v1) |
+| 对比基线 | ASR: [[VibeVoice-ASR]] / [[FunASR-Nano]] / Doubao-ASR-2603 / Qwen3-ASR-1.7B；TTS: MiniMax-2.8-HD / [[ElevenLabs-v3]] / Gemini-3.1-Flash-TTS；Realtime: GPT-realtime / Gemini Live / Doubao Realtime（隐式） |
 
 ---
 
 ## 一句话总结
 
-> 阶跃星辰把 ASR、TTS、Realtime 对话三个方向统一到**一个 MoE LLM backbone**，在 **2.2T token** 上渐进式预训练；下游三个分支分别靠 [[Multi-Token Prediction|MTP-5 可验证多 token 解码]]（ASR RTF **0.0053**）、[[RLHF]] + [[Generative Reward Model|GRM]]（TTS Arena **67.6% 胜率**）和渐进式 SFT + GRM-PPO（Realtime 全面领先 GPT-Realtime / Gemini Live）刷新各自 SOTA。
+> 用一个 MoE audio-language 基座 + RLHF 主导的后训练，把 ASR / TTS / 实时对话三条产品线压在同一 backbone 上，并在三个方向都达到或超过专用系统的水平。
 
 ---
 
-## 核心贡献
+## 核心工程交付（按工业价值排序）
 
-1. **统一基础架构**：冻结 audio encoder + 轻量 adaptor + MoE LLM decoder 的非对称设计，ASR / TTS / Realtime 三个方向共享同一 backbone，仅通过数据、优化目标和解码约束分化——验证了"一个高质量多模态先验 + 不同监督路由"的统一范式。
-2. **ASR: 可验证多 token 解码 (MTP-5)**：每一步前向产生 6 个 token 提案（1 主 + 5 辅助），配合自回归验证确保准确性不损失；RTF 0.0053，比 [[Qwen3-ASR]]-1.7B 快 **1.8x**，比 [[VibeVoice]]-ASR 快 **20x**。
-3. **TTS: 全 LLM 合成 + 偏好对齐**：完全去掉 encoder-adaptor，将语音合成建模为纯 next-token prediction；通过 [[Generative Reward Model|GRM]]-based [[RLHF]] 对齐人类偏好，Arena 评测 **67.6%** 胜率碾压三个商用基线。
-4. **Realtime: 渐进式人格一致对话**：million-scale 人格矩阵 + 副语言敏感训练 + GRM-PPO，在主观评测中领先竞品 **+10.0 分**，Step-SPQA 领先 **+16.6 分**。
-5. **大规模预训练数据引擎**：自动化 pipeline 覆盖 SED/VAD/多 ASR 交叉验证/ROVER 投票/LLM 后处理，支撑 800B text + 800B speech token 的统一多模态训练。
-
----
-
-## 问题背景
-
-### 要解决的问题
-
-语音系统正经历**架构趋同**——ASR 从 CTC/RNN-T 走向 encoder-decoder + LLM，TTS 从手工 pipeline 走向生成式离散表示建模，Realtime 对话需要低延迟 + 人格一致 + 副语言理解。三条路径在底层都趋向于 "将语音当作另一种序列类型映射到 LLM 的共享潜在空间"。问题在于：**能否用一个统一基础模型同时做好这三件事？**
-
-### 现有方法的局限
-
-- **专用系统**：ASR / TTS / 对话系统独立训练和部署，参数冗余、知识无法共享。
-- **早期 Speech LLM** ([[StepAudio]] / [[SpeechGPT]] / [[SALMONN]])：验证了统一可行性，但在各专项 benchmark 上仍弱于专用 SOTA。
-- **推理效率**：LLM-based ASR 的自回归解码速度远慢于 CTC/Transducer，限制了大模型 ASR 的实用性。
-- **TTS 对齐**：传统 MOS / CER / SIM 指标对 LLM-based TTS 有偏，且 SFT 后的表达力 / 自然度仍有优化空间。
-- **Realtime 对话**：人格一致性、副语言敏感度和奖励稀疏性是核心未解问题。
-
-### 本文的动机
-
-"一旦 text 和 audio 共享一个多模态表示空间，任务特化就只是不同的数据、优化目标和解码约束的问题"——StepAudio 2.5 验证这个命题，三个方向的识别、合成和对话能力是"同一个多模态记忆的三种查询方式"。
+| # | 交付 | 关键指标 | 出处 |
+|---|---|---|---|
+| 1 | **生产级 LLM-based ASR + MTP-5 加速** | RTF=0.0053 / 单 H800 / 单并发，比 Qwen3-ASR-1.7B 快 ~1.8× | Tab.2 |
+| 2 | **三方向 SOTA**（同一 backbone） | ASR avg CER 2.97% (zh) / WER 3.68% (en)；TTS arena win-rate 67.6%；Realtime +10.0 主观 margin | Tab.1 / Fig.4 / Fig.5 |
+| 3 | **Long-form ASR 数据管线**（3-system ROVER） | 50K h 伪标 long-form 训练集，drop ê>0.05 段 | §4.2 + Fig.3 |
+| 4 | **Persona × Fission Realtime 数据基建** | 10K+ native personas → 百万级 persona matrix × 百万级真实场景对话 | §6.2 |
+| 5 | **统一 RLHF 范式** | TTS / Realtime 都用 GRM-shaped reward，单一规范覆盖两条线 | §5.1 + §6.1.3 |
 
 ---
 
-## 方法详解
+## 1. 总体设计（核心论点）
 
-### 统一基础架构
+[已 verify §1] 论点："**Once text and audio share a well-shaped representational space, the differences among downstream tasks migrate away from architecture toward operational regimes: data, objectives, and decoding constraints.**"
 
-StepAudio 2.5 采用 **audio-encoder-adaptor-LLM-decoder** 的非对称架构：
+工程含义：不为 ASR / TTS / Realtime 各造一套架构，而是 (1) 共享 backbone (2) 用数据组合和后训练目标做"方向化推理"。
 
-- **冻结 audio encoder**：将波形特征转为紧凑声学嵌入，提供稳定的声学抽象，在下游训练中始终冻结。
-- **轻量 adaptor**：将 encoder 的声学嵌入映射到 LLM 的隐空间。
-- **MoE LLM decoder**：从文本 [[Mixture of Experts|MoE]] LLM 初始化，在统一序列空间中同时处理 text token 和 speech token。承担语义理解、上下文管理、指令遵循和生成的全部负担。
+三方向的部署需求差异（必须在同一 backbone 下满足）：
 
-**设计原则**：刻意的非对称——encoder 负责声学抽象，decoder 负责语义。"一旦语义主要在 decoder 里，下游任务即使输出不同也能共享大部分模型。"
-
-### 任务特化 = 方向性推理
-
-从同一个 backbone 出发，三个 "推理方向"：
-
-| 方向 | 条件 | 输出空间 | 核心挑战 |
-|------|------|----------|----------|
-| **ASR** | 声学嵌入 → decoder | 窄、离散、强锚定于语音信号 | 准确性 + 解码效率 |
-| **TTS** | 文本 + 控制指令 → decoder | 丰富、连续、需要自然表达 | 保真性 + 可控性 + 表达力 |
-| **Realtime** | 实时音频 + 对话历史 → decoder | 低延迟 + 人格一致 + 副语言 | 延迟 + 一致性 + 副语言敏感 |
+| 分支 | 核心目标 | 主要挑战 |
+|---|---|---|
+| ASR | 准确 + 高效 long-form 转录 | RTF + long-form context |
+| TTS | 可控 + 富表达力 | global / inline 双层级控制 + 评测 |
+| Realtime | 低延迟 + persona 一致性 + 副语言响应 | reward sparsity + 多轮一致性 |
 
 ---
 
-### 共享数据引擎与基础预训练 (Section 3)
+## 2. 统一基座（Shared Backbone）
 
-#### 数据 Pipeline (Section 3.1)
+### 2.1 架构组成
 
-原始音频经自动化处理：
-1. **SED (Sound Event Detection) + VAD** → 过滤非语音
-2. 相邻 VAD 段合并 → 按语义完整性重分段
-3. 标注：质量评分、合成语音检测、说话人计数、**双 ASR 转录**、语言 ID
-4. 通过 WER / 编辑距离 / 语速交叉验证
-5. 按语言、时长、语义质量分、音频质量分分级
+[已 verify §2.1] 经典 audio-encoder → adaptor → LLM-decoder 三件套：
 
-#### 渐进式基础训练 (Section 3.2)
+- **Audio Encoder**：冻结的声学编码器，输出紧凑声学嵌入
+- **Adaptor**：轻量映射层，把声学嵌入投影到 LLM hidden space
+- **MoE LLM Decoder**：从一个文本 MoE LLM 初始化；词表扩展加入新的 audio token；在统一序列空间中 text 与 audio token 共存
+- **TTS 分支特例**：[已 verify §5 p1] 完全去掉 encoder + adaptor，只用 LLM backbone 做 next-token prediction 生成 audio token
 
-**总量**：在 **2.2T token** (text + audio) 上持续预训练。
+### 2.2 三方向推理 (Directional Inference)
 
-| 阶段 | 规模 | 序列长度 | 训练内容 | 训练模块 |
-|------|------|----------|----------|----------|
-| **Stage 1: Adaptor 对齐** | 3B ASR token | - | ASR 数据（沿用 Step-Audio 2） | 仅 adaptor（encoder + LLM 冻结） |
-| **Stage 2: 统一多模态训练** | 800B text + 800B speech | 16K | ASR / TTS / 语音翻译 / text-speech 交替续写 / speech-to-speech 对话 | 全量 |
-| **Stage 3: Cooldown** | 600B 高质量 token | 32K | 在 Stage 2 基础上引入 Audio Caption + Instruct TTS | 全量 |
+| 方向 | 输入 | 输出 | 输出空间特性 |
+|---|---|---|---|
+| ASR | audio embeddings | transcript tokens | 窄、离散、被声学信号强锚定 |
+| TTS | text + control instructions | audio tokens / 中间表示 | 丰富，挑战在自然度与可控性 |
+| Realtime | audio | latent reasoning trace → response | 在 turn 级延迟约束下耦合理解+生成 |
 
-**Stage 2 内部分两阶段**：
-- **Warmup (128B token)**：稳定新引入的 speech vocabulary；adaptor / embedding / output 层用更大学习率，**MoE router 用更小学习率**以减少对文本模态的干扰。
-- **主训练**：层级学习率归一化；**MoE auxiliary loss 系数和 router 学习率渐进退火**，平衡 expert 利用率与 top-k 路由概率。
+> 关键：foundation 不区分"理解"与"生成"，只需一个高质量多模态先验 + 路由不同输出空间的机制。三方向都是对同一多模态记忆的不同查询。
 
----
+### 2.3 架构图
 
-### ASR 分支：可验证多 token 解码
+![Figure 1](https://arxiv.org/html/2605.23463v1/2605.23463v1/figures/stepaudio25-unified-foundation-architecture.png)
 
-#### MTP-5 架构
-
-在共享 encoder-adaptor-decoder 之上加 **MTP-5 (Multi-Token Prediction) head**：
-
-- 解码位置 $t$ 处：主分支预测 $x_{t+1}$，5 个辅助分支分别预测 $x_{t+2}, \ldots, x_{t+6}$
-- **一次前向产生 6 个 token 提案**
-- 推理时通过自回归验证——一旦某个 future token 与正常解码路径不一致，后续全部拒绝，从接受前缀恢复
-- MTP "严格只作为加速原语"，不影响输出质量
-
-每个 MTP block 的结构：
-1. 取前一分支的隐状态 + 移位 token embedding
-2. 归一化 + 拼接 → 投影回 decoder 隐藏维度
-3. 通过 decoder-style Transformer block 处理
-4. 所有分支共享 embedding 层和词汇输出头
-
-#### ASR 训练流程
-
-**Stage 1: ASR SFT**
-- 短/长 form 数据混合训练，打包到 32K token 序列
-- SpecAugment 时频 masking
-- Audio encoder 冻结，优化 adaptor + decoder
-- 10K steps, peak LR $2 \times 10^{-5}$, batch=32, cosine decay → $1 \times 10^{-6}$
-
-**Stage 2: MTP 训练（两子阶段）**
-
-| 子阶段 | 训练模块 | LR | 初始化 |
-|--------|----------|-----|--------|
-| 冻结分支对齐 | 仅 MTP blocks | $2 \times 10^{-4}$ | Transformer 层从 decoder 最后一层拷贝 |
-| 联合校准 | adaptor + LLM + MTP | $2 \times 10^{-5}$ | 从上一阶段继续 |
-
-两阶段均：32K 序列 / batch=32 / 10K steps。
-
-#### ASR 数据
-
-| 类别 | 规模 | 特点 |
-|------|------|------|
-| 短时有监督数据 | ~100K h | 中英 + code-switching + 垂直领域 + 远场/高噪 |
-| 长时伪标签数据 | ~50K h | 三系统 ASR 转录 → ROVER 投票 → $\hat{e} > 0.05$ 丢弃 → LLM 精修 |
-
-长时数据构建 pipeline：
-1. VAD 分段 (≤30s) → 2. 三独立 ASR 转录 → 3. 表面形式归一化 → 4. **ROVER 对齐融合** → 5. 仅保留 ≥2 系统共识的 token → 6. 段级分歧率 $\hat{e} = \frac{\text{分歧位置数}}{\text{文本单元数}}$，$\hat{e} > 0.05$ 丢弃 → 7. 拼接为长 form → 8. LLM 补标点 / ITN / 跨段术语一致化
+**说明**: 共享 audio-language stack 服务三个 deployment goal 不同的分支（ASR/TTS/Realtime）。
 
 ---
 
-### TTS 分支：全 LLM 合成 + RLHF
+## 3. 数据基础与多阶段预训练
 
-#### 架构特点
+### 3.1 通用数据生产管线
 
-TTS 分支**完全去掉 encoder-adaptor 模块**，仅依赖 LLM backbone。将 audio token 视为一种新"语言"，语音合成完全建模为 next-token prediction。
+[已 verify §3.1] 自动化 pipeline，**同时服务**理解 + TTS + 对话三类任务：
 
-#### 训练流程
+1. **SED + VAD** 过滤低质量非语音段
+2. 相邻 VAD 段合并，重新切分为"语义相对完整 + 时长适中"的 base sample
+3. **Audio-level annotation**：质量评分 / 合成语音检测 / 说话人数标注
+4. **Dual-ASR 转录** + LID；用 WER / edit-distance / 语速做交叉验证
+5. 基于转录做语义完整性评分 + 内容分类
+6. 按 metadata（语种 / 时长 / 语义质量 / 音质）分级，预训练不同阶段抽不同质量
 
-**SFT 两阶段**：
+### 3.2 Progressive Foundation Training
 
-| 阶段 | 数据 | 目标 |
-|------|------|------|
-| Stage 1 | 大规模 zero-shot TTS + 全局指令 | 粗粒度控制（说话人特征、说话风格、整体韵律） |
-| Stage 2 | 高质量内部语音 + 全局+内联指令 | 细粒度控制（句子级 + 片段级同步） |
+[已 verify §3.2] **总训练量 2.2T tokens**。分四阶段执行：
 
-核心训练目标：**zero-shot voice cloning TTS**，支持全局和内联双级别可控性。
+| Stage | 数据规模 | 序列长 | 可训模块 | 关键设置 |
+|---|---|---|---|---|
+| **(A) Adaptor 对齐** | 3B tokens（纯 ASR） | – | **仅 adaptor**（encoder + LLM 冻结） | 继承 Step-Audio 2 |
+| **(B) 多模态 Warmup** | 128B tokens | 16K | 全部 | adaptor / embedding / output 高 LR；MoE router 低 LR（保护文本模态） |
+| **(C) 主预训练** | ~1.47T tokens（800B text + 800B speech 减去 warmup） | 16K | 全部 | LR 归一；**MoE auxiliary loss 系数和 router LR 渐退**，平衡 expert 利用率与 top-$k$ 路由概率 |
+| **(D) Cooldown** | 600B 高质量 tokens | **扩 32K** | 全部 | 新增 **Audio Caption + Instruct TTS**；强调高质量多模态 + 长上下文 |
 
-**RLHF (基于 GRM)**：
+Speech 数据格式（Stage B/C）：ASR / TTS / S2T 翻译 / 文本-语音 interleaved continuation / S2S 对话。**语音不只是转录输入，而是作为通用 sequence modality 出现在多种 in/out 配置中**。
 
-对每个 prompt $x$，提供高质量参考响应 $y^*$，策略模型 $\pi_\theta$ 生成候选 $y$，[[Generative Reward Model|GRM]] $r_\phi$ 评估 $y$ 相对于 $y^*$ 的偏好得分：
-
-$$r_{hf}(x, y, y^*) = s\!\left(r_\phi(x, y, y^*)\right)$$
-
-其中 $s(\cdot)$ 是 reward shaping 变换。GRM 相比传统标量 reward model 能捕获更细粒度的人类偏好信号。
-
-#### TTS 可控性
-
-- **全局控制**：整个话语的说话风格、韵律模式、情感状态
-- **内联控制**：插入文本中的局部指令，标记片段级表达行为
-- **Zero-shot voice cloning**：无需说话人微调的任意说话人复制
-
-#### SFT 数据构建
-
-**1. 模型合成数据（全局指令控制）**：
-- 用 [[StepAudio-EditX]] 生成，提供跨风格和情感属性的大规模合成能力
-
-**2. 录制语音数据（全局 + 内联控制）**：
-标注 pipeline 参照 Emotional-Context-Speech（[HuggingFace](https://huggingface.co/Insects/Emotional-Context-Speech)）：
-1. [[Whisper]]-Large-v3 转录
-2. Montreal Forced Aligner 词级时间戳对齐 → 话语级分段
-3. 过滤对齐错误 / 不完整转录 / 过短样本
-4. 收集对话历史 / 脚本上下文
-
-**韵律特征提取与离散化**：F0 / 语速 / 停顿统计 / 谱质心 / RMS 能量 / MFCC 方差 / HNR → tokenize → 拼接转录和元数据 → LLM 标注输出：
-- **全局控制描述**：整体风格/韵律/情感
-- **内联表达描述**：片段级表达指令
+> 工程意义：32K 长上下文窗口是后续 ASR long-form / Realtime 多轮的能力基础——不是评测时临时扩，而是从预训练就准备好的。
 
 ---
 
-### Realtime 分支：渐进式人格对话
+## 4. ASR 专用化
 
-#### 核心挑战
+### 4.1 架构：encoder-adaptor-decoder + MTP-5
 
-1. **对话连贯性**：跨多轮保持话题上下文、风格一致、对话状态
-2. **人格一致性**：在多样/对抗性输入下保持特定人格特征和表达风格
-3. **副语言敏感**：理解犹豫、笑声、叹气、节奏变化等非语言信号
-4. **奖励稀疏**：自然度、情感匹配等属性缺乏单一 ground truth
+[已 verify §4 paper.html L354] 在共享 decoder 之上 append **5 个并行 future-token branches**，单步前向生成 6-token proposal（主分支 + 5 个 MTP）。
 
-#### 三阶段训练
+![Figure 2](https://arxiv.org/html/2605.23463v1/2605.23463v1/figures/stepaudio25-asr-mtp-architecture.png)
 
-**Stage 1: Audio-Centric Mid-Training**
-- 继承基础模型，提供稳健的音频感知和长 form 推理能力
+**MTP block 结构**（每个分支）：
+- 接收前一分支 hidden state + shifted token embedding
+- 两输入分别 normalize → concat → 投影到 decoder hidden size → 一层 Transformer block
+- 所有分支**共享** embedding layer 与 vocabulary output head
 
-**Stage 2: 渐进式 SFT（三维度递进注入）**
+**推理验证机制**：proposal 只接受"经验证的前缀"——一旦未来 token 与正常自回归路径不一致，丢弃后续；MTP 严格只做加速、不引入错误。
 
-| 维度 | 数据 | 目标 |
-|------|------|------|
-| 对话对齐 | 指令丰富的多轮对话 | 轮次连贯、口语化、处理不流畅/中断 |
-| 人格风格控制 | million-scale 人格矩阵 + 百万级真实场景语料 | 组合泛化到未见人格 |
-| 副语言敏感 | 带气氛描述的真实对话 | 在 latent reasoning trace 中注册非语言信号，动态调整语调和节奏 |
+### 4.2 训练 Recipe（关键超参）
 
-**防灾难性遗忘**：动态 rehearsal schedule 持续交织通用指令和推理任务。
+[已 verify §4.1] 两阶段训练：
 
-**人格矩阵构建**：
+**(1) ASR SFT**（先把基座调成可靠 AR recognizer）
 
-> 从 **10,000+ 人工撰写并验证的原生人格描述**出发 → 算法性 fission 重组正交属性 → **million-scale 人格矩阵** → 每个合成人格与 million-scale 真实场景语料配对。
-
-**Stage 3: RLHF + GRM-PPO**
-
-PPO + KL 正则化，使用与 TTS 相同的 [[Generative Reward Model|GRM]] 架构：
-
-$$r_{hf}(x, y, y^*) = s\!\left(r_\phi(x, y, y^*)\right)$$
-
-**双重奖励信号**：
-- **偏好对比**：整体响应质量
-- **Rubric 评分**：指令敏感维度（跨轮一致性、忠实于用户内容）
-
-**训练数据混合**：多轮对话（跨轮一致性）+ 单轮 prompt（更长推理、更丰富偏好）。
-
-#### Realtime 数据构建
-
-三个互补 SFT 数据流：
-
-1. **对话骨干**：自然口语多轮对话，过滤保留轮次连贯、省略/不流畅表达、中途修正
-2. **人格条件对话**：10K 原生人格 → million-scale 人格矩阵 → million-scale 真实场景配对
-3. **副语言线索数据**：气氛描述（语速/重音/潜台词）+ 线索标签（犹豫/轻笑/叹气/呼吸/节奏变化/降调）
-
-全语料统一 pipeline 检查：角色一致性、标注交叉验证、近重复去除。
-
----
-
-## 关键公式
-
-### 公式 1: MTP 分支权重衰减
-
-$$w_h = \frac{\alpha^{h-1}}{\sum_{j=1}^{H} \alpha^{j-1}}, \quad H=5, \quad \alpha=0.9$$
-
-**含义**: 越远的 future token 分支权重越小，指数衰减控制辅助分支对总 loss 的贡献。
-
-### 公式 2: MTP 训练损失（位置 $t$）
-
-$$\mathcal{L}_t = \text{CE}(p_t, x_{t+1}) + \sum_{h=1}^{H} w_h \, \text{CE}(p_{t,h}, x_{t+1+h})$$
-
-**含义**: 标准 next-token CE + 加权的多 future token CE。$p_t$ 是主分支分布，$p_{t,h}$ 是第 $h$ 辅助分支分布。
-
-### 公式 3: 段级分歧率（长时 ASR 数据过滤）
-
-$$\hat{e} = \frac{\text{分歧位置数}}{\text{文本单元数}}$$
-
-**含义**: 三系统 ROVER 对齐后，分歧超过 5% 的段丢弃，确保伪标签质量。
-
-### 公式 4: GRM-based RLHF 奖励（TTS + Realtime 共用）
-
-$$r_{hf}(x, y, y^*) = s\!\left(r_\phi(x, y, y^*)\right)$$
-
-**含义**: Generative Reward Model 对候选 $y$ 和参考 $y^*$ 做成对比较，$s(\cdot)$ 做 reward shaping。比传统标量 reward model 捕获更细粒度的偏好信号。
-
----
-
-## 关键图表
-
-### Figure 1: 统一基础架构
-
-![Figure 1: StepAudio 2.5 统一架构](https://arxiv.org/html/2605.23463v1/x1.png)
-
-**说明**: 中央为共享的 audio encoder-adaptor-LLM decoder 栈，向三个方向分化：ASR（转录 token）、TTS（audio token）、Realtime（低延迟对话）。
-
-### Figure 2: ASR MTP 架构
-
-![Figure 2: MTP-5 多 token 解码](https://arxiv.org/html/2605.23463v1/x2.png)
-
-**说明**: encoder-adaptor-decoder backbone + 5 个并行 future token 预测分支。每一步前向产生 6 个 token 提案，推理时自回归验证。
-
-### Figure 3: 长时 ASR 数据 Pipeline
-
-![Figure 3: Long-form ASR 数据构建](https://arxiv.org/html/2605.23463v1/x3.png)
-
-**说明**: 原始录音 → VAD 分段 → 三独立 ASR 转录 → 归一化 → ROVER 投票融合 → 分歧过滤 → 段拼接 → LLM 后处理。
-
-### Table 1: ASR 中文基准 (CER %)
-
-| 测试集 | VibeVoice-ASR | FunASR-Nano | Doubao-ASR-2603 | Qwen3-ASR-1.7B | **StepAudio 2.5** | w/o MTP |
-|---|---|---|---|---|---|---|
-| AISHELL-1 | 5.19 | 1.88 | 2.07 | 1.49 | **0.71** | 0.79 |
-| AISHELL-2 iOS | 5.10 | 2.61 | 2.70 | 2.50 | **2.29** | 2.30 |
-| WenetSpeech testnet | 14.79 | 5.30 | **4.03** | 4.44 | 4.54 | 4.57 |
-| WenetSpeech testmeeting | 17.09 | 5.31 | 5.09 | **4.66** | 4.70 | 4.73 |
-| FLEURS zh | 8.77 | 3.19 | 2.83 | 2.74 | **2.63** | 2.63 |
-| **Average** | 10.19 | 3.66 | 3.34 | 3.17 | **2.97** | 3.00 |
-
-### Table 2: ASR 英文基准 (WER %)
-
-| 测试集 | VibeVoice-ASR | FunASR-Nano | Doubao-ASR-2603 | Qwen3-ASR-1.7B | **StepAudio 2.5** | w/o MTP |
-|---|---|---|---|---|---|---|
-| LibriSpeech clean | 2.30 | 1.80 | 2.94 | 1.69 | **1.38** | 1.40 |
-| LibriSpeech other | 5.79 | 4.43 | 5.98 | 3.57 | **3.16** | 3.14 |
-| Common Voice v11 en | 20.03 | 11.05 | 14.06 | **7.50** | 7.57 | 7.62 |
-| FLEURS en | 5.20 | 4.96 | 6.74 | **3.23** | 3.55 | 3.74 |
-| VoxPopuli cleaned AA | **2.38** | 3.97 | 3.61 | 3.28 | 2.76 | 3.23 |
-| **Average** | 7.14 | 5.24 | 6.67 | 3.85 | **3.68** | 3.83 |
-
-### Table 3: ASR 长时基准 (Error Rate %)
-
-| 测试集 | VibeVoice-ASR | FunASR-Nano | Doubao-ASR-2603 | Qwen3-ASR-1.7B | **StepAudio 2.5** | w/o MTP |
-|---|---|---|---|---|---|---|
-| LibriSpeech clean long | 1.66 | 2.34 | 2.81 | 1.95 | **1.27** | 1.27 |
-| LibriSpeech other long | 3.48 | 4.89 | 5.59 | 3.81 | 2.90 | **2.81** |
-| WenetSpeech testnet long | 8.73 | 4.74 | **3.72** | 4.15 | 4.09 | 4.09 |
-| Earnings22 cleaned AA | 5.62 | 10.38 | 12.33 | 6.90 | 6.52 | **6.34** |
-| **Average** | 4.87 | 5.59 | 6.11 | 4.20 | **3.70** | 3.63 |
-
-**关键发现**: MTP-5 对识别精度的影响在 0.06 绝对点以内——验证了自回归验证确保转录质量。
-
-### Table 4: ASR 解码效率 (RTF)
-
-| 模型 | RTF |
+| 超参 | 值 |
 |---|---|
-| VibeVoice-ASR | 0.1039 |
-| FunASR-Nano | 0.0591 |
-| Doubao-ASR-2603 | 0.0640 |
-| Qwen3-ASR-1.7B | 0.0094 |
-| **StepAudio 2.5 ASR** | **0.0053** |
+| 数据 | 100K h short-form + 50K h long-form 伪标 |
+| 序列长度 | 32K（packed） |
+| 数据增强 | SpecAugment 时间+频率 masking |
+| 冻结模块 | audio encoder |
+| 可训模块 | adapter + LLM decoder |
+| Steps | 10K |
+| Peak LR | $2 \times 10^{-5}$ |
+| Global batch | 32 |
+| Warmup | 100 steps |
+| LR schedule | cosine decay → $1 \times 10^{-6}$ |
 
-100 条 30 秒 clip 在单卡 H800 上测量。StepAudio 2.5 比 [[Qwen3-ASR]]-1.7B 快 **1.8x**，尽管使用更大的 decoder——证明 "decoder 规模不再线性转化为 token-by-token 延迟"。
+**(2) MTP 训练**（两子阶段）
 
-### Table 5: MTP 接受率分析
+| Sub-stage | 可训模块 | Peak LR | Steps | 备注 |
+|---|---|---|---|---|
+| Frozen-branch alignment | **仅 5 个 MTP blocks** | $2 \times 10^{-4}$ | 10K | Transformer 层从**最后一层 decoder 初始化**（继承 linguistic prior）；branch-specific 投影新初始化；共享 embedding + LM head 全部冻结 |
+| Joint calibration | adapter + LLM + MTP | $2 \times 10^{-5}$ | 10K | 让 backbone 状态与 MTP 分支对齐，把 MTP 训成 calibrated proposal |
 
-| 配置 | 1st | 2nd | 3rd | 4th | 5th | 6th | 7th | 平均接受长度 |
+两子阶段都继承 32K 序列长度 / batch=32 / 10K steps。
+
+### 4.3 关键公式
+
+**MTP 分支权重**（指数递减，反映串行依赖）：
+
+$$
+w_h = \frac{\alpha^{h-1}}{\sum_{j=1}^{H}\alpha^{j-1}}, \quad H = 5, \quad \alpha = 0.9
+$$
+
+**ASR + MTP 联合损失**（每个位置 $t$）：
+
+$$
+\mathcal{L}_t = \mathrm{CE}(p_t, x_{t+1}) + \sum_{h=1}^{H} w_h \, \mathrm{CE}(p_{t,h}, x_{t+1+h})
+$$
+
+- $p_t$ / $p_{t,h}$：主分支 / 第 $h$ MTP 分支的输出分布
+- $x_{t+1+h}$：第 $h$ 步未来的真实 token
+
+**Long-form 数据可靠性度量**（段级分歧率，决定是否丢弃）：
+
+$$
+\hat{e} = \frac{\#\,\mathrm{disagreed\ positions}}{\#\,\mathrm{text\ units}}
+$$
+
+策略：$\hat{e} > 0.05$ 的段直接丢弃。
+
+### 4.4 Long-form ASR 数据管线（50K h）
+
+[已 verify §4.2] 五步管线：
+
+![Figure 3](https://arxiv.org/html/2605.23463v1/2605.23463v1/figures/stepaudio25-asr-data-pipeline.png)
+
+1. **VAD 分段** ≤30s
+2. **三 ASR 系统转录** 得到多个候选 hypothesis
+3. **Surface-form normalization**（统一大小写 / 标点 / 格式）以聚焦真实识别误差
+4. **ROVER 对齐 + token 级投票**：至少 2/3 系统支持的 token 才被接受；非共识位置标 disagreement
+5. **段级分歧率过滤**：$\hat{e} > 0.05$ 丢弃；通过的相邻段拼接成 long-form 训练样本
+6. **LLM-based 精修阶段**：恢复标点 / inverse text normalization / 跨段术语和实体一致性
+
+> 工程意义：用便宜的"3 系统投票 + 阈值过滤 + LLM 精修"造出 50K h **session-level**伪标数据，绕开人工标注瓶颈。这是 long-form 32K 上下文能力的核心数据基础。
+
+### 4.5 ASR 评测结果
+
+**Serving 设置**：单 NVIDIA H800 / 单并发；Doubao-ASR-2603 通过官方 API；不原生支持 long-form 的 baseline（如 FunASR-Nano）用 VAD 切 ≤30s。
+
+#### Table 1: 三 benchmark 分组 Error Rate (%)
+
+| 类别 | Test set | VibeVoice-ASR | FunASR-Nano | Doubao-ASR-2603 | Qwen3-ASR-1.7B | **StepAudio 2.5** | w/o MTP |
+|---|---|:---:|:---:|:---:|:---:|:---:|:---:|
+| **中文** | AISHELL-1 | 5.19 | 1.88 | 2.07 | 1.49 | **0.71** | 0.79 |
+| | AISHELL-2 ios | 5.10 | 2.61 | 2.70 | 2.50 | **2.29** | 2.30 |
+| | WenetSpeech testnet | 14.79 | 5.30 | **4.03** | 4.44 | 4.54 | 4.57 |
+| | WenetSpeech testmeeting | 17.09 | 5.31 | 5.09 | **4.66** | 4.70 | 4.73 |
+| | FLEURS zh | 8.77 | 3.19 | 2.83 | 2.74 | **2.63** | 2.63 |
+| | **Avg (zh)** | 10.19 | 3.66 | 3.34 | 3.17 | **2.97** | 3.00 |
+| **英文** | LibriSpeech clean | 2.30 | 1.80 | 2.94 | 1.69 | **1.38** | 1.40 |
+| | LibriSpeech other | 5.79 | 4.43 | 5.98 | 3.57 | **3.16** | 3.14 |
+| | Common Voice v11 | 20.03 | 11.05 | 14.06 | **7.50** | 7.57 | 7.62 |
+| | FLEURS en | 5.20 | 4.96 | 6.74 | **3.23** | 3.55 | 3.74 |
+| | VoxPopuli cleaned AA | **2.38** | 3.97 | 3.61 | 3.28 | 2.76 | 3.23 |
+| | **Avg (en)** | 7.14 | 5.24 | 6.67 | 3.85 | **3.68** | 3.83 |
+| **Long-form** | LibriSpeech clean long | 1.66 | 2.34 | 2.81 | 1.95 | **1.27** | 1.27 |
+| | LibriSpeech other long | 3.48 | 4.89 | 5.59 | 3.81 | **2.90** | 2.81 |
+| | WenetSpeech testnet long | 8.73 | 4.74 | **3.72** | 4.15 | 4.09 | 4.09 |
+| | Earnings22 cleaned AA | **5.62** | 10.38 | 12.33 | 6.90 | 6.52 | 6.34 |
+| | **Avg (long-form)** | 4.87 | 5.59 | 6.11 | 4.20 | **3.70** | 3.63 |
+
+**关键观察**：
+- 在 3 类 benchmark 的 average 上都建立新 SOTA（zh / en / long-form 平均分别 2.97 / 3.68 / 3.70）
+- **MTP 对准确率的影响 <0.06 abs 点**（with vs without 列），验证了 strict-prefix verification 的设计正确性
+- LibriSpeech long 上明显碾压其它系统，归因于原生 32K context（无 boundary errors）
+
+#### Table 2: RTF（100 个 30s clip 平均）
+
+| Model | VibeVoice-ASR | FunASR-Nano | Doubao-ASR-2603 | Qwen3-ASR-1.7B | **StepAudio 2.5 ASR** |
+|---|---|---|---|---|---|
+| RTF ↓ | 0.1039 | 0.0591 | 0.0640 | 0.0094 | **0.0053** |
+
+**关键观察**：MTP-5 把"decoder 越大 token-by-token 延迟越线性增长"的规律打破——大多 step 一次性 emit 多个 verified token。**比 Qwen3-ASR-1.7B 快 ~1.77×**，更比 VibeVoice-ASR 快约 20× 。
+
+#### Table 3: MTP-{3/5/7} 严格逐位置接受率（WenetSpeech meeting）
+
+| Config | 1st | 2nd | 3rd | 4th | 5th | 6th | 7th | Avg Length |
 |---|---|---|---|---|---|---|---|---|
-| MTP-3 | 0.96 | 0.88 | 0.80 | - | - | - | - | 3.6 / 4 |
-| MTP-5 | 0.95 | 0.88 | 0.80 | 0.71 | 0.64 | - | - | 5.0 / 6 |
+| MTP-3 | 0.96 | 0.88 | 0.80 | – | – | – | – | 3.6 / 4 |
+| **MTP-5** | 0.95 | 0.88 | 0.80 | 0.71 | 0.64 | – | – | **5.0 / 6** |
 | MTP-7 | 0.96 | 0.88 | 0.80 | 0.72 | 0.65 | 0.59 | 0.53 | 6.1 / 8 |
 
-**关键发现**:
-- 早期位置接受率不随总分支数变化——每个 MTP head 学到独立稳定的预测任务
-- 从位置 2 起，接受率按 ~0.9/branch 衰减
-- MTP-3→MTP-5：平均接受长度 **+39%**；MTP-5→MTP-7 仅 +22%，因高位置失败导致 KV cache 回滚
-- **MTP-5 是效率-复杂度的最优平衡点**
+**关键观察**：
+- 早期位置接受率与总分支数**几乎无关** → 每个 MTP head 学到独立的稳定预测任务
+- 从第 2 位起接受率以 ~0.9 衰减
+- 3→5：+39% avg accepted length；5→7：仅 +22%，且 6/7 位失败会触发 KV-cache rollback，反而拖累 streaming
+- → **MTP-5 是效率-复杂度的最优 trade-off**
 
-### Figure 4: TTS Arena 胜率
-
-**StepAudio-2.5-TTS 总胜率 67.6%**，在 774 条 prompt 的 arena 成对比较中一致击败 MiniMax-2.8-HD / ElevenLabs-v3 / Gemini-3.1-Flash-TTS。
-
-### Figure 5: Realtime 评测
-
-五个评测维度上 StepAudio 2.5 Realtime 全面领先：
-- **主观人工评测**: 领先次优系统 **+10.0 分**
-- **Step-SPQA**: 领先 **+16.6 分**
-- **Step-Dialogue-Understanding**: 87 条多样音频样本测试声学特征推理
+> 工程级洞见（§4.3 末）："**Grounded generation tasks can be accelerated more aggressively than free-form text generation, precisely because the external modality reduces semantic branching.** Grounding is not only a source of information; it is also a source of algorithmic structure."
 
 ---
 
-## 实验
+## 5. TTS 专用化
 
-### 评测设置
+### 5.1 架构差异：去掉 encoder + adaptor
 
-**ASR**：与 VibeVoice-ASR / FunASR-Nano / Doubao-ASR-2603 / [[Qwen3-ASR]]-1.7B 对比，单卡 H800 单并发（Doubao 通过 API）。
+[已 verify §5 paper.html L699-700] TTS 分支**完全不要 encoder + adaptor**，audio token 当作 LLM 的一种"新语言"，TTS = pure next-token prediction（NTP）。核心挑战：text ↔ audio 表示空间的对齐。
 
-**TTS**：Arena 式成对评估，774 条 prompt。
-- 评估者听力灵敏度筛选 → 固定评估者池
-- 随机化模型音频对和评估位置
-- 定期抽查 + 高差异案例后评估审查
-- 基线：MiniMax-2.8-HD / ElevenLabs-v3 / Gemini-3.1-Flash-TTS（各用官方推荐最优声音预设）
+### 5.2 两阶段 SFT
 
-论文明确讨论了传统指标的局限：CER / SIM 对 LLM-based 模型有内在偏差；ASR 指标在丰富副语言现象下不可靠；嵌入式说话人验证丢弃高频细节；LLM-as-judge 难以评估韵律质量。因此选用人类偏好 arena 评测。
+[已 verify §5.1]
 
-**Realtime**：五个评测套件：
-| 套件 | 类型 | 内容 |
-|------|------|------|
-| Step-Dialogue-Human-Eval | 主观/手机 App | 通用对话 |
-| step_Dialogue_general | 客观/API | 通用对话 |
-| step-Dialogue-car | 客观/API | 车载场景 |
-| Step-Dialogue-Understanding | 客观 | 87 条音频的声学特征推理（年龄/性别/语速） |
-| Step-SPQA | 客观 | 11 类音频问答（来自 Step-Audio 2） |
+| Stage | 数据 | 目标 |
+|---|---|---|
+| **Stage 1** 大规模 zero-shot TTS + global instruction supervision | Step-Audio-EditX 合成 | 学粗粒度音色 / speaking style / 整体韵律控制 |
+| **Stage 2** 高质量录音 + global & inline 双标注 | 内部录音 | 学 utterance / segment 级细粒度表达控制 |
 
-### 关键定量结果汇总
+→ 既支持 global instruction following 又支持 inline expressive control。
 
-| 方向 | 核心指标 | 数值 | 意义 |
-|------|----------|------|------|
-| ASR (中文) | 平均 CER | **2.97%** | 优于 Qwen3-ASR (3.17) |
-| ASR (英文) | 平均 WER | **3.68%** | 优于 Qwen3-ASR (3.85) |
-| ASR (长时) | 平均 Error Rate | **3.70%** | 优于 Qwen3-ASR (4.20) |
-| ASR | AISHELL-1 CER | **0.71%** | 绝对 SOTA，vs Qwen3-ASR 1.49 |
-| ASR | LibriSpeech clean WER | **1.38%** | 绝对 SOTA，vs Qwen3-ASR 1.69 |
-| ASR | RTF | **0.0053** | 比 Qwen3-ASR 快 1.8x |
-| TTS | Arena 总胜率 | **67.6%** | 碾压三商用基线 |
-| Realtime | 主观评测优势 | **+10.0** | vs 次优系统 |
-| Realtime | Step-SPQA 优势 | **+16.6** | vs 次优系统 |
+### 5.3 TTS RLHF（核心）
 
-### MTP 的关键 insight
+[已 verify §5.1 Eq.1]
 
-> "有锚定的生成任务（grounded generation）有时比自由文本生成更容易加速——因为外部模态（音频）约束了输出分布，降低了语义分支，锚定提供的不仅是信息，还有**算法结构**，使多 token 验证能以高接受率成功。"
+1. 先训练 **Generative Reward Model** $r_\phi$
+2. 对每个 prompt $x$，policy $\pi_\theta$ 生成候选 $y$；高质量 reference $y^*$
+3. GRM 对 $(x, y, y^*)$ 输出 pairwise scalar preference
+4. 最终 reward 经 reward shaping：
+
+$$
+r_{hf}(x, y, y^*) = s\!\left( r_\phi(x, y, y^*) \right)
+$$
+
+- $r_\phi$：GRM 原始打分
+- $s(\cdot)$：reward shaping 变换
+
+### 5.4 SFT 数据生产管线（recorded data）
+
+[已 verify §5.2] 沿用 **Emotional-Context-Speech** 标注框架（Huggingface 仓库），核心改造在标注 target：
+
+1. **Whisper-Large-v3** 转录 → **MFA** 词级时间戳 → 切 utterance
+2. 严重对齐错 / 转录不完整 / 极短样本 drop
+3. 每条 utterance 收集对话上下文 / 剧本 metadata
+4. **离散化韵律特征**：F0、语速、停顿统计、谱重心、RMS energy、MFCC variance、HNR
+5. 把 transcript + context + quantized acoustic features 喂给**标注 LLM**，产出双标注：
+   - **Global control**：整句 speaking style / 韵律 / 情感概述
+   - **Inline expression**：在文本中插入 local directives 标 span 级表达行为
+6. 训练前再用 ASR 模型交叉验证转录，drop mismatch 段
+
+### 5.5 评测：Arena Win-Rate
+
+[已 verify §5.3] 作者明确否定客观指标（CER / SS / LLM-as-judge / MOS）对 LLM-based TTS 的可靠性，转用 arena 评测。
+
+**评测协议**：
+- 听感敏感度筛选评测员，评测期内固定不变
+- 音对随机化 + 评测位置随机化
+- 要求评测员说明偏好理由
+- 周期性 spot-check 干预偏差，事后复审大分歧 case
+- 774 prompts，对每个 baseline 选官方推荐 voice preset
+
+![Figure 4](https://arxiv.org/html/2605.23463v1/2605.23463v1/figures/stepaudio25-tts-arena.png)
+
+**结果**：StepAudio-2.5-TTS 对 MiniMax-2.8-HD / ElevenLabs-v3 / Gemini-3.1-Flash-TTS **总胜率 67.6%**，对每个 baseline 都一致领先。
+
+> ⚠️ 评估薄弱点：**完全没有报告 WER / SIM / SECS / MOS 等标准客观指标**，arena 评测集不公开，胜率无置信区间。
 
 ---
 
-## 批判性思考
+## 6. Realtime 专用化
 
-### 优点
+### 6.1 架构：原封不动复用基座
 
-1. **统一范式真正 work 了**：三个方向都达到或超过专用系统 SOTA，证明 "一个 backbone 三种查询" 不是空话。ASR 中文 CER 0.71 (AISHELL-1) 和 RTF 0.0053 同时达到速度和精度 SOTA 尤其有说服力。
-2. **MTP-5 的 grounding insight 深刻**：指出 grounded generation 比 free-form text 更适合 multi-token decoding，因为音频锚定降低了输出分布的不确定性——这个观察可推广到其他 grounded NLP 任务。
-3. **GRM 是比标量 reward model 更好的 RLHF 方案**：在 TTS 和 Realtime 两个方向都展现了 generative reward model 对人类偏好的细粒度捕获能力。
-4. **Realtime 的人格矩阵工程创新**：10K 原生人格 → million-scale 矩阵 → 组合泛化，是 scalable persona conditioning 的工程范本。
-5. **长时 ASR 数据构建严谨**：三系统 ROVER + 分歧率过滤 + LLM 后处理，伪标签质量有保障。
-6. **评测方法论严肃**：TTS 不用传统 MOS/CER 而用 Arena 评测，并在论文中明确论证了传统指标对 LLM-based TTS 的偏差——这种自省式方法论值得其他工作学习。
+[已 verify §6 p1] 不改架构：audio encoder + adaptor + decoder。decoder 输出**显式 latent reasoning trace** 再生成 response。
 
-### 局限性
+### 6.2 四大挑战
 
-1. **模型细节严重缺失**：MoE LLM 的具体架构（参数量、expert 数、top-k routing）、audio encoder 架构、speech codec/tokenizer 设计（码本数/帧率/VQ 方式）均未公开。这是商业 tech report 的通病，但严重影响可复现性和学术价值。
-2. **TTS 没有传统客观指标**：虽然 Arena 评测有道理，但完全不提 WER/SIM/MOS 让无法做横向对比。67.6% 胜率中 per-baseline 胜率细分也没给。
-3. **Realtime 评测基线不透明**：竞品名称没有明确列出（只在 Figure 5 中），具体数值只给了 margin（+10.0 / +16.6）而非绝对分。
-4. **WenetSpeech 上未赢**：testnet 和 testmeeting 两个中文子集分别输给 Doubao (4.03 vs 4.54) 和 Qwen3-ASR (4.66 vs 4.70)，说明在噪声/会议场景下还有提升空间。
-5. **没有多语种 ASR 评测**：只有中英文，对于 "统一基础模型" 的定位来说语种覆盖不够。
-6. **代码/模型未开源**：截至发布时无 GitHub / HuggingFace 链接，仅有论文。
+1. Conversational coherence：跨多轮维持话题/风格/对话状态
+2. Persona consistency：在多样和 adversarial 输入下守住人格
+3. Paralinguistic sensitivity：理解犹豫 / 笑声 / 叹气 / 节奏变化
+4. **Reward sparsity**：对话属性（自然度 / 情感契合）无单一 ground-truth → 难以单靠 verifiable reward 优化
 
-### 潜在改进方向
+### 6.3 三阶段训练管线
 
-1. **开放 codec/encoder 细节**：至少公开帧率、码本维度、token 数等基本参数，方便社区定位能力来源。
-2. **TTS 补充客观评测**：在 Seed-TTS-eval 等标准 benchmark 上给出 WER/SIM，与 [[SemaVoice]] / [[IndexTTS 2]] / [[VoxCPM]] 做公平比较。
-3. **多语种 ASR 扩展**：[[FLEURS]] 已覆盖 100+ 语种，评测范围应扩大。
-4. **MTP 推广到 TTS/Realtime**：MTP 在 ASR 上效果显著，是否能加速 audio token 生成？论文未探讨。
-5. **流式 Realtime 延迟**：论文未报告 first-turn latency / P50/P99 延迟等工程指标。
+[已 verify §6.1]
 
-### 可复现性评估
+**(A) Audio-Centric Mid-Training** —— 完全继承基座，保留 audio-grounded perception + long-form reasoning。
 
-- [ ] 代码开源（未发现）
-- [ ] 预训练模型开源（未发现）
-- [ ] 音频 encoder 架构公开（未公开）
-- [ ] Speech codec 细节公开（未公开）
-- [ ] MoE LLM 参数量公开（未公开）
-- [x] 训练流程和超参描述完整（ASR 部分详尽；TTS/Realtime 部分较粗）
-- [x] 评测基准可获取
+**(B) Progressive SFT** —— 三维度渐进 curriculum：
+
+| 维度 | 数据 | 目标 |
+|---|---|---|
+| Conversational Alignment | 多轮对话 + spoken-language artifacts | turn 级连贯；处理 disfluency / mid-utterance interruption；偏好口语化 / 韵律友好 response |
+| Persona & Stylistic Control | persona-conditioned data | 从 curated seed 出发**算法 fission** 产出百万级 persona × verbal habit 组合矩阵；学 compositional generalization |
+| Paralinguistic Sensitivity | real spoken interactions | 在 latent reasoning trace 中注册副语言线索，动态调整 response 语气 + pacing；融合"who is speaking"与"how the user is speaking" |
+
+**Dynamic rehearsal schedule**：interaction-specific 数据持续与通用 instruction + reasoning 任务交错，按 validation metric 动态调整比例，防 catastrophic forgetting。
+
+**(C) RLHF with Generated Rewards** —— PPO + KL 正则；GRM 对参考 response 打分 + 显式 interaction rubrics（多轮一致性 / 对早期用户内容的忠实度）；混合 **multi-turn**（一致性主导）+ **single-turn**（更长推理 + 更丰富偏好表达）。
+
+### 6.4 数据基建（三条流）
+
+[已 verify §6.2]
+
+| 数据流 | 规模/构造 |
+|---|---|
+| Conversational backbone | 自然口语多轮对话，倾向 turn-to-turn 连贯 / 省略 / disfluent / mid-utterance revision；书面体 response 降权 |
+| Persona-conditioned | **10,000+ native personas（人写 + 人审）** → 算法 fission 重组 personality / 用语习惯 / 情感边界 / 互动 archetype → **百万级 persona matrix**；每个合成 persona 配对**百万级真实场景对话** |
+| Paralinguistic cue | 带 atmosphere descriptor（语速 / 重音 / subtext）+ cue label（hesitation / 轻笑 / 叹气 / 呼吸 / 节奏变化 / 降调） |
+
+整体管线：in-character 一致性检查 + annotation 交叉验证 + 去 fission 引入的近重复。
+
+### 6.5 评测（5 个套件）
+
+[已 verify §6.3]
+
+| 套件 | 类型 | 描述 |
+|---|---|---|
+| Step-Dialogue-Human-Eval | 主观 mobile-app | 通用对话 |
+| step_Dialogue_general | 客观 API | 通用对话 |
+| step-Dialogue-car | 客观 API | 车载对话 |
+| Step-Dialogue-Understanding | 87 个音频样本 | 从音频信号推断 age / gender / 语速 等声学属性 |
+| Step-SPQA | 11 类 audio-Q/audio-A | 沿用 Step-Audio 2 提出的 benchmark |
+
+![Figure 5](https://arxiv.org/html/2605.23463v1/2605.23463v1/figures/stepaudio25-realtime-evaluation.png)
+
+**关键结果**：5 个套件**全部领先**；主观 +10.0 margin；Step-SPQA +16.6 margin；Step-Dialogue-Understanding 强表现 → 副语言条件化没有损害通用 reasoning。
+
+> ⚠️ 评估薄弱点：5 个套件**只有 Step-SPQA 有外部参照**（来自 Step-Audio 2），其余 4 个均为自建，外部可比性有限。
+
+---
+
+## 7. 实验对比矩阵（按方向）
+
+### 7.1 ASR：每条 baseline 的对比维度
+
+| 维度 | StepAudio 2.5 | Qwen3-ASR-1.7B | Doubao-2603 | FunASR-Nano | VibeVoice-ASR |
+|---|---|---|---|---|---|
+| Avg CER (zh) | **2.97** | 3.17 | 3.34 | 3.66 | 10.19 |
+| Avg WER (en) | **3.68** | 3.85 | 6.67 | 5.24 | 7.14 |
+| Long-form avg | **3.70** | 4.20 | 6.11 | 5.59 | 4.87 |
+| RTF | **0.0053** | 0.0094 | 0.0640 | 0.0591 | 0.1039 |
+| 原生 long-form | ✓ (32K ctx) | ✓ | ✓ | ✗ (需 VAD) | ✓ |
+
+### 7.2 TTS：arena 模式（无客观指标）
+
+| 维度 | StepAudio 2.5 | MiniMax-2.8-HD | ElevenLabs-v3 | Gemini-3.1-Flash-TTS |
+|---|---|---|---|---|
+| Total arena win-rate | **67.6%** | — | — | — |
+| WER / SIM / MOS | **未报告** | — | — | — |
+
+### 7.3 Realtime：自建 benchmark 主导
+
+| 套件 | StepAudio 2.5 vs next-best |
+|---|---|
+| Step-Dialogue-Human-Eval（主观）| **+10.0** |
+| Step-SPQA | **+16.6** |
+| 其它 3 个 | "consistently outperforms"（无具体数字） |
+
+---
+
+## 8. 结果可信度分层
+
+| 可信度 | 结果 | 理由 |
+|---|---|---|
+| **高** | ASR zh/en/long-form 三类公开 benchmark CER/WER；RTF | 公开标准集 + 强基线 + 单卡单并发统一 serving；MTP 数字可独立测量 |
+| **高** | MTP 加速 vs 准确率 trade-off（≤0.06 abs 点） | 直接表中给 with/without 对照 |
+| **中** | TTS 67.6% arena 胜率 | 774 prompt + 流程标准化，但评测集不公开 + 无置信区间 + 无客观指标交叉验证 |
+| **中** | Realtime +10.0 / +16.6 margin | 主观 mobile-app + API 客观混合，benchmark 4/5 自建 |
+| **低** | TTS 内容一致性 / 说话人相似度的绝对水平 | 论文完全没报 WER / SIM 等 |
+
+---
+
+## 9. 批判性思考（按工程视角）
+
+### 9.1 核心 Claim 审查
+
+1. **Paper Claim**: "achieves state-of-the-art results across ASR, TTS, and Realtime"
+   **My Assessment**: ASR 在 3 类公开 benchmark + 强基线下成立（CER 2.97% / WER 3.68% / long-form 3.70% / RTF 0.0053 都 best）。TTS 仅 arena 胜率成立，**绝对 quality 无法判断**。Realtime 受限于自建 benchmark，外部可比性弱。
+
+2. **Paper Claim**: "MTP acts strictly as an acceleration primitive"（不损害准确率）
+   **My Assessment**: 完全成立。Table 1 with/without 列差异 ≤0.06 abs 点，**这是 strict-prefix verification 设计带来的**——只接受经验证的前缀，KV-cache rollback 保证最终一致性。
+
+3. **Paper Claim**: "A singular audio-language foundation can successfully internalize the distinct deployment objectives"
+   **My Assessment**: 技术上确实共享 backbone + 不同后训练实现三模式。**但 TTS 分支完全去掉 encoder + adaptor**——这种情况下"同一模型"的定义边界存在模糊。论文未量化三分支实际共享的参数比例。
+
+### 9.2 工程优点
+
+1. **Recipe 完整度高**：从 4 阶段 pretraining 到 MTP 两子阶段训练，给出了具体 token 数、序列长、LR、batch、warmup、衰减。对工业团队来说是可借鉴的 ground truth。
+2. **MTP-5 设计精巧且可推广**：grounded generation 的加速思路（外部 modality 减少语义分支 → 验证式 multi-token）对任何 "speech/vision-conditioned LM" 都适用。
+3. **数据基建是真正护城河**：长音频 3-system ROVER 伪标管线 + Realtime 10K personas → 算法 fission 百万矩阵，这些都是几个月工作量。
+4. **统一 RLHF 范式**：TTS / Realtime 都用 GRM-shaped reward，规范统一便于团队扩展。
+
+### 9.3 工程局限
+
+1. **TTS 评估严重薄弱**：不报 WER / SIM / MOS / UTMOS，arena 集不公开。**外部团队无法独立 verify TTS 的绝对水平**。
+2. **MoE 参数量完全黑盒**：论文一字不提 active / total params / expert 数。无法估算服务成本。
+3. **Codec 内部架构未披露**：speech tokenizer 用了什么量化方式（RVQ/FSQ/其它）/ 帧率 / 码率全部缺失。这是 TTS 工程能力的核心组件之一，缺失严重。
+4. **未开源代码 + 未发模型 + 未发评测集**：L2 verify 全部不可用。
+5. **Realtime benchmark 4/5 自建**：外部对比能力弱，公允性受质疑。
+
+### 9.4 复现性评估
+
+- [ ] 代码开源（**未开源**）
+- [ ] 预训练 / SFT / RLHF checkpoint（**未公开**）
+- [x] 训练流程描述（**ASR 部分详尽**，TTS / Realtime 偏粗）
+- [ ] 数据集（ASR SFT 部分含公开集 + 自建；TTS / Realtime 数据均未公开）
+- [ ] 评测集（Realtime 4/5 套件自建未发布；TTS 774 prompt 未发布）
+- [x] long-form 评测附属工具（[wenetspeech-testnet-long](https://github.com/lawlict/wenetspeech-testnet-long) 已开源用于复现 long-form 评测）
+
+### 9.5 工业落地视角的可借鉴点
+
+1. **MTP-5 + autoregressive verification**：直接可移植到任何 grounded-generation 任务（ASR / VQA）。设计精巧，工程成本低。
+2. **3-system ROVER + LLM 精修**：替代昂贵人工标注 long-form ASR 数据的标准做法。
+3. **算法 fission persona matrix**：解决"persona 数据稀缺"的工程方案。
+4. **GRM + reward shaping**：取代 scalar reward model 的趋势型做法，对 TTS / 对话两类没有"唯一正确答案"的任务更合适。
+5. **统一基座 + 数据/目标差异化分支**：是 unified speech foundation 路线的工业级实证（vs Qwen3-Omni 同期）。
+
+---
+
+## 🗺️ 在知识地图中的定位
+
+- **所属领域**：[[SpeechLM-领域总览]]（unified audio-language foundation）
+- **技术路线**：
+  - [[TTS-技术路线图]] §speech-llm-tts —— 在 SpeechLM 内嵌 TTS 路线的工业代表（与 [[Qwen3-Omni]] 同类）
+  - [[TTS-技术路线图]] §controllable-tts —— global + inline 双层级 instruction control
+- **核心问题**：
+  - [[TTS-核心挑战]] §instruction-following / §dialogue-integration（覆盖三方向）
+  - 跨方向：在同一 backbone 内做 ASR (transduction) + TTS (generation) + Realtime (interactive) 的统一
+- **表示层位置**：[[TTS-表示层地图]] §unified-token-space —— text + audio token 共享 LLM decoder 词表
+- **在 SpeechLM/对话框架内的位置**：[[TTS-SpeechLM-Dialogue关系]] **位置 ①②③ 全覆盖**（理解 + 生成 + 对话），但 TTS 分支独立去 encoder 形态特殊
+- **相邻工作**：[[Step-Audio 2]]（前代）/ [[StepAudio-EditX]]（数据生成器）/ [[Qwen3-Omni]]（同期统一基座竞品）/ [[GPT-4o]] / [[Gemini]] / Doubao / [[Moshi]]（实时对话标杆）
+
+---
+
+## 🔄 后续重估
+
+- **2026-05-26（首次精读 + 从头重写为工业 tech report 格式）**：核心定位是 unified speech LLM 工业化的代表作之一。ASR 部分**工程价值极高**（具体 recipe + RTF 0.0053 + MTP-5 设计），可作为 LLM-based ASR 服务部署的 reference。TTS / Realtime 部分**透明度不足**——TTS 缺客观指标，Realtime 缺独立 benchmark。MoE 参数量 + codec 内部架构 + 完整 SFT/RL 数据规模均未披露，与 CosyVoice 系列开源 + 详尽 ablation 的风格形成鲜明对比。整体定位：值得跟踪的 unified speech foundation 路线工业代表，但**不可作为 L2 verify 的可靠 ground truth**。
 
 ---
 
 ## 关联笔记
 
-### 前作 / 基础
-- [[StepAudio]]: 初代统一语音交互系统（speech tokenizer + LLM + speech decoder）
-- [[Step-Audio-2]]: 2.5 的直接前作，提供 adaptor 对齐方法和基础架构
-- [[StepAudio-EditX]]: 语音编辑模型，在 TTS 分支中用于合成训练数据
+### 基于
+- [[Step-Audio 2]]：直接前代，Stage A adaptor 对齐策略沿用
+- [[StepAudio-EditX]]：TTS SFT Stage 1 的合成数据生成器
 
-### ASR 方向对比
-- [[Qwen3-ASR]]: 1.7B 参数，最直接的 ASR 对手；StepAudio 2.5 在中英平均和 RTF 上全面超越
-- [[Whisper]]: 经典 encoder-decoder ASR，StepAudio 2.5 代表了 LLM-based ASR 的下一代
+### 对比
+- [[Qwen3-Omni]]：同期同路线（unified audio-language foundation）
+- [[Qwen3-ASR-1.7B]]：ASR 主对照 baseline（RTF + 准确率双维度）
+- [[MiniMax-2.8-HD]] / [[ElevenLabs-v3]] / Gemini-3.1-Flash-TTS：TTS arena 基线
+- [[Moshi]]：实时对话延迟标杆（StepAudio 2.5 未报具体延迟，无法直接比对）
+- [[CosyVoice3]]：同期工业 tech report（独立 TTS 路线）对照
 
-### TTS 方向对比
-- [[SemaVoice]]: 连续 AR TTS + SFM 对齐，Seed-TTS EN WER 1.71%
-- [[CosyVoice 2]]: D-AR+C-NAR cascaded TTS
-- [[IndexTTS 2]]: D-AR+C-NAR，SIM 强
+### 方法相关
+- [[Multi-Token Prediction]]：ASR MTP-5 的方法基础
+- [[RLHF]]：TTS / Realtime 共享的后训练范式
+- [[MoE]]：基座 LLM 架构
+- [[ROVER]]：long-form 数据 voting 算法
+- [[SpecAugment]]：ASR SFT 数据增强
 
-### Realtime 方向对比
-- [[Moshi]]: 开源全双工对话系统
-- [[GLM-4-Voice]]: 清华/智谱的语音对话模型
-- [[Qwen2.5-Omni]]: 阿里巴巴的 Omni 模型
-
-### 方法相关概念
-- [[Multi-Token Prediction]]: ASR 加速核心技术（MTP-5 可验证多 token 解码）
-- [[Generative Reward Model]]: TTS + Realtime 共用的偏好对齐方案
-- [[RLHF]]: TTS 和 Realtime 的后训练对齐
-- [[Speech DPO]]: 相关的语音偏好优化方法
-- [[Mixture of Experts]]: 基础 LLM backbone 架构
-- [[Speech LLM]]: 本文所属范式
-- [[Full-Duplex]]: Realtime 分支的相关概念
-
-### 训练方法相关
-- [[Modality Alignment]]: adaptor 对齐阶段
-- [[Curriculum Learning]]: 渐进式预训练（3B→1.6T→600B）
+### 数据/硬件相关
+- [[WenetSpeech]] / [[LibriSpeech]] / [[AISHELL-1]] / [[AISHELL-2]] / [[FLEURS]] / [[Common Voice]] / [[VoxPopuli]] / [[Earnings22]]：ASR benchmark
+- [[Step-SPQA]]：Realtime audio-Q/A benchmark（继承自 Step-Audio 2）
+- [[H800]]：评测硬件
 
 ---
 
 ## 速查卡片
 
-> [!summary] StepAudio 2.5
-> - **核心**: 统一 audio-language foundation model，一个 MoE LLM backbone 同时做 ASR / TTS / Realtime 对话，三个方向通过不同数据/优化目标/解码约束分化。
-> - **预训练**: 2.2T token 渐进式训练（adaptor 对齐 3B → 统一多模态 1.6T → cooldown 600B），序列长度 16K→32K。
-> - **ASR**: MTP-5 可验证多 token 解码，中文 CER 2.97% / 英文 WER 3.68% / AISHELL-1 **0.71%** / RTF **0.0053**（1.8x faster than Qwen3-ASR）。
-> - **TTS**: 全 LLM 合成（去掉 encoder-adaptor），GRM-RLHF 偏好对齐，Arena 胜率 **67.6%**。
-> - **Realtime**: 渐进式 SFT + million-scale 人格矩阵 + GRM-PPO，主观评测 **+10.0** / Step-SPQA **+16.6**。
-> - **代码**: 未开源。
+> [!summary] StepAudio 2.5 Technical Report (StepFun, 2026-05)
+> - **核心**：统一 MoE audio-language 基座 + RLHF 主导后训练 → ASR / TTS / Realtime 三方向同 backbone SOTA
+> - **训练规模**：2.2T tokens（800B text + 800B speech + 600B cooldown）；32K 上下文；ASR SFT 100K h + long-form 50K h ROVER 伪标
+> - **ASR 核心**：MTP-5 验证式加速；avg CER 2.97% (zh) / WER 3.68% (en) / RTF 0.0053（单 H800 单并发；比 Qwen3-ASR-1.7B 快 ~1.77×）
+> - **TTS 核心**：去 encoder/adaptor，pure NTP；GRM-shaped reward RLHF；774-prompt arena 67.6% win-rate（无客观指标）
+> - **Realtime 核心**：10K+ native personas → 百万级 persona matrix；PPO + KL + GRM；主观 +10.0 / Step-SPQA +16.6 margin
+> - **未开源**：无 code / model / benchmark；MoE 参数量、codec 架构、TTS 数据规模均缺
+> - **工程亮点**：4 阶段 pretraining recipe / MTP-5 设计与训练 recipe / 3-system ROVER long-form 数据管线 / persona algorithmic fission 数据基建
 
 ---
 
-*笔记创建时间: 2026-05-25*
+*笔记创建时间: 2026-05-26（从头重写为工业 tech report 格式）*

@@ -16,6 +16,7 @@ generated_by: dailypaper-skills
 - [[论文笔记/_概念/4-Vocoder与声码器/Dilated Convolution|Dilated Convolution]]
 - [[论文笔记/_概念/4-Vocoder与声码器/Gated Activation Unit|Gated Activation Unit]]
 - [[论文笔记/_概念/4-Vocoder与声码器/HiFi-GAN|HiFi-GAN]]
+- [[论文笔记/_概念/4-Vocoder与声码器/MFD|MFD]]
 - [[论文笔记/_概念/4-Vocoder与声码器/Multi-Period Discriminator|Multi-Period Discriminator]]
 - [[论文笔记/_概念/4-Vocoder与声码器/Multi-Receptive Field Fusion|Multi-Receptive Field Fusion]]
 - [[论文笔记/_概念/4-Vocoder与声码器/Parallel WaveGAN|Parallel WaveGAN]]

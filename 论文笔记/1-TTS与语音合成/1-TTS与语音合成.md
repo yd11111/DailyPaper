@@ -48,6 +48,7 @@ generated_by: dailypaper-skills
 - [[论文笔记/1-TTS与语音合成/SPEAR-TTS|SPEAR-TTS]]
 - [[论文笔记/1-TTS与语音合成/SeedTTS|SeedTTS]]
 - [[论文笔记/1-TTS与语音合成/SemaVoice|SemaVoice]]
+- [[论文笔记/1-TTS与语音合成/StyleSelfReferencing|StyleSelfReferencing]]
 - [[论文笔记/1-TTS与语音合成/TextRolSpeech|TextRolSpeech]]
 - [[论文笔记/1-TTS与语音合成/Tortoise|Tortoise]]
 - [[论文笔记/1-TTS与语音合成/TransformerTTS|TransformerTTS]]

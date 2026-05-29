@@ -4,7 +4,59 @@ method_name: "Qwen3-TTS"
 authors: [Hangrui Hu, Xinfa Zhu, Ting He, Dake Guo, Bin Zhang, Xiong Wang, Zhifang Guo, Ziyue Jiang, Hongkun Hao, Zishan Guo, Xinyu Zhang, Pei Zhang, Baosong Yang, Jin Xu, Jingren Zhou, Junyang Lin]
 year: 2026
 venue: arXiv
+arxiv_id: "2601.15621"
 tags: [zero-shot-tts, streaming-tts, multilingual-tts, voice-cloning, speech-tokenizer, controllable-tts, voice-design]
+
+# === 论文核心技术元数据（三层 verify，2026-05-26 dogfood 完整核对，详见 SKILL.md §2.5 + no-hallucination-rules.md §11）===
+# Layer 1: 论文原文（arXiv HTML 2601.15621v1）= §X / Tab.X / Fig.X
+# Layer 2: GitHub 源码（github.com/QwenLM/Qwen3-TTS）= [GitHub: <path>]
+# Layer 3: 第三方实现 / 复现报告 = 不需要
+lm_init: "paper claims warm-start: 'Qwen3-TTS leverages the Qwen3 LM family' [§3.1] / 'built upon the Qwen3 text model foundation' [§3.3]; 但 GitHub 开源代码显示 talker 是 custom standalone transformer：不继承 Qwen3PreTrainedModel/Qwen3ForCausalLM，hidden_size=1024 不匹配任何已知 Qwen3 LLM 尺寸 (Qwen3-1.7B=2048)，_init_weights 用 standard normal init [GitHub: qwen_tts/core/models/{modeling_qwen3_tts.py, configuration_qwen3_tts.py}]；text_hidden_size=2048 暗示可能外部输入 Qwen3-1.7B text features；**pre-training init 代码未开源，literal Qwen3 LLM weight warm-start 实未 verify**"
+training_loss: "speech-token-only CE on text channel + 多码本 intra-speech loss balancing (NOT text-speech balancing); finetuning 公式 loss = outputs.loss + 0.3 * sub_talker_loss [GitHub: finetuning/sft_12hz.py]; outputs.loss 是 codec_0 (第 0 层码本) 的 CE，sub_talker_loss 是残差 codebook 1-15 的 CE [GitHub: qwen_tts/core/models/modeling_qwen3_tts.py forward()]; text positions 全 -100 mask (codec_0_labels = torch.full((b,t), -100)) [GitHub: finetuning/dataset.py]; **无 text loss、无 KL 约束、无 distillation loss**; 论文 §3.2 仅定性描述 pre-training 三阶段，无显式公式 [§3.2]"
+tokenizer_arch: "text+speech SEPARATE (NOT unified-token-space, NOT interleaved): 'Text is processed using the standard Qwen tokenizer, while speech is encoded using the Qwen-TTS-Tokenizer' [§3.1]; dual-channel input_ids shape (b, t, 2)，channel-0=text 用 Qwen text vocab + tts_bos/eos/pad，channel-1=codec 用 vocab_size=3072 + codec_bos/eos/pad [GitHub: finetuning/dataset.py + qwen_tts/core/models/configuration_qwen3_tts.py]"
+multitask: 'finetune 阶段是的：codec_0 主 loss + 残差 codebook sub_talker 0.3 权重 (intra-speech 多码本) [GitHub: finetuning/sft_12hz.py]；pre-training 阶段多任务范围未开源；论文 §3.2 仅说明 ChatML 统一格式 + 三阶段预训练但未列具体多任务 loss 项'
+training_data: "5M+ hours speech, 10 languages (zh/en/de/it/pt/es/ja/ko/fr/ru); 数据来源、清洗规则、配对方式 paper/code 均未公开 [§abstract / §3.2]"
+post_training: "三阶段 [§3.2]: (1) Speech-DPO 人类偏好对齐 (Rafailov 2023 公式); (2) GSPO group sampling policy optimization with rule-based reward; (3) speaker fine-tuning 单说话人轻量微调; **后训练代码未开源，仅 finetuning/sft_12hz.py 是 SFT 阶段**"
+codec_detail: "Tokenizer-12Hz: 16-layer RVQ, 码本 2048, 12.5 Hz/80ms, layer-1 语义蒸馏自 WavLM, layers 2-16 声学, GAN+多尺度 mel 重建 [§3.1, Tab.4]; Tokenizer-25Hz: 1-layer VQ, 码本 32768, 25 Hz/40ms, 基于 Qwen2-Audio 中间层 + DiT detokenizer + BigVGAN, 滑动窗口 block attention [§3.1, Tab.3]"
+
+# === 知识地图联动（R6 强制要求，2026-05-26 dogfood verify 修订）===
+domain: TTS
+subdomain: llm-native-tts
+routes: [speech-llm-tts, codec-lm-tts, controllable-tts, instruction-tts, streaming-tts, voice-cloning]
+problems: [zero-shot-cloning, prosody-control, multilinguality, data-scale, codec-design, instruction-following, latency, long-form-stability, evaluation]
+representations: [acoustic-token, semantic-token, mixed-token]
+# === 元数据修订记录 ===
+# 2026-05-26 (dogfood verify) 关键修正：
+#   - tokenizer_arch: 已 verify SEPARATE [§3.1 + finetuning/dataset.py]，确认 NOT unified-token-space
+#   - training_loss: 修正之前"无 loss balancing"误判 — 实际有 0.3 sub_talker 多码本 loss balancing (但仍是 intra-speech，不是 text-speech)
+#   - lm_init: paper 暗示 warm-start，但 GitHub 显示标准 init + 定制小型架构，literal warm-start 实未 verify (pre-training 代码未开源)
+related_maps:
+  - "[[TTS-技术路线图]]"
+  - "[[TTS-表示层地图]]"
+  - "[[TTS-代表模型谱系]]"
+  - "[[TTS-核心挑战]]"
+  - "[[TTS-评测体系]]"
+  - "[[TTS-趋势判断]]"
+  - "[[TTS-SpeechLM-Dialogue关系]]"
+  - "[[SpeechLM-领域总览]]"
+related_surveys:
+  - "[[ControllableTTS-Survey]]"
+evidence_level: medium
+maturity: emerging
+last_repositioned: 2026-05-26
+
+# === 回流状态 ===
+map_backfilled: true
+backfilled_at: 2026-05-26  # 8 个下游 cell 修订完成（路线图 ×2 + 谱系 ×4 + 趋势判断 ×2），详见 [[待回填地图]] §Qwen3-TTS 二次 verify 条目
+
+# === 资源本地化路径（cache_paper_resources.py 自动填充，2026-05-26 smoke test 第一篇 demo）===
+pdf_local: "~/DailyPaper/.cache/papers/2601.15621/paper.pdf"           # 8 MB，arXiv PDF 原文
+html_local: "~/DailyPaper/.cache/papers/2601.15621/paper.html"         # 225 KB，arXiv HTML 备份（离线 grep / 章节定位）
+figures_dir: "_resources/2601.15621/figures"                            # vault 内相对路径（Obsidian wikilink 用 `![[_resources/2601.15621/figures/fig-000.png]]`）
+github_local: "~/DailyPaper/.cache/papers/2601.15621/github/QwenLM_Qwen3-TTS"  # 完整 clone，关键文件 sft_12hz.py / modeling_qwen3_tts.py 已就位
+cached_at: 2026-05-26
+
+# === 通用元数据 ===
 image_source: online
 arxiv_html: https://arxiv.org/html/2601.15621v1
 created: 2026-05-25
@@ -455,6 +507,79 @@ $$\text{SIM}(s_{\text{ref}}, s_{\text{gen}}) = \frac{\mathbf{e}_{\text{ref}} \cd
 - [x] 预训练模型（Apache 2.0）
 - [ ] 训练细节完整（数据不公开）
 - [ ] 数据集可获取（内部 500 万小时）
+
+---
+
+> ✅ **R6/R7 三层 verify 完成注脚**（2026-05-26 dogfood 完整 verify 替换原警告 banner）
+>
+> 以下 🗺️/🔄 区块的具体技术对照判断已通过 §11 三层 verify 体系核对：
+> - **L1 论文原文**：arXiv HTML 2601.15621v1 §3.1 (Architectures) / §3.2 (Training) / §3.3 (Features) + Tab.3 + Tab.4
+> - **L2 GitHub 源码**：`finetuning/sft_12hz.py`、`finetuning/dataset.py`、`qwen_tts/core/models/modeling_qwen3_tts.py`、`qwen_tts/core/models/configuration_qwen3_tts.py`、`qwen_tts/inference/qwen3_tts_model.py`
+> - **L3 第三方**：不需要
+>
+> **关键修正记录**（与原 dogfood 错误对照）：
+> 1. ✅ **Tokenizer 分离已 verify**：§3.1 原文 "Text is processed using the standard Qwen tokenizer, while speech is encoded using the Qwen-TTS-Tokenizer" + GitHub `finetuning/dataset.py` 显示 `input_ids` shape `(b, t, 2)` 双通道结构（channel-0 text，channel-1 codec）+ 各自独立 special tokens (`tts_bos/eos/pad` vs `codec_bos/eos/pad`)。**确认 NOT unified-token-space**。
+> 2. ⚠️ **LM 初始化部分修正**：paper §3.1/§3.3 声称 "leverages the Qwen3 LM family" / "built upon the Qwen3 text model foundation"（暗示 warm-start），**但 GitHub 开源代码显示 talker 实为 custom standalone Qwen3-style transformer**：不继承 `Qwen3PreTrainedModel/Qwen3ForCausalLM`，`hidden_size=1024` 不匹配任何已知 Qwen3 LLM 尺寸 (Qwen3-1.7B 为 2048)，`_init_weights` 用 standard normal init。`text_hidden_size=2048` 暗示外部输入 Qwen3-1.7B text features 的可能。**Pre-training init 代码未开源，literal Qwen3 LLM weight warm-start 仍未 verify** —— 之前笔记把"leverages Qwen3"直接当作"warm-start 加载 Qwen3 LLM checkpoint"是过度解读。
+> 3. ✅ **Training loss 修正**：之前笔记说"无 loss balancing"是错的。GitHub `finetuning/sft_12hz.py` 实际公式为 `loss = outputs.loss + 0.3 * sub_talker_loss`，其中 `outputs.loss` 是 codec_0 第 0 层码本的 CE，`sub_talker_loss` 是残差 codebook 1-15 的 CE —— **存在多码本 intra-speech loss balancing (0.3 权重)**。但 text 通道仍全 -100 mask（`codec_0_labels = torch.full((b,t), -100)`），因此**无 text loss / 无 KL / 无 catastrophic-forgetting prevention**这一点之前笔记说对了；只是误判了"是否有任何 loss balancing"。
+>
+> **frontmatter R7 元数据**（lm_init / training_loss / tokenizer_arch / multitask / training_data / post_training / codec_detail）已按本次 verify 结果填入，每条带 §X / GitHub 来源标注。详见 [[方法论复盘-2026-05-26-知识地图建设]]、`feedback_no_hallucination_on_paper_details.md`、`feedback_second_order_analysis_hallucination.md`。
+
+## 🗺️ 在知识地图中的定位
+
+- **所属领域**：[[TTS-领域总览]]（核心 TTS 系统）+ 跨域到 [[SpeechLM-领域总览]]（用通用 Qwen3 LLM 做基座）
+- **技术路线**：
+  - [[TTS-技术路线图]] §路线 2 Codec LM（采用 speech token，沿用 LM 序列建模）
+  - **新兴路线** "LLM-native TTS" —— 通用 LLM 直出 speech token，不再单独训练专用声学模型（与 CosyVoice 系列的"Codec LM 专用模型"路线形成对照）
+  - [[TTS-技术路线图]] §控制范式 §策略 4 Instruction-Guided Synthesis（LLM 直接理解自然语言指令推断韵律）
+  - [[TTS-技术路线图]] §路线融合：Codec LM + 通用 LLM 基座 + 双 tokenizer + 流式
+- **核心问题**：
+  - [[TTS-核心挑战]] §挑战 1 零样本克隆（500 万 h 数据 + LLM in-context learning）
+  - [[TTS-核心挑战]] §挑战 2 韵律与表达性（**LLM 语义理解推断韵律**，不需要显式 prosody 标注）
+  - [[TTS-核心挑战]] §挑战 4 训练数据（500 万 h 是目前已知最大规模，超过 CosyVoice3 100 万 h、VoxCPM 180 万 h）
+  - [[TTS-核心挑战]] §挑战 5 Codec 设计（**双 tokenizer**：25Hz 单码本语义 + 12Hz 多码本语义-声学联合，是该方向的新探索）
+  - [[TTS-核心挑战]] §挑战 3 流式低延迟
+- **表示层位置**：
+  - [[TTS-表示层地图]] §2 量化维度 SVQ（25Hz 单码本是 SVQ 大词表的代表）+ 多码本（12Hz）
+  - [[TTS-表示层地图]] §5.1 混合 token（12Hz tokenizer 是语义+声学联合）
+  - [[TTS-表示层地图]] §4.1 LM scaling 友好性（**LM init 机制语焉**：paper §3.1/§3.3 声称 "leverages Qwen3 LM family / built upon Qwen3 text model foundation" [已 verify §3.1, §3.3 原文措辞]，但 GitHub 开源代码显示 talker 是 custom standalone Qwen3-style transformer (hidden_size=1024 ≠ 任何已知 Qwen3 LLM size, 不继承 Qwen3PreTrainedModel) [已 verify GitHub: qwen_tts/core/models/{modeling_qwen3_tts.py, configuration_qwen3_tts.py}]，pre-training init 代码未开源 → **literal Qwen3 LLM weight warm-start 仍未 verify**。与 CosyVoice3 (cold-start codec LM) 的差异更准确表述为"采用 Qwen3-style 架构 + 可能的部分 warm-start" vs "完全独立 codec LM"，而不是"完整 warm-start vs cold-start"二元对比）
+- **在 SpeechLM/对话框架内的位置**：
+  - [[TTS-SpeechLM-Dialogue关系]] **位置 ① 独立产品**（作为 API/SDK 提供 voice cloning + voice design）
+  - 同时 **接近位置 ②**：Qwen3 LLM 直出 speech token 的设计模糊了 TTS 与 SpeechLM 的边界（论文标题"TTS"但底座是通用 LLM）
+- **相邻工作**：[[CosyVoice3]] / [[StepAudio2.5]] / [[SeedTTS]] / [[VoxCPM]] / [[F5-TTS]] / [[IndexTTS2]] / [[Fish-Speech]]
+- **趋势位置**：[[TTS-趋势判断]] **趋势 3 LLM-native TTS / 统一 Speech LLM 的标志性代表系统**（与 [[StepAudio2.5]] 并列）；趋势 4 自然语言指令可控（LLM 语义理解驱动韵律）；趋势 6 Tokenizer 开放战场（双 tokenizer 是新探索）；趋势 9 开源闭源差距（500 万 h 闭源数据是当前已知最大）
+
+---
+
+## 🔄 后续重估
+
+- **2026-05-25**：初读（首次精读 501 行笔记完成）。核心定位为 LLM-native TTS 路线代表：用 Qwen3 通用 LLM 做基座，双 tokenizer 设计，500 万 h 训练数据。
+- **2026-05-26**：基于 11 篇综述综合的重新定位。新增以下判断：
+  - **LLM-native 路线的本质（精确表述，2026-05-26 二次修正）**：text 和 speech tokenizer 仍然是分离的（与 CosyVoice3 一样），**真正的差异在 LLM 参数初始化策略——Qwen3-TTS 用 Qwen3 通用 LLM 初始化 (warm start)，CosyVoice3 是从头训练专用 LM (cold start)**。
+    - **warm start 是"借用初始化"而非"保留通用能力"**：Qwen3-TTS 训练时只对 speech token 做 loss，没有文本 loss，文本能力会被 catastrophic forget 掉。最终它**只是一个专用 TTS**，不是"通用 LLM + TTS 模态"
+    - **warm start 的真实价值**：通用 LLM 预训练学到的语义表征作为更好的初始化点 → speech token 学习时的 inductive bias 受益（即便文本能力被 forget，初始化时的语义对齐残影仍影响最终模型）
+    - **指令跟随能力来源的精确表述**：不是"训练时保留语言模型能力"产生的，是"warm start 初始化的语义表征残影 + speech-instruction 配对训练数据"共同作用的结果
+    - **不是** "unified token space" 架构（那是 Spirit-LM 的 interleaved 或 Moshi 的并行 token 设计——text 与 speech token 真正混在同一序列；Qwen3-TTS 的 token 仍然是分离的）
+    - **与 StepAudio2.5 的进一步对比**：StepAudio2.5 是真的多任务训练（ASR+TTS+Realtime 共享基座，多任务 loss），有 "保留多任务能力" 的诉求；Qwen3-TTS 没有这个诉求——它只做 TTS
+  - **数据规模优势** vs 评估困难：500 万 h 是当前已知最大规模，但缺乏与 CosyVoice3 (100 万 h) / VoxCPM (180 万 h) 等的公平第三方对比；论文自报指标受 Position #11 (arXiv:2510.06927) 警示影响——"500 万 h" 不直接转化为更好的 SECS / WER（数据规模 diminishing returns）
+  - **双 tokenizer 设计的重要性**被低估：25Hz 单码本服务 ASR / 语义任务，12Hz 多码本服务高保真生成。这是 [[TTS-表示层地图]] §2 量化维度 SVQ vs 多 codebook 设计权衡的少见双轨实现
+  - **证据强度** = medium：技术报告非同行评审；500 万 h 数据闭源；与 CosyVoice3 / SeedTTS / StepAudio2.5 等同期工业级系统缺乏第三方独立大规模评测对比
+  - **成熟度** = emerging：LLM-native 路线整体仍 exploratory~emerging，Qwen3-TTS 是早期标志性工作但路线尚未充分验证（[[TTS-趋势判断]] 趋势 3 自评"LLM-native 全面取代专用系统尚早"）
+  - **与 [[CosyVoice3]] 的关键路线分歧**：CosyVoice3 维持"独立 TTS 系统 + 专用 Codec LM"；Qwen3-TTS 走"通用 LLM 直出"。两者同属阿里通义但代表不同技术押注，[[TTS-代表模型谱系]] 应明示这一分化
+  - **与 [[StepAudio2.5]] 的关键差异**：StepAudio2.5 强调统一基座 + ASR/TTS/Realtime 分支特化（位置 ②+④）；Qwen3-TTS 仍以"独立 TTS API"为产品形态（位置 ①）
+- **2026-05-26 (dogfood 二次 verify)**：按新工作流 §2.5 + no-hallucination-rules.md §11 三层 verify，重读论文 §3 + GitHub 源码，对前一日推断做以下精确化（保留原条目作为审计轨迹，本条为最新可信版本）：
+  - **Tokenizer 分离 [已 verify §3.1 + GitHub: finetuning/dataset.py]**：原文 "Text is processed using the standard Qwen tokenizer, while speech is encoded using the Qwen-TTS-Tokenizer"。GitHub 显示 `input_ids` 双通道 `(b, t, 2)`，channel-0 text + channel-1 codec 各有独立 special tokens 和 vocab。**前判断"text/speech tokenizer 分离 (NOT unified-token-space)"成立**。
+  - **LM 初始化精确表述 [部分 verify, 部分仍未 verify]**：
+    - 论文措辞 "leverages Qwen3 LM family" [§3.1] / "built upon Qwen3 text model foundation" [§3.3] 是 paper claim，**已 verify**。
+    - GitHub 开源代码反向 verify：talker 实为 custom standalone transformer，**不继承 Qwen3PreTrainedModel/Qwen3ForCausalLM**，hidden_size=1024 不匹配 Qwen3-1.7B (2048) [已 verify GitHub: configuration_qwen3_tts.py + modeling_qwen3_tts.py]。`_init_weights` 用 standard normal init，无 Qwen3 LLM weight loading 调用 [已 verify GitHub: modeling_qwen3_tts.py]。
+    - **Pre-training init 代码未开源** → literal "warm-start from Qwen3 LLM checkpoint" 仍未 verify [L2 不可用]。
+    - **修正前判断**：之前笔记把 "leverages Qwen3" 直接当作 "literal weight warm-start" 是过度解读。更准确表述：**采用 Qwen3-style 架构（RoPE / GQA / RMSNorm / SwiGLU / sliding window）**，是否真的 warm-start 自 Qwen3 LLM checkpoint 没有公开证据。`text_hidden_size=2048` 提示可能存在外部 Qwen3-1.7B text features 输入路径，但代码未直接展示。
+    - **对 CosyVoice3 对照判断的精确化**：原"warm vs cold start"二元对比过于简化；更准确是**架构同源（Qwen3-style block）vs 独立 codec LM**。
+  - **Training loss 关键修正 [已 verify GitHub: finetuning/sft_12hz.py + dataset.py + modeling_qwen3_tts.py]**：
+    - 之前笔记两处错判：
+      - ❌ 之前隐含"warm start 必须搭配 loss balancing 防 catastrophic forgetting" → 实际无 text loss、无 forgetting prevention 设计
+      - ❌ 之前明示"无 loss balancing" → 实际 finetuning loss 公式为 `loss = outputs.loss + 0.3 * sub_talker_loss`（codec_0 主 + 残差 codebook 1-15 副，**有多码本 intra-speech loss balancing**）
+    - ✅ 正确表述：**finetuning 阶段是 speech-token-only CE on text channel + 多码本 intra-speech 0.3 权重 loss balancing；text 通道全 -100 mask；无 text loss、无 KL 约束**。pre-training loss 代码未开源，但 model.forward 只对 codec logits 算 loss [已 verify GitHub: modeling_qwen3_tts.py forward()]，强烈暗示 pre-training 也是 speech-token-only CE。
+  - **二阶幻觉根源复盘**：前两次错误（unified-token-space + 必有 loss balancing）都是基于"已有笔记摘要 + ML 直觉补全"，未读原文 + 未查 GitHub。本次按 §11 三层 verify 后修正了一个直觉假阳性（loss balancing 实际有，但是 intra-speech 不是 text-speech），同时确认了一个直觉假阴性（unified-token-space 假说）。**结论：直觉对二阶判断的覆盖率永远不够，必须强制 L1+L2 双层 verify 才能下"X 是 Y"式的具体技术决策断言**。
 
 ---
 

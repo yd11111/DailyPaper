@@ -20,7 +20,7 @@ last_updated: 2026-05-25
 | Codec LM 仍是主流？ | ✅ 仍然是，但 Tokenizer-free 路线加速崛起 | 基本正确 |
 | 最大训练数据量突破 1000 万 h？ | ❌ 未突破，[[Qwen3-TTS]] 500 万 h 是目前已知最大 | 过于乐观 |
 | 出现公认 TTS benchmark？ | ⚠️ Seed-TTS-eval 采用率最高但仍非"ImageNet 级"公认标准 | 进展有限 |
-| LLM-native TTS 匹配专用系统？ | ✅ [[Qwen3-TTS]] 初步证实，但独立验证仍不充分 | 趋势正确 |
+| LLM-native TTS 匹配专用系统？ | ⚠️ [[Qwen3-TTS]] 是 paper claim 的标志性代表，但 (a) 独立验证仍不充分；(b) 2026-05-26 dogfood verify 发现 literal weight warm-start 未独立 verify（GitHub 显示 talker = custom Qwen3-style transformer，hidden_size=1024 与 Qwen3 LLM 不匹配，pre-training init 代码未开源）→ "LLM-native" 需要降级为 "claimed LLM-native" | 趋势方向正确，措辞需精确化 |
 | 流式首包延迟突破 100ms？ | ❌ 200ms 仍是主流水平，<100ms 未见可靠报告 | 过于乐观 |
 | 出现重要的非中国团队新系统？ | ⚠️ [[Raon-OpenTTS]]（韩国）出现，但影响力有限；Google/Meta 继续沉寂 | 部分正确 |
 
@@ -69,7 +69,7 @@ last_updated: 2026-05-25
 | 独立声学模型 | [[FastSpeech2]]、[[VITS]] | 2019-21 | TTS 是独立系统 |
 | 专用 Codec LM | [[VALL-E]]、[[CosyVoice]] | 2023-24 | 专门训练的 LM 做 TTS |
 | 通用 LLM 微调 | [[GLM-TTS]]（GLM-4） | 2024 | 在通用 LLM 上加 TTS 能力 |
-| **LLM 直出** | [[Qwen3-TTS]] | 2026 | 通用 LLM 直接输出 speech token，500 万 h |
+| **LLM 直出（claimed）** | [[Qwen3-TTS]] | 2026 | 基于 Qwen3 LM family 输出 speech token，500 万 h；paper claim warm-start 但 GitHub 代码显示 talker = custom Qwen3-style transformer，literal weight warm-start 未独立 verify（详见 [[Qwen3-TTS]] frontmatter `lm_init`）|
 | **统一 Speech LLM** | [[StepAudio2.5]] | 2026 | ASR + TTS + 实时交互在一个模型中 |
 
 **意味着什么**：

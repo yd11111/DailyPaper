@@ -11,6 +11,7 @@ generated_by: dailypaper-skills
 ## 当前目录笔记
 
 - [[论文笔记/_概念/14-LLM基础/Adaptive Layer Normalization|Adaptive Layer Normalization]]
+- [[论文笔记/_概念/14-LLM基础/Attention Sink|Attention Sink]]
 - [[论文笔记/_概念/14-LLM基础/Autoregressive|Autoregressive]]
 - [[论文笔记/_概念/14-LLM基础/BART|BART]]
 - [[论文笔记/_概念/14-LLM基础/BERT|BERT]]
@@ -33,6 +34,8 @@ generated_by: dailypaper-skills
 - [[论文笔记/_概念/14-LLM基础/Gated PixelCNN|Gated PixelCNN]]
 - [[论文笔记/_概念/14-LLM基础/Gumbel-Softmax|Gumbel-Softmax]]
 - [[论文笔记/_概念/14-LLM基础/In-Context Learning|In-Context Learning]]
+- [[论文笔记/_概念/14-LLM基础/KV Cache|KV Cache]]
+- [[论文笔记/_概念/14-LLM基础/KV-Cache Swap|KV-Cache Swap]]
 - [[论文笔记/_概念/14-LLM基础/Layer Normalization|Layer Normalization]]
 - [[论文笔记/_概念/14-LLM基础/LoRA|LoRA]]
 - [[论文笔记/_概念/14-LLM基础/Multi-Token Prediction|Multi-Token Prediction]]
@@ -51,6 +54,7 @@ generated_by: dailypaper-skills
 - [[论文笔记/_概念/14-LLM基础/RoPE|RoPE]]
 - [[论文笔记/_概念/14-LLM基础/Self-Attention|Self-Attention]]
 - [[论文笔记/_概念/14-LLM基础/Skip Connection|Skip Connection]]
+- [[论文笔记/_概念/14-LLM基础/Sliding-Window Attention|Sliding-Window Attention]]
 - [[论文笔记/_概念/14-LLM基础/Smooth Length Reward|Smooth Length Reward]]
 - [[论文笔记/_概念/14-LLM基础/Softmax|Softmax]]
 - [[论文笔记/_概念/14-LLM基础/T5|T5]]

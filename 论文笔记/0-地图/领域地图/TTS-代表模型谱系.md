@@ -59,7 +59,7 @@ last_updated: 2026-05-25
 | [[VoxCPM]] | 2025 | L | 连续 mel 帧 | LLM AR 连续预测 | ✓ | 无 tokenizer，LLM 直接预测连续值 |
 | [[FELLE]] | 2025 | L+D | 连续 mel | AR + token-wise Flow Matching | ✓ | MELLE 基础上引入逐 token Flow Matching 精修 |
 | [[CLEAR]] | 2025 | L | 连续 latent | AR 连续预测 | ✓ | 连续 latent AR，追求低延迟 |
-| [[Qwen3-TTS]] | 2026 | L+K | multi-codebook token | LLM 直出 | ✓ | 通用 LLM 直接做 TTS，支持自然语言韵律指令 |
+| [[Qwen3-TTS]] | 2026 | L+K | multi-codebook token | LLM 派生（基于 Qwen3 LM family；literal warm-start 未 verify）| ✓ | paper claim 基于 Qwen3 LM family 做 TTS，支持自然语言韵律指令；详见 [[Qwen3-TTS]] frontmatter `lm_init` |
 | [[SemaVoice]] | 2026 | D+L | 语义 latent | 连续 AR + Flow Matching | ✓ | SFM 对齐 + patch-wise diffusion head |
 | [[Raon-OpenTTS]] | 2026 | D | — | DiT Flow Matching | ✓ | 开放数据+模型，KRAFTON/首尔大/KAIST |
 | [[FlexiVoice]] | 2026 | K+C | — | NL 指令条件生成 | ✓ | 自然语言指令控制风格（无需参考音频） |
@@ -185,7 +185,7 @@ BigVGAN (2023) → BigVGAN-v2 (2024)
 | [[BaseTTS]] | Codec LM | Amazon 大规模预训练，方法论独立 |
 | [[XTTS]] | 混合（GPT + 声码器） | Coqui 工业开源，技术混合度高 |
 | [[Fish-Speech]] | Codec LM | 社区开源，独立实现 |
-| [[Qwen3-TTS]] | LLM-native | 与 Codec LM 有亲缘但属于新范式（通用 LLM 直出） |
+| [[Qwen3-TTS]] | LLM-native（paper claim） | paper claim 与 Codec LM 有亲缘但属于新范式（基于 Qwen3 LM family 直出 speech token）；GitHub 开源代码显示 talker = custom standalone Qwen3-style transformer (hidden_size=1024, 不继承 Qwen3PreTrainedModel)，pre-training init 代码未开源 → **literal weight warm-start 未独立 verify** [§3.1 + GitHub: modeling_qwen3_tts.py + configuration_qwen3_tts.py] |
 | [[VoxCPM]] | LLM-native / Tokenizer-free | 全新路线，无直接先驱 |
 | [[MELLE]] | Tokenizer-free AR | 微软，连续 mel AR 的开创者，VoxCPM 的思想近亲 |
 | [[FELLE]] | Tokenizer-free AR + Flow | 微软，MELLE 基础上加 token-wise flow matching |
@@ -261,7 +261,7 @@ Codec LM 内部分化为三个子方向：
 两个并行趋势在 2026 年汇合：
 
 **趋势 A — LLM-native TTS**:
-- [[Qwen3-TTS]]（2026）: 通用 Qwen3 LLM 直接预测 multi-codebook speech token，500万h 数据
+- [[Qwen3-TTS]]（2026）: 基于 Qwen3 LM family 预测 multi-codebook speech token，500万h 数据；架构沿用 Qwen3-style（RoPE/GQA/RMSNorm），但 literal weight warm-start 未 verify（详见 [[Qwen3-TTS]] frontmatter `lm_init`）
 - [[StepAudio2.5]]（2026）: ASR + TTS + 实时交互统一在一个 Speech LLM 基座中
 
 **趋势 B — 自然语言指令控制**:
@@ -326,7 +326,7 @@ TTS 的评测逻辑也在随范式一起变化：
 | 系统 | 机构 | 技术组合 | 训练数据 | 核心差异点 |
 |------|------|---------|---------|-----------|
 | [[CosyVoice3]] | 阿里通义 | LLM + FSQ + Flow Matching | 100万h | 数据规模 + FSQ 量化 |
-| [[Qwen3-TTS]] | 阿里通义 | Qwen3 LLM 直出 token | 500万h | LLM-native，不额外训练声学模型 |
+| [[Qwen3-TTS]] | 阿里通义 | 基于 Qwen3 LM family 输出 token（架构 Qwen3-style；literal warm-start 未 verify）| 500万h | paper claim LLM-native，不额外训练独立声学模型；详见 [[Qwen3-TTS]] frontmatter |
 | [[SeedTTS]] | 字节 | AR LM + Diffusion + RL | 未公开 | 自蒸馏 + RL 后训练 |
 | [[GLM-TTS]] | 智谱 AI | Streaming LM + Flow Matching | 10万h（严格筛选） | 流式 chunk 级解码 |
 | [[VoxCPM]] | 面壁智能 | LLM 连续 mel 预测 | 180万h | 无 tokenizer |

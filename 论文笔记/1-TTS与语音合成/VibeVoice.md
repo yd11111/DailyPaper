@@ -1,10 +1,29 @@
 ---
-title: "VibeVoice Technical Report"
-method_name: "VibeVoice"
-authors: [Zhiliang Peng, Jianwei Yu, Wenhui Wang, Yaoyao Chang, Yutao Sun, Li Dong, Yi Zhu, Weijiang Xu, Hangbo Bao, Zehua Wang, Shaohan Huang, Yan Xia, Furu Wei]
+title: VibeVoice Technical Report
+method_name: VibeVoice
+authors:
+  - Zhiliang Peng
+  - Jianwei Yu
+  - Wenhui Wang
+  - Yaoyao Chang
+  - Yutao Sun
+  - Li Dong
+  - Yi Zhu
+  - Weijiang Xu
+  - Hangbo Bao
+  - Zehua Wang
+  - Shaohan Huang
+  - Yan Xia
+  - Furu Wei
 year: 2025
 venue: arXiv
-tags: [tts, long-form-tts, multi-speaker, next-token-diffusion, speech-tokenizer, llm-tts]
+tags:
+  - tts
+  - long-form-tts
+  - multi-speaker
+  - next-token-diffusion
+  - speech-tokenizer
+  - llm-tts
 zotero_collection: 1-TTS与语音合成
 image_source: online
 arxiv_html: https://arxiv.org/html/2508.19205v1

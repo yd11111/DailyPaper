@@ -376,6 +376,38 @@ $$
 
 ---
 
+## 实验结果
+
+> 完整数字见上方 **Table 1-7 + Figure 3/5**；本节给出训练协议 + 核心数字汇总，便于横比。
+
+### 训练 / 评测协议（来源：§5.1）
+
+| 配置项 | SemBo 预训练 | LoSATok 主训练 | DiT 下游 (单任务) | DiT 下游 (联合) |
+|---|---|---|---|---|
+| 数据 | Emilia-EN 50k h | Emilia + WavCaps + Jamendo 等共 ~80k h | LibriTTS / WavCaps / Jamendo | 三者混合 |
+| Steps / Batch | 100 K / 64 | 1 M / 32 | 500 K / 32 | 1 M / 32 |
+| Optimizer | AdamW lr=1e-4 | AdamW lr=1e-4，warmup 10K | AdamW lr=1e-4 cos decay | 同左 |
+| 评测 benchmark | XARES 子集 (ESC/FSC/GTZAN) | XARES 15 任务 + AudioSet mel + SeedTTS PESQ/STOI | LibriTTS test-clean (WER/SIM/UTMOS) + WavCaps/Jamendo (FAD/CLAP) | 同左 |
+| 评分模型 | — | Whisper-large-v3 (WER)，WavLM (SIM)，UTMOSv2 | 同左 | 同左 |
+
+### 三类核心数字（一张表通览）
+
+| 维度 | 关键发现 | 数字 (来源) |
+|---|---|---|
+| **跨域理解 (XARES Avg)** | LoSATok 128-d ≈ 78% MiDashengLM 1280-d 上界，且超 HuBERT/WavLM | LoSATok **59.30** > HuBERT 49.82 > WavLM 44.33；MiDashengLM 上界 75.48（Table 2） |
+| **TTS 同配 DiT (208M, 512-d)** | LoSATok 全面碾压 4.7× 参数的 DashengTokenizer | WER **3.030** / SIM **0.548** / UTMOS **3.367** vs DashengTokenizer-975M 的 3.652 / 0.287 / 3.144（Table 3） |
+| **TTA / TTM** | 单任务 + 多任务双场景均 SOTA | TTA FAD **2.760**（数据 7558 h）/ **1.813**（数据 123 h），TTM FAD 联合训练 **3.366**（Table 3 + 7） |
+| **重建质量（trade-off）** | LoSATok 明显落后于纯声学 tokenizer —— 作者 Limitations 显式承认 | PESQ **3.051** vs DashengTokenizer 4.122 / UniFlow-Audio 3.833（Table 4） |
+| **Human Study** | TTA REL 主观分 2× 倍优于基线 | LoSATok REL **3.61 ± 0.25** vs UniFlow-Audio 1.65 / DashengTokenizer 1.94（Fig.5） |
+| **消融关键项** | low-dim 监督 $\mathcal{L}_L$ 是 dual-level 的主导项 | 去 $\mathcal{L}_L$ 后 FSC 从 59.87 暴跌到 **6.30**（Table 5） |
+| **KL 强度 trade-off** | 大 KL 偏生成、小 KL 偏理解+重建 | $\lambda_{KL}=10^{-2}$ TTS 最佳；$10^{-3}$ PESQ 提升 0.4（Table 6） |
+
+### 一句话总评
+
+LoSATok 用 **半 baseline 参数**（208M vs 975M）就在 TTS/TTA/TTM 三类生成任务上同时超越 DashengTokenizer，同时在 XARES 跨域理解上保留 1280-d 上界 78% 的能力 —— **以重建质量（PESQ ↓ ~1.0）为代价换 DiT-friendly 低维语义结构**，trade-off 设计明确。
+
+---
+
 ## 批判性思考
 
 ### 核心 Claim 审查
