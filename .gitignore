@@ -69,6 +69,11 @@ $RECYCLE.BIN/
 # 191MB 体量，不适合走 git/网络。assets/papers/ 这个目录由 .gitkeep 占位即可
 assets/papers/*.pdf
 
+# ───────── paper-reader 论文资源本地化缓存（图表）─────────
+# vault 内 _resources/ 存论文图表（用 ![[wikilink]] 引用），重型资源（PDF/HTML/GitHub clone）在 vault 外 ~/DailyPaper/.cache/。
+# 详见 ~/DailyPaper/skills/paper-reader/references/no-hallucination-rules.md §11.5
+论文笔记/_resources/
+
 # ───────── 显式保留（白名单注释，方便后人理解；不需要 ! 规则因未在上面排除）─────────
 # 以下默认会被 git 跟踪，是 vault 共享的核心配置：
 #   .obsidian/app.json              基础设置

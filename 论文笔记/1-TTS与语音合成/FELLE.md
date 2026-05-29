@@ -44,3 +44,5 @@ created: 2026-05-22
 - arXiv: https://arxiv.org/abs/2502.11128
 - PDF: [[assets/papers/FELLE.pdf|本地 PDF]]
 - 源目录: `TTS-LLM/FELLE.pdf`
+
+> 🔍 **对比报告**: [[2026-05-29-VALL-E系列演进调研]]
