@@ -25,6 +25,7 @@ $$
 4. 支持可变码率（通过选择 RVQ 层数控制）
 
 ## 代表工作
+- [[SoundStream]]: 原始论文（Zeghidour et al., 2021）—— 精读笔记见 [[论文笔记/3-Audio-Codec与Tokenizer/SoundStream|SoundStream 精读]]
 - AudioLM (Google): 使用 SoundStream token 做音频语言建模
 - [[VALL-E]]: 使用 [[EnCodec]]（SoundStream 的同期竞品）做零样本 TTS
 - [[GLM-TTS]]: 论文中作为离散 TTS 范式的基础引用
