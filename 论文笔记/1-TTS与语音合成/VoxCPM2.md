@@ -121,10 +121,10 @@ VoxCPM2 的完整流水线：
 **怎么做**：
 
 - **Encoder**：因果 CNN，下采样率 [2, 5, 8, 8]（总 640 倍时域压缩），将 16 kHz 波形映射为 64 维 latent frames @25 Hz，输出 mu 和 logvar（VAE 形式）
-- **Decoder**：更深更宽的因果 CNN，上采样率 [8, 6, 5, 2, 2, 2]（总 960 倍），接受可选的目标采样率条件（通过 `SampleRateConditionLayer` 以 scale-bias 注入），输出 48 kHz 波形
+- **Decoder**：更深更宽的因果 CNN，上采样率 [8, 6, 5, 2, 2, 2]（总 1920 倍），接受可选的目标采样率条件（通过 `SampleRateConditionLayer` 以 scale-bias 注入），输出 48 kHz 波形
 - Patch size P=4 → LM 侧 token rate = 25 Hz / 4 = **6.25 Hz**（每步 160 ms）
 
-**具体例子**：一段 10 秒的 16 kHz 音频（160,000 samples）经 encoder 下采样 640 倍得到 250 个 latent frames；以 P=4 合并后 TSLM 只需处理 63 个 token，每步 LocDiT 生成 4 帧 latent；decoder 将 250 帧 latent 上采样 960 倍输出 240,000 samples @48 kHz（即 5 秒——因为 48 kHz 下 5 秒 = 240k samples，但实际输出时长仍为 10 秒，因为 decoder 内部帧率匹配不同）。
+**具体例子**：一段 10 秒的 16 kHz 音频（160,000 samples）经 encoder 下采样 640 倍得到 250 个 latent frames；以 P=4 合并后 TSLM 只需处理约 63 个 token，每步 LocDiT 生成 4 帧 latent；decoder 将 250 帧 latent 上采样 1920 倍输出 480,000 samples @48 kHz（10 秒，与输入时长一致）。
 
 ### 子系统 B：TSLM（文本-语义语言模型）
 

@@ -19,6 +19,7 @@ generated_by: dailypaper-skills
 - [[论文笔记/_概念/4-Vocoder与声码器/MFD|MFD]]
 - [[论文笔记/_概念/4-Vocoder与声码器/Multi-Period Discriminator|Multi-Period Discriminator]]
 - [[论文笔记/_概念/4-Vocoder与声码器/Multi-Receptive Field Fusion|Multi-Receptive Field Fusion]]
+- [[论文笔记/_概念/4-Vocoder与声码器/Multi-scale Discriminator|Multi-scale Discriminator]]
 - [[论文笔记/_概念/4-Vocoder与声码器/Parallel WaveGAN|Parallel WaveGAN]]
 - [[论文笔记/_概念/4-Vocoder与声码器/Vocoder|Vocoder]]
 - [[论文笔记/_概念/4-Vocoder与声码器/Vocos|Vocos]]

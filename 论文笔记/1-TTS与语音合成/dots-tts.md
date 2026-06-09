@@ -6,7 +6,7 @@ year: 2026
 venue: arXiv
 arxiv_id: "2606.07080"
 tags: [continuous-ar-tts, flow-matching, self-corrective-alignment, meanflow-distillation, zero-shot-cloning, streaming-tts]
-note_tier: standard
+note_tier: heavy
 
 # === 技术决策枚举 ===
 lm_init_type: warm-start

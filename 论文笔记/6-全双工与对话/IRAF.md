@@ -414,7 +414,7 @@ $$
 - **所属领域**：[[Dialogue-领域总览]]（端到端全双工语音对话）
 - **技术路线**：[[TTS-SpeechLM-Dialogue关系]] 位置 ④（端到端 duplex speech LM 的噪声鲁棒性增强）
 - **核心问题**：[[TTS-核心挑战]] §挑战 8（对话系统集成——噪声鲁棒性子问题）
-- **表示层位置**：不直接改变表示，但在 [[acoustic-token]] 流上做帧级门控
+- **表示层位置**：不直接改变表示，但在 [[Acoustic Token]] 流上做帧级门控
 - **相邻工作**：[[Moshi]]（端到端 duplex 标杆）/ [[SALMONN]]（omni 变体提及的 SALMONN-omni）/ [[SyncLLM]]（实时双向 LLM）/ [[dGSLM]]（离散双说话人对话）
 
 ## 🔄 后续重估

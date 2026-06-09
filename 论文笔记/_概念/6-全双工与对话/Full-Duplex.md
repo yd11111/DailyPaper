@@ -38,6 +38,7 @@ aliases: [Full-Duplex, 全双工, 全双工对话]
 - [[SyncLLM]]: 实时双向 LLM
 - [[LiveCC]] / [[StreamingVLM]]: vision-only 流式
 - [[Synchronization-Turn-Taking]]: 让两个 [[Moshi]] 互相对话，用 [[CKA]] + 因果 LSTM 探针分析全双工模型的内部同步与轮替信号
+- [[IRAF]]: CUHK + Huawei，帧级 speaker-guided 门控解决 E2E duplex 的干扰鲁棒性
 
 ## 评测/常见数字
 
