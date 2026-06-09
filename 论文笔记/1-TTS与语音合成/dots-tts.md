@@ -47,7 +47,7 @@ created: 2026-06-09
 
 # 论文笔记：dots.tts Technical Report
 
-> **笔记分级**：standard（完整精读）。分级标准见 `references/quality-standards.md §模板分级`。
+> **笔记分级**：heavy（完整精读 + GitHub 代码核验）。分级标准见 `references/quality-standards.md §模板分级`。
 >
 > **结构说明**：本笔记分三层——**一、阅读层**（读懂论文所需，技术断言用核验后口径书写）/ **二、研究审计层**（核验来源、可信度、claim 审查、批判，独立容器）/ **三、知识系统层**（地图定位 + 重估日志）。三层互不混杂。
 
@@ -458,7 +458,7 @@ $$
 
 # 三、知识系统层
 
-## 在知识地图中的定位
+## 🗺️ 在知识地图中的定位
 
 - **所属领域**：[[TTS-领域总览]]
 - **技术路线**：[[TTS-技术路线图]] §Route 3 连续表示 AR 生成 + §Route 4 Diffusion/Flow TTS（AR-FM Head）
@@ -466,7 +466,7 @@ $$
 - **表示层位置**：[[TTS-表示层地图]] §连续 latent（128 维 VAE @25 Hz）
 - **相邻工作**：[[DiTAR]]（同属连续 AR + per-patch flow-matching）/ [[VibeVoice]]（同属连续 AR）/ [[VoxCPM]]（同属连续 AR）/ [[ARDiT]]（灵感来源，decoder-only DiT）/ [[CosyVoice3]]（离散 AR 强基线）/ [[Qwen3-TTS]]（LLM-native TTS 对照）
 
-## 后续重估
+## 🔄 后续重估
 
 - **2026-06-09**：初读。连续 AR TTS 路线的重要里程碑，首次在全面 benchmark 上整体优于主流离散 AR 方案。三模块解耦 + SOAR 自纠正 + MeanFlow 蒸馏的工程完成度高。但 2B 参数 + 1.5M 小时数据的规模优势需要控制，低资源语言弱点反映 BPE 方案的固有局限。SOAR 的表达力-稳定性 trade-off 值得关注——后续如果有 SOAR + 表达力保持的改进版，需重新评估。
 
