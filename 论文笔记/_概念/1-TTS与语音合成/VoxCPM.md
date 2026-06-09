@@ -28,7 +28,8 @@ aliases: [VoxCPM-Emilia]
 
 ## 代表工作
 
-- [[VoxCPM]]: 本体论文 (arXiv:2509.24650)
+- [[VoxCPM]]: 本体论文 (arXiv:2509.24650)，0.6B 参数，16 kHz 输出
+- [[VoxCPM2]]: 升级版 (arXiv:2606.06928)，2B 参数，48 kHz 输出，30 语种 + 可控生成
 - [[SemaVoice]]: 后续相关工作
 
 ## 相关概念
