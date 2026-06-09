@@ -11,8 +11,10 @@ generated_by: dailypaper-skills
 ## 当前目录笔记
 
 - [[论文笔记/_概念/1-TTS与语音合成/AR Long-Sequence Modeling|AR Long-Sequence Modeling]]
+- [[论文笔记/_概念/1-TTS与语音合成/ARDiT|ARDiT]]
 - [[论文笔记/_概念/1-TTS与语音合成/Adversarial Loss|Adversarial Loss]]
 - [[论文笔记/_概念/1-TTS与语音合成/Attentron|Attentron]]
+- [[论文笔记/_概念/1-TTS与语音合成/AudioVAE|AudioVAE]]
 - [[论文笔记/_概念/1-TTS与语音合成/Autoregressive Model|Autoregressive Model]]
 - [[论文笔记/_概念/1-TTS与语音合成/BASE-TTS|BASE-TTS]]
 - [[论文笔记/_概念/1-TTS与语音合成/CLEAR|CLEAR]]
@@ -46,6 +48,7 @@ generated_by: dailypaper-skills
 - [[论文笔记/_概念/1-TTS与语音合成/Grouped Code Modeling|Grouped Code Modeling]]
 - [[论文笔记/_概念/1-TTS与语音合成/HierSpeech++|HierSpeech++]]
 - [[论文笔记/_概念/1-TTS与语音合成/HiggsAudio-v2|HiggsAudio-v2]]
+- [[论文笔记/_概念/1-TTS与语音合成/HoliTok|HoliTok]]
 - [[论文笔记/_概念/1-TTS与语音合成/IndexTTS 2|IndexTTS 2]]
 - [[论文笔记/_概念/1-TTS与语音合成/IndexTTS|IndexTTS]]
 - [[论文笔记/_概念/1-TTS与语音合成/InstructTTS|InstructTTS]]

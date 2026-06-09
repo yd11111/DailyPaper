@@ -21,11 +21,14 @@ generated_by: dailypaper-skills
 - [[论文笔记/_概念/8-Diffusion与FlowMatching/Discrete Diffusion|Discrete Diffusion]]
 - [[论文笔记/_概念/8-Diffusion与FlowMatching/Flow Matching|Flow Matching]]
 - [[论文笔记/_概念/8-Diffusion与FlowMatching/Latent Diffusion|Latent Diffusion]]
+- [[论文笔记/_概念/8-Diffusion与FlowMatching/MeanFlow Distillation|MeanFlow Distillation]]
 - [[论文笔记/_概念/8-Diffusion与FlowMatching/Normalizing Flow|Normalizing Flow]]
 - [[论文笔记/_概念/8-Diffusion与FlowMatching/OT-CFM|OT-CFM]]
 - [[论文笔记/_概念/8-Diffusion与FlowMatching/Optimal Transport|Optimal Transport]]
+- [[论文笔记/_概念/8-Diffusion与FlowMatching/Rectified Flow|Rectified Flow]]
 - [[论文笔记/_概念/8-Diffusion与FlowMatching/VAE|VAE]]
 - [[论文笔记/_概念/8-Diffusion与FlowMatching/WaveGrad|WaveGrad]]
+- [[论文笔记/_概念/8-Diffusion与FlowMatching/adaLN-zero|adaLN-zero]]
 
 ## 说明
 
