@@ -60,6 +60,7 @@ generated_by: dailypaper-skills
 - [[论文笔记/_概念/14-LLM基础/Softmax|Softmax]]
 - [[论文笔记/_概念/14-LLM基础/T5|T5]]
 - [[论文笔记/_概念/14-LLM基础/TCN|TCN]]
+- [[论文笔记/_概念/14-LLM基础/TinyLlama|TinyLlama]]
 - [[论文笔记/_概念/14-LLM基础/Transformer|Transformer]]
 - [[论文笔记/_概念/14-LLM基础/WaveNet|WaveNet]]
 - [[论文笔记/_概念/14-LLM基础/llama.cpp-omni|llama.cpp-omni]]
