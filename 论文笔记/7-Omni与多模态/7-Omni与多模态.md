@@ -11,6 +11,7 @@ generated_by: dailypaper-skills
 ## 当前目录笔记
 
 - [[论文笔记/7-Omni与多模态/MiniCPM-o-4.5|MiniCPM-o-4.5]]
+- [[论文笔记/7-Omni与多模态/Wan-Streamer|Wan-Streamer]]
 
 ## 说明
 
