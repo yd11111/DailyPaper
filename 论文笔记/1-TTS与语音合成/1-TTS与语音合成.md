@@ -47,6 +47,7 @@ generated_by: dailypaper-skills
 - [[论文笔记/1-TTS与语音合成/Raon-OpenTTS|Raon-OpenTTS]]
 - [[论文笔记/1-TTS与语音合成/SC-VALLE|SC-VALLE]]
 - [[论文笔记/1-TTS与语音合成/SPEAR-TTS|SPEAR-TTS]]
+- [[论文笔记/1-TTS与语音合成/Sarashina22-TTS|Sarashina22-TTS]]
 - [[论文笔记/1-TTS与语音合成/SeedTTS|SeedTTS]]
 - [[论文笔记/1-TTS与语音合成/SemaVoice|SemaVoice]]
 - [[论文笔记/1-TTS与语音合成/StyleSelfReferencing|StyleSelfReferencing]]
