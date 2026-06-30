@@ -19,6 +19,7 @@ generated_by: dailypaper-skills
 - [[论文笔记/_概念/14-LLM基础/Beam Search|Beam Search]]
 - [[论文笔记/_概念/14-LLM基础/Block-Causal Attention|Block-Causal Attention]]
 - [[论文笔记/_概念/14-LLM基础/ByteNet|ByteNet]]
+- [[论文笔记/_概念/14-LLM基础/Chain-of-Thought|Chain-of-Thought]]
 - [[论文笔记/_概念/14-LLM基础/ConvNeXt V2|ConvNeXt V2]]
 - [[论文笔记/_概念/14-LLM基础/ConvNeXt|ConvNeXt]]
 - [[论文笔记/_概念/14-LLM基础/Convolution|Convolution]]
