@@ -41,6 +41,7 @@ generated_by: dailypaper-skills
 - [[论文笔记/_概念/5-Speech-LLM与AudioLM/Step-Audio|Step-Audio]]
 - [[论文笔记/_概念/5-Speech-LLM与AudioLM/SyncLLM|SyncLLM]]
 - [[论文笔记/_概念/5-Speech-LLM与AudioLM/VITA|VITA]]
+- [[论文笔记/_概念/5-Speech-LLM与AudioLM/VocalNet|VocalNet]]
 - [[论文笔记/_概念/5-Speech-LLM与AudioLM/dGSLM|dGSLM]]
 
 ## 说明

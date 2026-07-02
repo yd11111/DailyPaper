@@ -13,6 +13,7 @@ generated_by: dailypaper-skills
 - [[论文笔记/5-Speech-LLM与AudioLM/AudioLM|AudioLM]]
 - [[论文笔记/5-Speech-LLM与AudioLM/FunAudioLLM|FunAudioLLM]]
 - [[论文笔记/5-Speech-LLM与AudioLM/LatentLM|LatentLM]]
+- [[论文笔记/5-Speech-LLM与AudioLM/PRIME-Speech|PRIME-Speech]]
 - [[论文笔记/5-Speech-LLM与AudioLM/SoundStorm|SoundStorm]]
 - [[论文笔记/5-Speech-LLM与AudioLM/SpeechWorldModel|SpeechWorldModel]]
 - [[论文笔记/5-Speech-LLM与AudioLM/StepAudio-EditX|StepAudio-EditX]]
