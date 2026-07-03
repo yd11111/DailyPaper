@@ -54,6 +54,7 @@ generated_by: dailypaper-skills
 - [[论文笔记/1-TTS与语音合成/TextRolSpeech|TextRolSpeech]]
 - [[论文笔记/1-TTS与语音合成/Tortoise|Tortoise]]
 - [[论文笔记/1-TTS与语音合成/TransformerTTS|TransformerTTS]]
+- [[论文笔记/1-TTS与语音合成/UnifiedGuidanceFM|UnifiedGuidanceFM]]
 - [[论文笔记/1-TTS与语音合成/VALL-E R|VALL-E R]]
 - [[论文笔记/1-TTS与语音合成/VALL-E|VALL-E]]
 - [[论文笔记/1-TTS与语音合成/VALL-E2|VALL-E2]]
