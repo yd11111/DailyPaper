@@ -10,7 +10,10 @@ aliases: []
 
 ## 代表工作
 - [[FormalASR]]
+- [[FlexiCodec]] / [[FlexiSLM]]: 使用 SenseVoice ASR 特征作为语义编码输入
+- [[CosyVoice3]]: 同 FunAudioLLM 生态
 
 ## 相关概念
 - [[Paraformer]]
 - [[Whisper]]
+- [[FlexiCodec]]
