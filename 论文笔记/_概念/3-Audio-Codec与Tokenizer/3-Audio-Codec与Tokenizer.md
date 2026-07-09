@@ -44,6 +44,7 @@ generated_by: dailypaper-skills
 - [[论文笔记/_概念/3-Audio-Codec与Tokenizer/Vector Quantization|Vector Quantization]]
 - [[论文笔记/_概念/3-Audio-Codec与Tokenizer/WavTokenizer|WavTokenizer]]
 - [[论文笔记/_概念/3-Audio-Codec与Tokenizer/X-Codec|X-Codec]]
+- [[论文笔记/_概念/3-Audio-Codec与Tokenizer/X-Codec2|X-Codec2]]
 - [[论文笔记/_概念/3-Audio-Codec与Tokenizer/XY-Tokenizer|XY-Tokenizer]]
 
 ## 说明
